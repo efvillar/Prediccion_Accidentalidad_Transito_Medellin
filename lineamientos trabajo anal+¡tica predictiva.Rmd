@@ -1,0 +1,57 @@
+---
+title: "Lineamientos para el trabajo de Analítica Predictiva"
+author: Prof. Juan David Ospina Arango</br>Universidad Nacional - Sede Medellín</br>Analítica Predictiva</br>Semestre 2019-01
+output:
+  word_document: default
+  html_document:
+    df_print: paged
+---
+
+# Predecir la accidentalidad en Medellín
+En este trabajo se abordará el problema de predecir la accidentalidad en la ciudad de Medellín a partir de la historia reciente de los accidentes reportados.
+
+El insumo principal de este trabajo son los [datos abiertos de movilidad](https://geomedellin-m-medellin.opendata.arcgis.com/search?tags=movilidad) que publica la Alcaldía de Medellín en el portal [GeoMedellín](https://www.medellin.gov.co/geomedellin/).
+
+
+
+## 1 - Entrenamiento de un modelo predictivo
+Se deberá construir un modelo que permita predecir la accidentalidad por tipo de accidente a nivel semanal, mensual y diario. Para esto se deberán considerar fechas especiales.
+
+### Entrenamiento y validación
+Los modelos predictivos se deberán construir con los datos de los años 2014, 2015, 2016 y 2017. Se usan los accidentesdel año 2018 para validar los modelos.
+
+## 2 - Modelamiento
+Para el modelamiento se podrá usar cualquier método visto en el curso o apropiado por los estudiantes. El criterio de éxito de los modelos predictivos será el error cuadrático medio de la predicción. 
+
+Para prevenir el sobreentrenamiento se penalizarán variaciones excesivas entre los errores cuadráticos medios de entrenamiento y validación. Variaciones de más del 15% se considerarán sospechosas de sobreeentrenamiento.
+
+
+## 3 - Entregables
+
+Los entregables de este trabajo serán los siguientes:
+
+### Aplicación web
+1. Visualización: esta aplicación deberá permitir seleccionar una ventana de tiempo y obtener los datos históricos de accidentalidad por tipo de accidente.
+
+2. Predicción: la aplicación también deberá permitir predecir la accidentalidad por tipo de accidente utilizando una ventana y una resolución temporal definidas por el usuario.
+
+### Video promocional
+La aplicación web deberá estar acompañada de un video promocional en youtube donde se explique los beneficios de utilizarla y el cómo se usa. Tanto la aplicación como el video se deben construir pensando en un usuario en particular definido por los estudiantes.
+
+### Reporte técnico
+Se debe generar un reporte que contenga el entendimiento desarrollado en el trabajo, su bibliografía de soporte y la metodología seguida debidamente justificada.
+
+## 5 - Equipos y fecha de entrega
+1. Equipos: los equipos estarán conformados por cuatro o cinco estudiantes.
+
+2. Fecha de entrega: el trabajo se deberá entregar el día domingo 11 de agosto y se debe enviar al correo jdospina@unal.edu.co.
+
+
+
+
+
+
+
+
+
+
