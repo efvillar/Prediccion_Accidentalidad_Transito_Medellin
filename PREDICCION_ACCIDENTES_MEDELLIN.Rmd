@@ -1,0 +1,149 @@
+---
+title: "PREDICCIÓN ACCIDENTES MEDELLIN"
+author: "Edwin Villarraga"
+date: "16/7/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# DESCRIPCIÓN DEL PROBLEMA
+
+
+# HIPOTESIS
+
+
+# ANALISIS DESCRIPTIVO
+
+## Carga de Datos
+
+### Datos de 2014
+
+```{r}
+raw_data_2014 <- read.csv(file="./data/Accidentalidad_georreferenciada_2014.csv", encoding="UTF-8", header=TRUE, sep=",")
+```
+
+
+```{r}
+head(raw_data_2014)
+```
+
+```{r}
+summary(raw_data_2014)
+```
+
+```{r}
+str(raw_data_2014)
+```
+
+
+
+### Datos de 2015
+
+```{r}
+raw_data_2015 <- read.csv(file="./data/Accidentalidad_georreferenciada_2015.csv", encoding="UTF-8", header=TRUE, sep=",")
+```
+
+
+```{r}
+head(raw_data_2015)
+```
+
+```{r}
+str(raw_data_2015)
+```
+
+### Datos 2016
+
+```{r}
+raw_data_2016 <- read.csv(file="./data/Accidentalidad_georreferenciada_2016.csv", encoding="UTF-8", header=TRUE, sep=",")
+```
+
+
+```{r}
+head(raw_data_2016)
+str(raw_data_2016)
+```
+
+### Datos 2017
+
+```{r}
+raw_data_2017 <- read.csv(file="./data/Accidentalidad_georreferenciada_2017.csv", encoding="UTF-8", header=TRUE, sep=",")
+```
+
+
+```{r}
+head(raw_data_2017)
+str(raw_data_2017)
+```
+
+```{r}
+levels(raw_data_2014$CLASE)
+levels(raw_data_2015$CLASE)
+levels(raw_data_2016$CLASE)
+levels(raw_data_2017$CLASE)
+```
+
+```{r}
+summary(raw_data_2014$CLASE)
+```
+
+```{r}
+summary(raw_data_2015$CLASE)
+```
+
+```{r}
+summary(raw_data_2016$CLASE)
+```
+
+```{r}
+summary(raw_data_2017$CLASE)
+```
+
+Se debe hacer una depuración de las etiquetas del factor CLASE
+
+```{r}
+levels(raw_data_2017$CLASE)[levels(raw_data_2015$CLASE)=="Caida de Ocupante"] <- "Caída de Ocupante"
+levels(raw_data_2017$CLASE)[levels(raw_data_2016$CLASE)=="Caida de Ocupante"] <- "Caída de Ocupante"
+levels(raw_data_2017$CLASE)[levels(raw_data_2017$CLASE)=="Caida de Ocupante"] <- "Caída de Ocupante"
+```
+
+```{r}
+levels(raw_data_2014$CLASE)
+levels(raw_data_2015$CLASE)
+levels(raw_data_2016$CLASE)
+levels(raw_data_2017$CLASE)
+```
+
+
+
+
+### Unir los datos
+
+```{r}
+Train_Dataset <- rbind(raw_data_2014,raw_data_2015,raw_data_2016, raw_data_2017)
+```
+
+```{r}
+str(Train_Dataset)
+```
+
+```{r}
+levels(Train_Dataset$CLASE)
+```
+
+
+
+# EVALUACIÓN DE MODELOS
+
+
+
+# ELECCIÓN DEL MODELO
+
+
+
+
+
