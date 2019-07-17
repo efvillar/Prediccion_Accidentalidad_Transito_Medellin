@@ -490,6 +490,14 @@ summary {
 ##  $ DISENO           : Factor w/ 13 levels &quot;&quot;,&quot;Ciclo Ruta&quot;,..: 11 11 11 11 11 4 11 4 11 11 ...
 ##  $ DIA_NOMBRE       : Factor w/ 7 levels &quot;DOMINGO  &quot;,&quot;JUEVES   &quot;,..: 5 5 5 5 5 5 5 5 5 5 ...
 ##  $ MES              : int  1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<pre class="r"><code>levels(raw_data_2014$CLASE)</code></pre>
+<pre><code>## [1] &quot;Atropello&quot;         &quot;Caída de Ocupante&quot; &quot;Choque&quot;           
+## [4] &quot;Incendio&quot;          &quot;Otro&quot;              &quot;Volcamiento&quot;</code></pre>
+<pre class="r"><code>levels(raw_data_2014$CLASE) &lt;- c(&quot;Atropello&quot;,&quot;Caida_Ocupante&quot;,&quot;Choque&quot;,&quot;Incendio&quot;,&quot;Otro&quot;,
+                                 &quot;Volcamiento&quot;)</code></pre>
+<pre class="r"><code>levels(raw_data_2014$CLASE)</code></pre>
+<pre><code>## [1] &quot;Atropello&quot;      &quot;Caida_Ocupante&quot; &quot;Choque&quot;         &quot;Incendio&quot;      
+## [5] &quot;Otro&quot;           &quot;Volcamiento&quot;</code></pre>
 </div>
 <div id="datos-de-2015" class="section level3">
 <h3>Datos de 2015</h3>
@@ -530,6 +538,63 @@ summary {
 ## 4  MARTES      1
 ## 5  MARTES      1
 ## 6  LUNES       1</code></pre>
+<pre class="r"><code>summary(raw_data_2015)</code></pre>
+<pre><code>##  X.U.FEFF.OBJECTID       X                Y              RADICADO        
+##  Min.   :    1     Min.   :821476   Min.   :1172359   Min.   :3.270e+02  
+##  1st Qu.:11558     1st Qu.:833029   1st Qu.:1181443   1st Qu.:1.482e+06  
+##  Median :23149     Median :834305   Median :1183204   Median :1.494e+06  
+##  Mean   :23110     Mean   :834102   Mean   :1183264   Mean   :2.175e+16  
+##  3rd Qu.:34664     3rd Qu.:835387   3rd Qu.:1185476   3rd Qu.:1.506e+06  
+##  Max.   :46172     Max.   :842417   Max.   :1193451   Max.   :5.002e+20  
+##                                                                          
+##                       FECHA             HORA            DIA       
+##  2015-08-18T00:00:00.000Z:  183   07:00 AM:  951   Min.   : 1.00  
+##  2015-08-28T00:00:00.000Z:  183   08:00 AM:  921   1st Qu.: 8.00  
+##  2015-09-11T00:00:00.000Z:  162   10:00 AM:  801   Median :16.00  
+##  2015-12-07T00:00:00.000Z:  161   07:30 AM:  767   Mean   :15.74  
+##  2015-09-17T00:00:00.000Z:  160   06:30 AM:  756   3rd Qu.:23.00  
+##  2015-09-18T00:00:00.000Z:  160   06:00 AM:  741   Max.   :31.00  
+##  (Other)                 :41071   (Other) :37143                  
+##     PERIODO                   CLASE               DIRECCION    
+##  Min.   :2015   Choque           :28249   CR 64 C CL 78:  211  
+##  1st Qu.:2015   Atropello        : 4485   CR 63 CL 44  :  177  
+##  Median :2015   Otro             : 4218   CR 57 CL 44  :  172  
+##  Mean   :2015   Caida Ocupante   : 3673   CR 64 C CL 67:  132  
+##  3rd Qu.:2015   Volcamiento      : 1435   CR 80 CL 50  :  122  
+##  Max.   :2015   Caída de Ocupante:   18   CR 52 CL 10  :  121  
+##                 (Other)          :    2   (Other)      :41145  
+##                     DIRECCION_ENC        CBML      
+##  CR  064 C   078  000 00000:  227   1019   : 1067  
+##  CR  063   044  000 00000  :  177   0517   :  899  
+##  CR  057   044  000 00000  :  173   1007   :  882  
+##  CR  064 C   067  000 00000:  132   1006   :  867  
+##  CR  080   050  000 00000  :  122   1012   :  804  
+##  CR  052   010  000 00000  :  121   1105   :  783  
+##  (Other)                   :41128   (Other):36778  
+##                           TIPO_GEOCOD          GRAVEDAD    
+##  Malla vial                     :31011   HERIDO    :23273  
+##  Malla vial cruce invertido     : 2341   MUERTO    :  250  
+##  EPM sin Interior               :  886   SOLO DAÑOS:18557  
+##  EPM con Interior               :  459                     
+##  Malla vial aproximada: CR 1-2  :   86                     
+##  Malla vial aproximada: CR 65-80:   85                     
+##  (Other)                        : 7212                     
+##                 BARRIO                   COMUNA                DISENO     
+##  La Candelaria     : 1069   La Candelaria   : 9355   Tramo de via :33729  
+##  Caribe            :  899   Laureles Estadio: 4908   Interseccion : 5794  
+##  Guayaquil         :  883   Castilla        : 4000   Lote o Predio: 1219  
+##  San Benito        :  868   El Poblado      : 3194   Glorieta     :  751  
+##  Perpetuo Socorro  :  804   Robledo         : 2884                :  250  
+##  Los Conquistadores:  785   Guayabal        : 2814   Paso Elevado :  101  
+##  (Other)           :36772   (Other)         :14925   (Other)      :  236  
+##      DIA_NOMBRE        MES        
+##  DOMINGO  :4048   Min.   : 1.000  
+##  JUEVES   :6516   1st Qu.: 4.000  
+##  LUNES    :5973   Median : 7.000  
+##  MARTES   :6696   Mean   : 6.624  
+##  MIÉRCOLES:6341   3rd Qu.:10.000  
+##  SÁBADO   :6003   Max.   :12.000  
+##  VIERNES  :6503</code></pre>
 <pre class="r"><code>str(raw_data_2015)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    42080 obs. of  19 variables:
 ##  $ X.U.FEFF.OBJECTID: int  1001 1002 1003 1004 1005 1006 1007 1008 1009 1010 ...
@@ -551,6 +616,15 @@ summary {
 ##  $ DISENO           : Factor w/ 13 levels &quot;&quot;,&quot;Ciclo Ruta&quot;,..: 11 11 11 11 11 11 11 11 11 11 ...
 ##  $ DIA_NOMBRE       : Factor w/ 7 levels &quot;DOMINGO  &quot;,&quot;JUEVES   &quot;,..: 4 4 4 4 4 3 4 4 4 4 ...
 ##  $ MES              : int  1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<pre class="r"><code>levels(raw_data_2015$CLASE)</code></pre>
+<pre><code>## [1] &quot;&quot;                  &quot;Atropello&quot;         &quot;Caída de Ocupante&quot;
+## [4] &quot;Caida Ocupante&quot;    &quot;Choque&quot;            &quot;Incendio&quot;         
+## [7] &quot;Otro&quot;              &quot;Volcamiento&quot;</code></pre>
+<pre class="r"><code>levels(raw_data_2015$CLASE) &lt;- c(&quot;Otro&quot;,&quot;Atropello&quot;,&quot;Caida_Ocupante&quot;,&quot;Caida_Ocupante&quot;,&quot;Choque&quot;,
+                                 &quot;Incendio&quot;,&quot;Otro&quot;,&quot;Volcamiento&quot;)</code></pre>
+<pre class="r"><code>levels(raw_data_2015$CLASE)</code></pre>
+<pre><code>## [1] &quot;Otro&quot;           &quot;Atropello&quot;      &quot;Caida_Ocupante&quot; &quot;Choque&quot;        
+## [5] &quot;Incendio&quot;       &quot;Volcamiento&quot;</code></pre>
 </div>
 <div id="datos-2016" class="section level3">
 <h3>Datos 2016</h3>
@@ -612,6 +686,15 @@ summary {
 ##  $ DISENO           : Factor w/ 13 levels &quot;&quot;,&quot;Ciclo Ruta&quot;,..: 5 11 11 11 11 4 11 4 4 11 ...
 ##  $ DIA_NOMBRE       : Factor w/ 7 levels &quot;DOMINGO  &quot;,&quot;JUEVES   &quot;,..: 5 5 5 5 5 5 5 5 5 5 ...
 ##  $ MES              : int  1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<pre class="r"><code>levels(raw_data_2016$CLASE)</code></pre>
+<pre><code>## [1] &quot;&quot;                  &quot;Atropello&quot;         &quot;Caída de Ocupante&quot;
+## [4] &quot;Caida Ocupante&quot;    &quot;Choque&quot;            &quot;Incendio&quot;         
+## [7] &quot;Otro&quot;              &quot;Volcamiento&quot;</code></pre>
+<pre class="r"><code>levels(raw_data_2016$CLASE) &lt;- c(&quot;Otro&quot;,&quot;Atropello&quot;,&quot;Caida_Ocupante&quot;,&quot;Caida_Ocupante&quot;,&quot;Choque&quot;,
+                                 &quot;Incendio&quot;,&quot;Otro&quot;,&quot;Volcamiento&quot;)</code></pre>
+<pre class="r"><code>levels(raw_data_2016$CLASE)</code></pre>
+<pre><code>## [1] &quot;Otro&quot;           &quot;Atropello&quot;      &quot;Caida_Ocupante&quot; &quot;Choque&quot;        
+## [5] &quot;Incendio&quot;       &quot;Volcamiento&quot;</code></pre>
 </div>
 <div id="datos-2017" class="section level3">
 <h3>Datos 2017</h3>
@@ -666,44 +749,38 @@ summary {
 ##  $ DISENO           : Factor w/ 13 levels &quot;&quot;,&quot;Ciclo Ruta&quot;,..: 4 3 11 11 11 11 5 11 4 4 ...
 ##  $ DIA_NOMBRE       : Factor w/ 7 levels &quot;DOMINGO  &quot;,&quot;JUEVES   &quot;,..: 2 2 1 5 5 5 6 2 2 7 ...
 ##  $ MES              : int  7 6 7 3 7 4 6 4 6 6 ...</code></pre>
-<pre class="r"><code>levels(raw_data_2014$CLASE)</code></pre>
-<pre><code>## [1] &quot;Atropello&quot;         &quot;Caída de Ocupante&quot; &quot;Choque&quot;           
-## [4] &quot;Incendio&quot;          &quot;Otro&quot;              &quot;Volcamiento&quot;</code></pre>
-<pre class="r"><code>levels(raw_data_2015$CLASE)</code></pre>
-<pre><code>## [1] &quot;&quot;                  &quot;Atropello&quot;         &quot;Caída de Ocupante&quot;
-## [4] &quot;Caida Ocupante&quot;    &quot;Choque&quot;            &quot;Incendio&quot;         
-## [7] &quot;Otro&quot;              &quot;Volcamiento&quot;</code></pre>
-<pre class="r"><code>levels(raw_data_2016$CLASE)</code></pre>
-<pre><code>## [1] &quot;&quot;                  &quot;Atropello&quot;         &quot;Caída de Ocupante&quot;
-## [4] &quot;Caida Ocupante&quot;    &quot;Choque&quot;            &quot;Incendio&quot;         
-## [7] &quot;Otro&quot;              &quot;Volcamiento&quot;</code></pre>
 <pre class="r"><code>levels(raw_data_2017$CLASE)</code></pre>
 <pre><code>## [1] &quot;Atropello&quot;          &quot;Caida Ocupante&quot;     &quot;Caída Ocupante&quot;    
 ## [4] &quot;Choque&quot;             &quot;Choque &quot;            &quot;Choque y Atropello&quot;
 ## [7] &quot;Incendio&quot;           &quot;Otro&quot;               &quot;Volcamiento&quot;</code></pre>
+<pre class="r"><code>levels(raw_data_2017$CLASE) &lt;- c(&quot;Atropello&quot;,&quot;Caida_Ocupante&quot;,&quot;Caida_Ocupante&quot;,&quot;Choque&quot;,&quot;Choque&quot;,
+                                 &quot;Otro&quot;,&quot;Incendio&quot;,&quot;Otro&quot;,&quot;Volcamiento&quot;)</code></pre>
+<pre class="r"><code>levels(raw_data_2017$CLASE)</code></pre>
+<pre><code>## [1] &quot;Atropello&quot;      &quot;Caida_Ocupante&quot; &quot;Choque&quot;         &quot;Otro&quot;          
+## [5] &quot;Incendio&quot;       &quot;Volcamiento&quot;</code></pre>
+<pre class="r"><code>levels(raw_data_2017$CLASE)</code></pre>
+<pre><code>## [1] &quot;Atropello&quot;      &quot;Caida_Ocupante&quot; &quot;Choque&quot;         &quot;Otro&quot;          
+## [5] &quot;Incendio&quot;       &quot;Volcamiento&quot;</code></pre>
 <pre class="r"><code>summary(raw_data_2014$CLASE)</code></pre>
-<pre><code>##         Atropello Caída de Ocupante            Choque          Incendio 
-##              4779              4157             27157                 8 
-##              Otro       Volcamiento 
-##              4521               972</code></pre>
+<pre><code>##      Atropello Caida_Ocupante         Choque       Incendio           Otro 
+##           4779           4157          27157              8           4521 
+##    Volcamiento 
+##            972</code></pre>
 <pre class="r"><code>summary(raw_data_2015$CLASE)</code></pre>
-<pre><code>##                           Atropello Caída de Ocupante    Caida Ocupante 
-##                 1              4485                18              3673 
-##            Choque          Incendio              Otro       Volcamiento 
-##             28249                 1              4218              1435</code></pre>
+<pre><code>##           Otro      Atropello Caida_Ocupante         Choque       Incendio 
+##           4219           4485           3691          28249              1 
+##    Volcamiento 
+##           1435</code></pre>
 <pre class="r"><code>summary(raw_data_2016$CLASE)</code></pre>
-<pre><code>##                           Atropello Caída de Ocupante    Caida Ocupante 
-##                 5              4167              1490              2190 
-##            Choque          Incendio              Otro       Volcamiento 
-##             28631                 4              4870              1484</code></pre>
+<pre><code>##           Otro      Atropello Caida_Ocupante         Choque       Incendio 
+##           4875           4167           3680          28631              4 
+##    Volcamiento 
+##           1484</code></pre>
 <pre class="r"><code>summary(raw_data_2017$CLASE)</code></pre>
-<pre><code>##          Atropello     Caida Ocupante     Caída Ocupante 
-##               3640               3423                 10 
-##             Choque            Choque  Choque y Atropello 
-##              29192                  3                  1 
-##           Incendio               Otro        Volcamiento 
-##                  4               4718               1572</code></pre>
-<p>Se debe hacer una depuración de las etiquetas del factor CLASE</p>
+<pre><code>##      Atropello Caida_Ocupante         Choque           Otro       Incendio 
+##           3640           3433          29195           4719              4 
+##    Volcamiento 
+##           1572</code></pre>
 </div>
 <div id="unir-los-datos" class="section level3">
 <h3>Unir los datos</h3>
@@ -718,7 +795,7 @@ summary {
 ##  $ HORA             : Factor w/ 1389 levels &quot;01:00 AM&quot;,&quot;01:00 PM&quot;,..: 95 954 1 938 777 201 469 268 37 72 ...
 ##  $ DIA              : int  1 1 1 1 1 1 1 1 1 1 ...
 ##  $ PERIODO          : int  2014 2014 2014 2014 2014 2014 2014 2014 2014 2014 ...
-##  $ CLASE            : Factor w/ 11 levels &quot;Atropello&quot;,&quot;Caída de Ocupante&quot;,..: 3 1 1 1 2 3 3 3 3 2 ...
+##  $ CLASE            : Factor w/ 6 levels &quot;Atropello&quot;,&quot;Caida_Ocupante&quot;,..: 3 1 1 1 2 3 3 3 3 2 ...
 ##  $ DIRECCION        : Factor w/ 26335 levels &quot;CL 1 A CR 42&quot;,..: 11441 8871 6987 1424 11297 8063 3081 6269 11142 8131 ...
 ##  $ DIRECCION_ENC    : Factor w/ 25304 levels &quot;000&quot;,&quot;CL     029  000 00000&quot;,..: 11024 8642 6786 915 11166 7817 2469 6072 10863 7898 ...
 ##  $ CBML             : Factor w/ 638 levels &quot;&quot;,&quot;0101&quot;,&quot;01010480009&quot;,..: 333 192 39 340 105 48 170 176 241 280 ...
@@ -730,10 +807,13 @@ summary {
 ##  $ DIA_NOMBRE       : Factor w/ 7 levels &quot;DOMINGO  &quot;,&quot;JUEVES   &quot;,..: 5 5 5 5 5 5 5 5 5 5 ...
 ##  $ MES              : int  1 1 1 1 1 1 1 1 1 1 ...</code></pre>
 <pre class="r"><code>levels(Train_Dataset$CLASE)</code></pre>
-<pre><code>##  [1] &quot;Atropello&quot;          &quot;Caída de Ocupante&quot;  &quot;Choque&quot;            
-##  [4] &quot;Incendio&quot;           &quot;Otro&quot;               &quot;Volcamiento&quot;       
-##  [7] &quot;&quot;                   &quot;Caida Ocupante&quot;     &quot;Caída Ocupante&quot;    
-## [10] &quot;Choque &quot;            &quot;Choque y Atropello&quot;</code></pre>
+<pre><code>## [1] &quot;Atropello&quot;      &quot;Caida_Ocupante&quot; &quot;Choque&quot;         &quot;Incendio&quot;      
+## [5] &quot;Otro&quot;           &quot;Volcamiento&quot;</code></pre>
+<pre class="r"><code>summary(Train_Dataset$CLASE)</code></pre>
+<pre><code>##      Atropello Caida_Ocupante         Choque       Incendio           Otro 
+##          17071          14961         113232             17          18334 
+##    Volcamiento 
+##           5463</code></pre>
 </div>
 </div>
 </div>

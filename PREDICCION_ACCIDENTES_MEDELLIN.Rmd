@@ -40,6 +40,18 @@ str(raw_data_2014)
 ```
 
 
+```{r}
+levels(raw_data_2014$CLASE)
+```
+
+```{r}
+levels(raw_data_2014$CLASE) <- c("Atropello","Caida_Ocupante","Choque","Incendio","Otro",
+                                 "Volcamiento")
+```
+
+```{r}
+levels(raw_data_2014$CLASE)
+```
 
 ### Datos de 2015
 
@@ -53,7 +65,24 @@ head(raw_data_2015)
 ```
 
 ```{r}
+summary(raw_data_2015)
+```
+
+```{r}
 str(raw_data_2015)
+```
+
+```{r}
+levels(raw_data_2015$CLASE)
+```
+
+```{r}
+levels(raw_data_2015$CLASE) <- c("Otro","Atropello","Caida_Ocupante","Caida_Ocupante","Choque",
+                                 "Incendio","Otro","Volcamiento")
+```
+
+```{r}
+levels(raw_data_2015$CLASE)
 ```
 
 ### Datos 2016
@@ -68,6 +97,21 @@ head(raw_data_2016)
 str(raw_data_2016)
 ```
 
+
+```{r}
+levels(raw_data_2016$CLASE)
+```
+
+```{r}
+levels(raw_data_2016$CLASE) <- c("Otro","Atropello","Caida_Ocupante","Caida_Ocupante","Choque",
+                                 "Incendio","Otro","Volcamiento")
+```
+
+```{r}
+levels(raw_data_2016$CLASE)
+```
+
+
 ### Datos 2017
 
 ```{r}
@@ -80,10 +124,21 @@ head(raw_data_2017)
 str(raw_data_2017)
 ```
 
+
 ```{r}
-levels(raw_data_2014$CLASE)
-levels(raw_data_2015$CLASE)
-levels(raw_data_2016$CLASE)
+levels(raw_data_2017$CLASE)
+```
+
+```{r}
+levels(raw_data_2017$CLASE) <- c("Atropello","Caida_Ocupante","Caida_Ocupante","Choque","Choque",
+                                 "Otro","Incendio","Otro","Volcamiento")
+```
+
+```{r}
+levels(raw_data_2017$CLASE)
+```
+
+```{r}
 levels(raw_data_2017$CLASE)
 ```
 
@@ -103,22 +158,6 @@ summary(raw_data_2016$CLASE)
 summary(raw_data_2017$CLASE)
 ```
 
-Se debe hacer una depuración de las etiquetas del factor CLASE
-
-```{r}
-levels(raw_data_2017$CLASE)[levels(raw_data_2015$CLASE)=="Caida de Ocupante"] <- "Caída de Ocupante"
-levels(raw_data_2017$CLASE)[levels(raw_data_2016$CLASE)=="Caida de Ocupante"] <- "Caída de Ocupante"
-levels(raw_data_2017$CLASE)[levels(raw_data_2017$CLASE)=="Caida de Ocupante"] <- "Caída de Ocupante"
-```
-
-```{r}
-levels(raw_data_2014$CLASE)
-levels(raw_data_2015$CLASE)
-levels(raw_data_2016$CLASE)
-levels(raw_data_2017$CLASE)
-```
-
-
 
 
 ### Unir los datos
@@ -133,6 +172,10 @@ str(Train_Dataset)
 
 ```{r}
 levels(Train_Dataset$CLASE)
+```
+
+```{r}
+summary(Train_Dataset$CLASE)
 ```
 
 
