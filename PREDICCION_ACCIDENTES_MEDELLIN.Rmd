@@ -159,36 +159,6 @@ summary(raw_data_2017$CLASE)
 ```
 
 
-
-### Unir los datos
-
-```{r}
-Train_Dataset <- rbind(raw_data_2014,raw_data_2015,raw_data_2016, raw_data_2017)
-```
-
-```{r}
-str(Train_Dataset)
-```
-
-```{r}
-levels(Train_Dataset$CLASE)
-```
-
-```{r}
-summary(Train_Dataset$CLASE)
-```
-
-La Fecha está cargada como factor, se realiza una transformación a formato de fecha (date)
-
-
-```{r}
-Train_Dataset$FECHA <- as.Date(Train_Dataset$FECHA, format="%Y-%m-%d")
-tail(Train_Dataset)
-```
-
-
-Ahora se cargan los datos de 2018 como test data
-
 ```{r}
 raw_data_2018 <- read.csv(file="./data/Accidentalidad_georreferenciada_2018.csv", encoding="UTF-8", header=TRUE, sep=",")
 ```
@@ -209,10 +179,41 @@ levels(raw_data_2018$CLASE) <- c("Atropello","Caida_Ocupante","Caida_Ocupante","
 levels(raw_data_2018$CLASE)
 ```
 
+
 ```{r}
-raw_data_2018$FECHA <- as.Date(raw_data_2018$FECHA, format="%Y-%m-%d")
-tail(Train_Dataset)
+summary(raw_data_2018$CLASE)
 ```
+
+
+### Unir los datos
+
+```{r}
+Total_Dataset <- rbind(raw_data_2014,raw_data_2015,raw_data_2016, raw_data_2017, raw_data_2018)
+```
+
+```{r}
+str(Total_Dataset)
+```
+
+```{r}
+levels(Total_Dataset$CLASE)
+```
+
+```{r}
+summary(Total_Dataset$CLASE)
+```
+
+La Fecha está cargada como factor, se realiza una transformación a formato de fecha (date)
+
+
+```{r}
+Total_Dataset$FECHA <- as.Date(Total_Dataset$FECHA, format="%Y-%m-%d")
+tail(Total_Dataset)
+```
+
+
+
+
 
 
 # ANALISIS DESCRIPTIVO
