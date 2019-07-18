@@ -224,6 +224,19 @@ library(dplyr)
 Datos_Diarios=Total_Dataset%>%group_by(FECHA)%>%summarise(conteo=n())
 ```
 
+
+```{r message=FALSE}
+library(plotly)
+plot_ly (data=subset(Datos_Diarios,subset = (FECHA<="2017-12-31")),
+         x = ~FECHA,
+         y = ~conteo,
+         type = "scatter" ,mode = "lines",
+         line=list(width=1))%>%
+  layout(title='Choques Diarios',
+         xaxis=list(title="Día"),
+         yaxis=list(title="Número de choques"))
+```
+
 # EVALUACIÓN DE MODELOS
 
 
