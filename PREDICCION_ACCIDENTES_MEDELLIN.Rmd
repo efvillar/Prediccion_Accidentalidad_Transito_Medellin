@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # HIPOTESIS
 
 
-# ANALISIS DESCRIPTIVO
+# CARGA Y DEPURACION DE DATOS
 
 ## Carga de Datos
 
@@ -177,6 +177,45 @@ levels(Train_Dataset$CLASE)
 ```{r}
 summary(Train_Dataset$CLASE)
 ```
+
+La Fecha está cargada como factor, se realiza una transformación a formato de fecha (date)
+
+
+```{r}
+Train_Dataset$FECHA <- as.Date(Train_Dataset$FECHA, format="%Y-%m-%d")
+tail(Train_Dataset)
+```
+
+
+Ahora se cargan los datos de 2018 como test data
+
+```{r}
+raw_data_2018 <- read.csv(file="./data/Accidentalidad_georreferenciada_2018.csv", encoding="UTF-8", header=TRUE, sep=",")
+```
+
+```{r}
+str(raw_data_2018)
+```
+
+```{r}
+levels(raw_data_2018$CLASE)
+```
+
+```{r}
+levels(raw_data_2018$CLASE) <- c("Atropello","Caida_Ocupante","Caida_Ocupante","Choque","Incendio","Otro", "Volcamiento")
+```
+
+```{r}
+levels(raw_data_2018$CLASE)
+```
+
+```{r}
+raw_data_2018$FECHA <- as.Date(raw_data_2018$FECHA, format="%Y-%m-%d")
+tail(Train_Dataset)
+```
+
+
+# ANALISIS DESCRIPTIVO
 
 
 
