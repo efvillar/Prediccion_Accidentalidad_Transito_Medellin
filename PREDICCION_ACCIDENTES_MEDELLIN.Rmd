@@ -222,6 +222,7 @@ tail(Total_Dataset)
 library(plyr)
 library(dplyr)
 Datos_Diarios=Total_Dataset%>%group_by(FECHA)%>%summarise(conteo=n())
+```
 
 # EVALUACIÓN DE MODELOS
 
