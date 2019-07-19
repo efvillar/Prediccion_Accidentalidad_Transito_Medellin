@@ -211,13 +211,104 @@ Total_Dataset$FECHA <- as.Date(Total_Dataset$FECHA, format="%Y-%m-%d")
 tail(Total_Dataset)
 ```
 
+Se convierten las variables día y mes a factor
+
+```{r}
+Total_Dataset$DIA <- as.factor(Total_Dataset$DIA)
+Total_Dataset$MES <- as.factor(Total_Dataset$MES)
+```
+
+```{r}
+tail(Total_Dataset)
+```
+
+Se genera frecuencia que es la tabla a analizar
+
+```{r}
+library(sqldf)
+Total_Dataset_Freq <- sqldf("SELECT FECHA, CLASE, count(CLASE) AS FREQ, DIA_NOMBRE, MES, DIA 
+       FROM Total_Dataset
+       GROUP BY FECHA, CLASE")
+```
 
 
+se agrega la variable año al datafrate
+
+```{r}
+Total_Dataset_Freq$ANO <- as.factor(format(Total_Dataset_Freq$FECHA,'%Y'))
+```
 
 
+```{r}
+tail(Total_Dataset_Freq)
+```
+
+```{r}
+levels(Total_Dataset_Freq$DIA_NOMBRE)
+```
+
+```{r}
+levels(Total_Dataset_Freq$DIA_NOMBRE) <- c("DOMINGO","JUEVES","LUNES","MARTES","MIERCOLES","SABADO","VIERNES") 
+```
+
+```{r}
+levels(Total_Dataset_Freq$DIA_NOMBRE)
+```
+
+
+```{r}
+Total_Dataset_Freq$DIA_NOMBRE <- ordered(Total_Dataset_Freq$DIA_NOMBRE,c("LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", "SABADO", "DOMINGO"))
+```
+
+```{r}
+levels(Total_Dataset_Freq$DIA_NOMBRE)
+```
 
 # ANALISIS DESCRIPTIVO
 
+```{r}
+library(plotly)
+plot_ly(data=Total_Dataset_Freq,
+        x = ~FECHA,
+        y = ~FREQ,
+        type = "scatter", mode = "lines",
+        split = ~ANO,
+         ine=list(width=1))%>%
+  layout(title='Accidentes_Medellin',
+         xaxis=list(title="Dia"),
+         yaxis=list(title="Unidades"))
+```
+
+```{r}
+plot_ly(data=Total_Dataset_Freq,
+        x = ~ANO,
+        y = ~FREQ,
+        type = "box")%>%
+  layout(title='Accidentes_Medellin',
+         xaxis=list(title="Año"),
+         yaxis=list(title="Unidades"))
+```
+
+```{r}
+plot_ly(data=Total_Dataset_Freq,
+        x = ~MES,
+        y = ~FREQ,
+        type = "box")%>%
+  layout(title='Accidentes_Medellin',
+         xaxis=list(title="Mes"),
+         yaxis=list(title="Unidades"))
+```
+
+
+```{r}
+plot_ly(data=Total_Dataset_Freq,
+        x = ~DIA_NOMBRE,
+        y = ~FREQ,
+        type = "box")%>%
+  layout(title='Accidentes_Medellin',
+         xaxis=list(title="Dia_Nombre"),
+         yaxis=list(title="Unidades"))
+```
 
 
 # EVALUACIÓN DE MODELOS
