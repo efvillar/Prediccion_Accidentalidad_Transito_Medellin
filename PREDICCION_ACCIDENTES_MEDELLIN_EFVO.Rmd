@@ -267,7 +267,6 @@ levels(Total_Dataset_Freq$DIA_NOMBRE)
 # ANALISIS DESCRIPTIVO
 
 ```{r}
-<<<<<<< HEAD
 library(plotly)
 plot_ly(data=Total_Dataset_Freq,
         x = ~FECHA,
@@ -280,15 +279,19 @@ plot_ly(data=Total_Dataset_Freq,
          yaxis=list(title="Unidades"))
 ```
 
+
+
 ```{r}
 plot_ly(data=Total_Dataset_Freq,
         x = ~ANO,
         y = ~FREQ,
         type = "box")%>%
   layout(title='Accidentes_Medellin',
-         xaxis=list(title="Año"),
+         xaxis=list(title="ano"),
          yaxis=list(title="Unidades"))
 ```
+
+
 
 ```{r}
 plot_ly(data=Total_Dataset_Freq,
@@ -309,33 +312,13 @@ plot_ly(data=Total_Dataset_Freq,
   layout(title='Accidentes_Medellin',
          xaxis=list(title="Dia_Nombre"),
          yaxis=list(title="Unidades"))
-=======
-library(plyr)
-library(dplyr)
-Datos_Diarios=Total_Dataset%>%group_by(FECHA)%>%summarise(conteo=n())
->>>>>>> 82647a22fec6c80e2081bf640e35509016f2f0f4
 ```
 
+Se observa que excepto el domingo que es menor, los demásla accidentalidad promedio es muy similar, pero se diferencia en la cola derecha de la distribucion 
 
-```{r message=FALSE}
-library(plotly)
-plot_ly (data=subset(Datos_Diarios,subset = (FECHA<="2017-12-31")),
-         x = ~FECHA,
-         y = ~conteo,
-         type = "scatter" ,mode = "lines",
-         line=list(width=1))%>%
-  layout(title='Choques Diarios',
-         xaxis=list(title="Día"),
-         yaxis=list(title="Número de choques"))
-```
 
 # EVALUACIÓN DE MODELOS
 
 
 
 # ELECCIÓN DEL MODELO
-
-
-
-
-
