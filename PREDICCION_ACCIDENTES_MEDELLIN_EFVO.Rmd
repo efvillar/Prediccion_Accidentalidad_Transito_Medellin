@@ -232,6 +232,7 @@ Total_Dataset_Freq <- sqldf("SELECT FECHA, CLASE, count(CLASE) AS FREQ, DIA_NOMB
 ```
 
 
+
 se agrega la variable año al datafrate
 
 ```{r}
@@ -262,6 +263,41 @@ Total_Dataset_Freq$DIA_NOMBRE <- ordered(Total_Dataset_Freq$DIA_NOMBRE,c("LUNES"
 
 ```{r}
 levels(Total_Dataset_Freq$DIA_NOMBRE)
+```
+
+Ahora se agregan otras variables a que caracterizan fechas especiales
+
+
+```{r}
+Dias_Especiales <- read.csv(file="./data/Caracterizacion.csv", encoding="UTF-8", header=TRUE, sep=";",stringsAsFactors=FALSE)
+```
+
+```{r}
+head(Dias_Especiales)
+```
+
+
+```{r}
+Dias_Especiales <- Dias_Especiales[1:1826,]
+Dias_Especiales$FECHA <- as.Date(Dias_Especiales$Fecha, format="%d-%m-%Y")
+```
+
+```{r}
+Dias_Especiales$Fecha <- NULL
+```
+
+
+Estos días especiales se incorporan al dataframe Total_Dataset_Freq
+```{r}
+Total_Dataset_Freq <- sqldf("SELECT * 
+              FROM Total_Dataset_Freq
+              LEFT JOIN Dias_Especiales USING(FECHA)")
+```
+
+
+
+```{r}
+head(Total_Dataset_Freq)
 ```
 
 # ANALISIS DESCRIPTIVO
@@ -315,6 +351,11 @@ plot_ly(data=Total_Dataset_Freq,
 ```
 
 Se observa que excepto el domingo que es menor, los demásla accidentalidad promedio es muy similar, pero se diferencia en la cola derecha de la distribucion 
+
+
+### Analisis exploratorio por tipo de accidente
+
+
 
 
 # EVALUACIÓN DE MODELOS
