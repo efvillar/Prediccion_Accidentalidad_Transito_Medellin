@@ -1,5 +1,5 @@
 ---
-title: "PREDICCIÓN ACCIDENTES MEDELLIN"
+title: "PREDICCION ACCIDENTES MEDELLIN"
 author: "Edwin Villarraga"
 date: "16/7/2019"
 output: html_document
@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-# DESCRIPCIÓN DEL PROBLEMA
+# DESCRIPCION DEL PROBLEMA
 
 
 # HIPOTESIS
@@ -22,7 +22,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Datos de 2014
 
-Durante la carga de datos se realizó la verificación de las clases de accidentes e inicialmente se identificaron 6 categorias:
+Durante la carga de datos se realizo la verificacion de las clases de accidentes e inicialmente se identificaron 6 categorias:
 1. Atropello
 2. Caida_Ocupante
 3. Choque
@@ -30,7 +30,7 @@ Durante la carga de datos se realizó la verificación de las clases de accident
 5. Otro
 6. Volcamiento
 
-Sin embargo entre 2014 y 2017 solo se presentaron 17 casos de incendio y en el año 2018, 7 casos.  Dada la poca cantidad de eventos se dejaron finalmente 5 categorias dado que incendio se incorporó a otro:
+Sin embargo entre 2014 y 2017 solo se presentaron 17 casos de incendio y en el año 2018, 7 casos.  Dada la poca cantidad de eventos se dejaron finalmente 5 categorias dado que incendio se incorporo a otro:
 
 1. Atropello
 2. Caida_Ocupante
@@ -199,7 +199,7 @@ summary(raw_data_2018$CLASE)
 ```
 
 
-### Unión de los datos
+### Union de los datos
 
 ```{r}
 Total_Dataset <- rbind(raw_data_2014,raw_data_2015,raw_data_2016, raw_data_2017, raw_data_2018)
@@ -224,7 +224,7 @@ rm(raw_data_2014,raw_data_2015,raw_data_2016, raw_data_2017, raw_data_2018)
 ```
 
 
-La Fecha está cargada como factor, se realiza una transformación a formato de fecha (date)
+La Fecha esta cargada como factor, se realiza una transformacion a formato de fecha (date)
 
 
 ```{r}
@@ -232,7 +232,7 @@ Total_Dataset$FECHA <- as.Date(Total_Dataset$FECHA, format="%Y-%m-%d")
 tail(Total_Dataset)
 ```
 
-Se convierten las variables día y mes a factor
+Se convierten las variables dia y mes a factor
 
 ```{r}
 Total_Dataset$DIA <- as.factor(Total_Dataset$DIA)
@@ -306,7 +306,7 @@ Dias_Especiales <- read.csv(file="./data/Caracterizacion.csv", encoding="UTF-8",
 head(Dias_Especiales)
 ```
 
-Se transforma la variable FEcha a formato Fecha pues se cargó como factor y se unifica el nombre a FECHA para que coincida con l clave de la tabla Total_Dataset_Freq
+Se transforma la variable FEcha a formato Fecha pues se cargo como factor y se unifica el nombre a FECHA para que coincida con l clave de la tabla Total_Dataset_Freq
 
 ```{r}
 Dias_Especiales <- Dias_Especiales[1:1826,]
@@ -318,7 +318,7 @@ Dias_Especiales$Fecha <- NULL
 ```
 
 
-Estos días especiales se incorporan al dataframe Total_Dataset_Freq
+Estos dias especiales se incorporan al dataframe Total_Dataset_Freq
 ```{r}
 Total_Dataset_Freq <- sqldf("SELECT * 
               FROM Total_Dataset_Freq
@@ -385,7 +385,7 @@ plot_ly(data=Total_Dataset_Freq,
          yaxis=list(title="Unidades"))
 ```
 
-Se observa que excepto el domingo que es menor, los demásla accidentalidad promedio es muy similar, pero se diferencia en la cola derecha de la distribucion 
+Se observa que excepto el domingo que es menor, los demasla accidentalidad promedio es muy similar, pero se diferencia en la cola derecha de la distribucion 
 
 
 ```{r}
@@ -411,7 +411,7 @@ aggregate(FREQ~ANO*MES, data=Total_Dataset_Freq,FUN=mean)%>%
          type = "scatter" ,mode = "lines",
          split = ~ANO,
          line=list(width=1))%>%
-  layout(title='Promedio diario mensual de ACCIDENTES en Medellín',
+  layout(title='Promedio diario mensual de ACCIDENTES en Medellin',
          xaxis=list(title="Mes"),
          yaxis=list(title="No. Accidentes"))
 ```
@@ -423,8 +423,8 @@ aggregate(FREQ~ANO*DIA_NOMBRE, data=Total_Dataset_Freq,FUN=mean)%>%
          type = "scatter" ,mode = "lines",
          split = ~ANO,
          line=list(width=1))%>%
-  layout(title='Promedio diario DIA DE LA SEMANA de Accidentes de Tránsito en Medellín',
-         xaxis=list(title="Día Semana"),
+  layout(title='Promedio diario DIA DE LA SEMANA de Accidentes de Transito en Medellin',
+         xaxis=list(title="Dia Semana"),
          yaxis=list(title="No. Accidentes"))
 ```
 
@@ -435,17 +435,17 @@ aggregate(FREQ~ANO*CLASE, data=Total_Dataset_Freq,FUN=mean)%>%
          type = "scatter" ,mode = "lines",
          split = ~ANO,
          line=list(width=1))%>%
-  layout(title='Promedio diario CLASE de Accidentes de Tránsito en Medellín',
+  layout(title='Promedio diario CLASE de Accidentes de Transito en Medellin',
          xaxis=list(title="Clase"),
          yaxis=list(title="No. Accidentes"))
 ```
 
 
-LAs predicciones a realizar serán para cada uno de las 5 clases de accidentes, y para los periodos de tiempo mensual, semanal y diario, por lo que se generarán 15 modelos, 5 clases de accidente por 3 tipos de periodo de predicción.
+LAs predicciones a realizar seran para cada uno de las 5 clases de accidentes, y para los periodos de tiempo mensual, semanal y diario, por lo que se generaran 15 modelos, 5 clases de accidente por 3 tipos de periodo de prediccion.
 
-Se realiza entonces la partición de los datos por frecuencia: M: Mensual, S: Semanal, D: Diario
+Se realiza entonces la particion de los datos por frecuencia: M: Mensual, S: Semanal, D: Diario
 
-primero se realiza un reshape del dataframe para consolidar los casos por día y separarlos factores CLASE en columnas
+primero se realiza un reshape del dataframe para consolidar los casos por dia y separarlos factores CLASE en columnas
 
 
 
@@ -479,7 +479,7 @@ SE agrega la variable dia al dataframe
 Total_Dataset_Freq$DIA <-as.factor(format(Total_Dataset_Freq$FECHA,'%d'))
 ```
 
-Se agrega el día de la semana
+Se agrega el dia de la semana
 
 ```{r}
 Total_Dataset_Freq$DIA_SEMANA <-as.factor(weekdays(Total_Dataset_Freq$FECHA))
@@ -516,9 +516,9 @@ Total_Dataset_Freq[is.na(Total_Dataset_Freq)] <- 0
 
 
 
-# EVALUACIÓN DE MODELOS
+# EVALUACION DE MODELOS
 
-## 1. Partición de los datos para entrenamiento y test
+## 1. Particion de los datos para entrenamiento y test
 
 ```{r}
 Train_D_Dataset <- subset(Total_Dataset_Freq, ANO!="2018")
@@ -656,4 +656,4 @@ RMSE_test
 
 
 
-# ELECCIÓN DEL MODELO
+# ELECCION DEL MODELO
