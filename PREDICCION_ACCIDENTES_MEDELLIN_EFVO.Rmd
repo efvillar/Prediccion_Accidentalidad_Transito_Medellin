@@ -585,7 +585,7 @@ library(caret)
 
 ```{r}
 trcntrl = trainControl(method="cv", number=10)
-caret_knn_fit = caret::train(Total_Accidentes~DIA+SEMANA+MES, data=Train_D_Dataset,
+caret_knn_fit = caret::train(Total_Accidentes~DIA+SEMANA+MES+DIA_SEMANA, data=Train_D_Dataset,
                       method = "knn", trControl = trcntrl,
                       preProcess=c("center", "scale"),
                       tuneLength = 10)
@@ -603,7 +603,7 @@ caret_knn_fit
 Calculo MSE y RMSE para los datos de entrenamiento
 
 ```{r}
-y_tr_pred<-predict(caret_knn_fit,Train_D_Dataset[,c("DIA","SEMANA","MES")])
+y_tr_pred<-predict(caret_knn_fit,Train_D_Dataset[,c("DIA","SEMANA","MES","DIA_SEMANA")])
 mse_tr<-mean((Train_D_Dataset$Total_Accidentes-y_tr_pred)^2) # calcula el mse de entrenamiento
 RMSE_tr = sqrt(mse_tr)
 mse_tr
@@ -615,7 +615,7 @@ RMSE_tr
 Calculo MSE y RMSE para los datos de prueba (2018)
 
 ```{r}
-y_test_pred<-predict(caret_knn_fit,Test_D_Dataset[,c("DIA","SEMANA","MES")])
+y_test_pred<-predict(caret_knn_fit,Test_D_Dataset[,c("DIA","SEMANA","MES","DIA_SEMANA")])
 mse_test<-mean((Test_D_Dataset$Total_Accidentes-y_test_pred)^2) # calcula el mse de entrenamiento
 RMSE_test = sqrt(mse_test)
 mse_test
@@ -627,6 +627,46 @@ RMSE_test
 ## 2. REGRESION LINEAL
 
 
+```{r}
+head(Train_D_Dataset)
+```
+
+
+
+```{r}
+trcntrl = trainControl(method="cv", number=10)
+caret_knn_fit = caret::train(Total_Accidentes~SEMANA+DIA_SEMANA+Semana.Santa+Prima+Feriado, data=Train_D_Dataset,
+                      method = "lm", trControl = trcntrl,
+                      preProcess=c("center", "scale"),
+                      tuneLength = 10)
+```
+
+
+```{r}
+summary(caret_knn_fit)
+```
+
+```{r}
+caret_knn_fit
+```
+
+Calculo MSE y RMSE para los datos de entrenamiento
+
+```{r}
+y_tr_pred<-predict(caret_knn_fit,Train_D_Dataset[,c("SEMANA","DIA_SEMANA","Semana.Santa","Prima","Feriado")])
+mse_tr<-mean((Train_D_Dataset$Total_Accidentes-y_tr_pred)^2) # calcula el mse de entrenamiento
+RMSE_tr = sqrt(mse_tr)
+mse_tr
+RMSE_tr
+```
+
+```{r}
+y_test_pred<-predict(caret_knn_fit,Test_D_Dataset[,c("SEMANA","DIA_SEMANA","Semana.Santa","Prima","Feriado")])
+mse_test<-mean((Test_D_Dataset$Total_Accidentes-y_test_pred)^2) # calcula el mse de entrenamiento
+RMSE_test = sqrt(mse_test)
+mse_test
+RMSE_test
+```
 
 
 
