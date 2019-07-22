@@ -22,6 +22,23 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Datos de 2014
 
+Durante la carga de datos se realizó la verificación de las clases de accidentes e inicialmente se identificaron 6 categorias:
+1. Atropello
+2. Caida_Ocupante
+3. Choque
+4. Incendio
+5. Otro
+6. Volcamiento
+
+Sin embargo entre 2014 y 2017 solo se presentaron 17 casos de incendio y en el año 2018, 7 casos.  Dada la poca cantidad de eventos se dejaron finalmente 5 categorias dado que incendio se incorporó a otro:
+
+1. Atropello
+2. Caida_Ocupante
+3. Choque
+4. Otro
+5. Volcamiento
+
+
 ```{r}
 raw_data_2014 <- read.csv(file="./data/Accidentalidad_georreferenciada_2014.csv", encoding="UTF-8", header=TRUE, sep=",")
 ```
@@ -45,7 +62,7 @@ levels(raw_data_2014$CLASE)
 ```
 
 ```{r}
-levels(raw_data_2014$CLASE) <- c("Atropello","Caida_Ocupante","Choque","Incendio","Otro",
+levels(raw_data_2014$CLASE) <- c("Atropello","Caida_Ocupante","Choque","Otro","Otro",
                                  "Volcamiento")
 ```
 
@@ -78,7 +95,7 @@ levels(raw_data_2015$CLASE)
 
 ```{r}
 levels(raw_data_2015$CLASE) <- c("Otro","Atropello","Caida_Ocupante","Caida_Ocupante","Choque",
-                                 "Incendio","Otro","Volcamiento")
+                                 "Otro","Otro","Volcamiento")
 ```
 
 ```{r}
@@ -104,7 +121,7 @@ levels(raw_data_2016$CLASE)
 
 ```{r}
 levels(raw_data_2016$CLASE) <- c("Otro","Atropello","Caida_Ocupante","Caida_Ocupante","Choque",
-                                 "Incendio","Otro","Volcamiento")
+                                 "Otro","Otro","Volcamiento")
 ```
 
 ```{r}
@@ -131,16 +148,13 @@ levels(raw_data_2017$CLASE)
 
 ```{r}
 levels(raw_data_2017$CLASE) <- c("Atropello","Caida_Ocupante","Caida_Ocupante","Choque","Choque",
-                                 "Otro","Incendio","Otro","Volcamiento")
+                                 "Choque","Otro","Otro","Volcamiento")
 ```
 
 ```{r}
 levels(raw_data_2017$CLASE)
 ```
 
-```{r}
-levels(raw_data_2017$CLASE)
-```
 
 ```{r}
 summary(raw_data_2014$CLASE)
@@ -172,7 +186,7 @@ levels(raw_data_2018$CLASE)
 ```
 
 ```{r}
-levels(raw_data_2018$CLASE) <- c("Atropello","Caida_Ocupante","Caida_Ocupante","Choque","Incendio","Otro", "Volcamiento")
+levels(raw_data_2018$CLASE) <- c("Atropello","Caida_Ocupante","Caida_Ocupante","Choque","Otro","Otro", "Volcamiento")
 ```
 
 ```{r}
@@ -185,7 +199,7 @@ summary(raw_data_2018$CLASE)
 ```
 
 
-### Unir los datos
+### Unión de los datos
 
 ```{r}
 Total_Dataset <- rbind(raw_data_2014,raw_data_2015,raw_data_2016, raw_data_2017, raw_data_2018)
@@ -203,6 +217,13 @@ levels(Total_Dataset$CLASE)
 summary(Total_Dataset$CLASE)
 ```
 
+Para ahorra memoria se eliminan los dataframes por año
+
+```{r}
+rm(raw_data_2014,raw_data_2015,raw_data_2016, raw_data_2017, raw_data_2018)
+```
+
+
 La Fecha está cargada como factor, se realiza una transformación a formato de fecha (date)
 
 
@@ -217,6 +238,7 @@ Se convierten las variables día y mes a factor
 Total_Dataset$DIA <- as.factor(Total_Dataset$DIA)
 Total_Dataset$MES <- as.factor(Total_Dataset$MES)
 ```
+
 
 ```{r}
 tail(Total_Dataset)
@@ -239,10 +261,18 @@ se agrega la variable año al datafrate
 Total_Dataset_Freq$ANO <- as.factor(format(Total_Dataset_Freq$FECHA,'%Y'))
 ```
 
+Se agrega la variable semana al dataframe
+
+```{r}
+Total_Dataset_Freq$SEMANA <-as.factor(format(Total_Dataset_Freq$FECHA,'%V'))
+```
+
 
 ```{r}
 tail(Total_Dataset_Freq)
 ```
+
+Se depura la variable DIA_NOMBRE para eliminar los espacios, quitar tildes, dar un orden al factor
 
 ```{r}
 levels(Total_Dataset_Freq$DIA_NOMBRE)
@@ -265,7 +295,7 @@ Total_Dataset_Freq$DIA_NOMBRE <- ordered(Total_Dataset_Freq$DIA_NOMBRE,c("LUNES"
 levels(Total_Dataset_Freq$DIA_NOMBRE)
 ```
 
-Ahora se agregan otras variables a que caracterizan fechas especiales
+Ahora se agregan otras variables a que caracterizan fechas especiales.  Se carga un CSV y se realiza un left join a la tabla Total_Dataset_Freq
 
 
 ```{r}
@@ -276,6 +306,7 @@ Dias_Especiales <- read.csv(file="./data/Caracterizacion.csv", encoding="UTF-8",
 head(Dias_Especiales)
 ```
 
+Se transforma la variable FEcha a formato Fecha pues se cargó como factor y se unifica el nombre a FECHA para que coincida con l clave de la tabla Total_Dataset_Freq
 
 ```{r}
 Dias_Especiales <- Dias_Especiales[1:1826,]
@@ -300,7 +331,11 @@ Total_Dataset_Freq <- sqldf("SELECT *
 head(Total_Dataset_Freq)
 ```
 
+
+
 # ANALISIS DESCRIPTIVO
+
+## Para el Total de Accidentes
 
 ```{r}
 library(plotly)
@@ -353,12 +388,271 @@ plot_ly(data=Total_Dataset_Freq,
 Se observa que excepto el domingo que es menor, los demásla accidentalidad promedio es muy similar, pero se diferencia en la cola derecha de la distribucion 
 
 
-### Analisis exploratorio por tipo de accidente
+```{r}
+plot_ly(data=Total_Dataset_Freq,
+        x = ~SEMANA,
+        y = ~FREQ,
+        type = "box")%>%
+  layout(title='Accidentes_Medellin',
+         xaxis=list(title="SEMANA"),
+         yaxis=list(title="Unidades"))
+```
+
+
+
+```{r}
+attach(Total_Dataset_Freq)
+```
+
+```{r}
+aggregate(FREQ~ANO*MES, data=Total_Dataset_Freq,FUN=mean)%>%
+  plot_ly(x = ~MES,
+         y = ~FREQ,
+         type = "scatter" ,mode = "lines",
+         split = ~ANO,
+         line=list(width=1))%>%
+  layout(title='Promedio diario mensual de ACCIDENTES en Medellín',
+         xaxis=list(title="Mes"),
+         yaxis=list(title="No. Accidentes"))
+```
+
+```{r}
+aggregate(FREQ~ANO*DIA_NOMBRE, data=Total_Dataset_Freq,FUN=mean)%>%
+  plot_ly(x = ~DIA_NOMBRE,
+         y = ~FREQ,
+         type = "scatter" ,mode = "lines",
+         split = ~ANO,
+         line=list(width=1))%>%
+  layout(title='Promedio diario DIA DE LA SEMANA de Accidentes de Tránsito en Medellín',
+         xaxis=list(title="Día Semana"),
+         yaxis=list(title="No. Accidentes"))
+```
+
+```{r}
+aggregate(FREQ~ANO*CLASE, data=Total_Dataset_Freq,FUN=mean)%>%
+  plot_ly(x = ~CLASE,
+         y = ~FREQ,
+         type = "scatter" ,mode = "lines",
+         split = ~ANO,
+         line=list(width=1))%>%
+  layout(title='Promedio diario CLASE de Accidentes de Tránsito en Medellín',
+         xaxis=list(title="Clase"),
+         yaxis=list(title="No. Accidentes"))
+```
+
+
+LAs predicciones a realizar serán para cada uno de las 5 clases de accidentes, y para los periodos de tiempo mensual, semanal y diario, por lo que se generarán 15 modelos, 5 clases de accidente por 3 tipos de periodo de predicción.
+
+Se realiza entonces la partición de los datos por frecuencia: M: Mensual, S: Semanal, D: Diario
+
+primero se realiza un reshape del dataframe para consolidar los casos por día y separarlos factores CLASE en columnas
+
+
+
+```{r}
+library(reshape)
+Total_Dataset_Freq <- cast(Total_Dataset_Freq[,c(1,2,3)],FECHA~CLASE)
+```
+
+```{r}
+Total_Dataset_Freq <- sqldf("SELECT * 
+              FROM Total_Dataset_Freq
+              LEFT JOIN Dias_Especiales USING(FECHA)")
+```
+
+
+se agrega la variable año al datafrate
+
+```{r}
+Total_Dataset_Freq$ANO <- as.factor(format(Total_Dataset_Freq$FECHA,'%Y'))
+```
+
+Se agrega la variable semana al dataframe
+
+```{r}
+Total_Dataset_Freq$SEMANA <-as.factor(format(Total_Dataset_Freq$FECHA,'%V'))
+```
+
+SE agrega la variable dia al dataframe
+
+```{r}
+Total_Dataset_Freq$DIA <-as.factor(format(Total_Dataset_Freq$FECHA,'%d'))
+```
+
+Se agrega el día de la semana
+
+```{r}
+Total_Dataset_Freq$DIA_SEMANA <-as.factor(weekdays(Total_Dataset_Freq$FECHA))
+```
+
+Se agrega el mes
+```{r}
+Total_Dataset_Freq$MES <-as.factor(format(Total_Dataset_Freq$FECHA,'%m'))
+```
+
+
+```{r}
+head(Total_Dataset_Freq)
+```
+
+
+Se agrega la columna Total_Accidentes
+
+```{r}
+Total_Dataset_Freq$Total_Accidentes <- Total_Dataset_Freq$Atropello + Total_Dataset_Freq$Caida_Ocupante + Total_Dataset_Freq$Choque + Total_Dataset_Freq$Otro + Total_Dataset_Freq$Volcamiento
+```
+
+```{r}
+tail(Total_Dataset_Freq)
+```
+
+```{r}
+Total_Dataset_Freq[is.na(Total_Dataset_Freq)] <- 0
+```
+
+
+
 
 
 
 
 # EVALUACIÓN DE MODELOS
+
+## 1. Partición de los datos para entrenamiento y test
+
+```{r}
+Train_D_Dataset <- subset(Total_Dataset_Freq, ANO!="2018")
+```
+
+```{r}
+summary(Train_D_Dataset$ANO)
+```
+
+Se ajustan otra vez los niveles del factor ANO
+
+```{r}
+Train_D_Dataset$ANO <- factor(Train_D_Dataset$ANO)
+```
+
+```{r}
+summary(Train_D_Dataset$ANO)
+```
+
+
+
+
+```{r}
+library(sqldf)
+Test_D_Dataset <- sqldf("SELECT *  
+       FROM Total_Dataset_Freq
+       WHERE ANO == 2018")
+```
+
+```{r}
+summary(Test_D_Dataset$ANO)
+```
+
+Se ajustan otra vez los niveles del factor ANO
+
+```{r}
+Test_D_Dataset$ANO <- factor(Test_D_Dataset$ANO)
+```
+
+```{r}
+summary(Test_D_Dataset$ANO)
+```
+
+## 2. KNN
+
+
+
+```{r}
+set.seed(1) # fija la semilla del generador de números para que sea reproducible
+```
+
+
+```{r}
+head(Train_D_Dataset)
+```
+
+#DIA_NOMBRE+DIA+SEMANA+MES+ANO+AmoryAmistad+Madre+Padre+Mujer+Prima+Semana.Santa+Feriado
+
+```{r}
+library(caret)
+```
+
+
+
+```{r}
+trcntrl = trainControl(method="cv", number=10)
+caret_knn_fit = caret::train(Total_Accidentes~DIA+SEMANA+MES, data=Train_D_Dataset,
+                      method = "knn", trControl = trcntrl,
+                      preProcess=c("center", "scale"),
+                      tuneLength = 10)
+```
+
+
+```{r}
+summary(caret_knn_fit)
+```
+
+```{r}
+caret_knn_fit
+```
+
+Calculo MSE y RMSE para los datos de entrenamiento
+
+```{r}
+y_tr_pred<-predict(caret_knn_fit,Train_D_Dataset[,c("DIA","SEMANA","MES")])
+mse_tr<-mean((Train_D_Dataset$Total_Accidentes-y_tr_pred)^2) # calcula el mse de entrenamiento
+RMSE_tr = sqrt(mse_tr)
+mse_tr
+RMSE_tr
+```
+
+
+
+Calculo MSE y RMSE para los datos de prueba (2018)
+
+```{r}
+y_test_pred<-predict(caret_knn_fit,Test_D_Dataset[,c("DIA","SEMANA","MES")])
+mse_test<-mean((Test_D_Dataset$Total_Accidentes-y_test_pred)^2) # calcula el mse de entrenamiento
+RMSE_test = sqrt(mse_test)
+mse_test
+RMSE_test
+```
+
+
+
+## 2. REGRESION LINEAL
+
+
+
+
+
+
+
+## 3. MODELO LINEAL GENERALIZADO
+
+
+
+## 4. ARBOLES DE REGRESION
+
+
+
+## 5. BOSQUE ALEATORIO
+
+
+## 6. XGBOOST
+
+
+
+## 7. RED NEURONAL
+
+
+## 8. SERIE DE TIEMPO
+
+
 
 
 
