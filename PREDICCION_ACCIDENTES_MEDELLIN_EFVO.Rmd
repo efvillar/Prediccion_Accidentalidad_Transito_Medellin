@@ -30,7 +30,7 @@ Durante la carga de datos se realizo la verificacion de las clases de accidentes
 5. Otro
 6. Volcamiento
 
-Sin embargo entre 2014 y 2017 solo se presentaron 17 casos de incendio y en el año 2018, 7 casos.  Dada la poca cantidad de eventos se dejaron finalmente 5 categorias dado que incendio se incorporo a otro:
+Sin embargo entre 2014 y 2017 solo se presentaron 17 casos de incendio y en el ano 2018, 7 casos.  Dada la poca cantidad de eventos se dejaron finalmente 5 categorias dado que incendio se incorporo a otro:
 
 1. Atropello
 2. Caida_Ocupante
@@ -217,7 +217,7 @@ levels(Total_Dataset$CLASE)
 summary(Total_Dataset$CLASE)
 ```
 
-Para ahorra memoria se eliminan los dataframes por año
+Para ahorra memoria se eliminan los dataframes por ano
 
 ```{r}
 rm(raw_data_2014,raw_data_2015,raw_data_2016, raw_data_2017, raw_data_2018)
@@ -255,7 +255,7 @@ Total_Dataset_Freq <- sqldf("SELECT FECHA, CLASE, count(CLASE) AS FREQ, DIA_NOMB
 
 
 
-se agrega la variable año al datafrate
+se agrega la variable ano al datafrate
 
 ```{r}
 Total_Dataset_Freq$ANO <- as.factor(format(Total_Dataset_Freq$FECHA,'%Y'))
@@ -405,6 +405,19 @@ attach(Total_Dataset_Freq)
 ```
 
 ```{r}
+aggregate(FREQ~ANO*SEMANA, data=Total_Dataset_Freq,FUN=mean)%>%
+  plot_ly(x = ~SEMANA,
+         y = ~FREQ,
+         type = "scatter" ,mode = "lines",
+         split = ~ANO,
+         line=list(width=1))%>%
+  layout(title='Promedio diario mensual de ACCIDENTES en Medellin',
+         xaxis=list(title="SEMANA"),
+         yaxis=list(title="No. Accidentes"))
+```
+
+
+```{r}
 aggregate(FREQ~ANO*MES, data=Total_Dataset_Freq,FUN=mean)%>%
   plot_ly(x = ~MES,
          y = ~FREQ,
@@ -461,7 +474,7 @@ Total_Dataset_Freq <- sqldf("SELECT *
 ```
 
 
-se agrega la variable año al datafrate
+se agrega la variable ano al datafrate
 
 ```{r}
 Total_Dataset_Freq$ANO <- as.factor(format(Total_Dataset_Freq$FECHA,'%Y'))
@@ -652,7 +665,7 @@ head(Train_D_Dataset)
 
 ```{r}
 trcntrl = trainControl(method="cv", number=10)
-caret_lm_fit = caret::train(Total_Accidentes~SEMANA+DIA_SEMANA+Semana.Santa+Prima+Feriado, data=Train_D_Dataset,
+caret_lm_fit = caret::train(Total_Accidentes~MES+AmoryAmistad+Madre+Padre+Mujer+SEMANA+DIA_SEMANA+Semana.Santa+Feriado, data=Train_D_Dataset,
                       method = "lm", trControl = trcntrl,
                       preProcess=c("center", "scale"),
                       tuneLength = 10)
@@ -670,7 +683,7 @@ caret_lm_fit
 Calculo MSE y RMSE para los datos de entrenamiento
 
 ```{r}
-y_tr_pred_lm<-predict(caret_lm_fit,Train_D_Dataset[,c("SEMANA","DIA_SEMANA","Semana.Santa","Prima","Feriado")])
+y_tr_pred_lm<-predict(caret_lm_fit,Train_D_Dataset[,c("MES","AmoryAmistad","Madre","Padre","Mujer","SEMANA","DIA_SEMANA","Semana.Santa","Feriado")])
 
 ```
 
@@ -684,12 +697,33 @@ RMSE_tr_lm
 
 
 ```{r}
-y_test_pred_lm<-predict(caret_lm_fit,Test_D_Dataset[,c("SEMANA","DIA_SEMANA","Semana.Santa","Prima","Feriado")])
+y_test_pred_lm<-predict(caret_lm_fit,Test_D_Dataset[,c("MES","AmoryAmistad","Madre","Padre","Mujer","SEMANA","DIA_SEMANA","Semana.Santa","Feriado")])
 mse_test_lm<-mean((Test_D_Dataset$Total_Accidentes-y_test_pred_lm)^2) # calcula el mse de entrenamiento
 RMSE_test_lm = sqrt(mse_test_lm)
 mse_test_lm
 RMSE_test_lm
 ```
+
+PRedicion en la muestra
+
+```{r}
+plot_ly (data=Train_D_Dataset,
+         x = ~FECHA,
+         y = ~Total_Accidentes,
+         type = "scatter" ,mode = "lines",
+         name='Real',
+         line=list(width=1,color='rgb(205, 12, 24)'))%>%
+  add_trace(y= ~y_tr_pred_lm,
+            name='Modelo lm',
+            line=list(width=1,color='rgb(22, 96, 167)'))%>%
+  layout(title='Total Accidentes',
+         xaxis=list(title="Fecha"),
+         yaxis=list(title="Accidentes"),
+         legend = list(x = 0.75, y = 0.9))
+```
+
+
+GRafica serie 2018
 
 ```{r}
 plot_ly (data=Test_D_Dataset,
@@ -766,7 +800,21 @@ plot_ly (data=Test_D_Dataset,
          legend = list(x = 0.75, y = 0.9))
 ```
 
-
+```{r}
+plot_ly (data=Train_D_Dataset,
+         x = ~FECHA,
+         y = ~Total_Accidentes,
+         type = "scatter" ,mode = "lines",
+         name='Real',
+         line=list(width=1,color='rgb(205, 12, 24)'))%>%
+  add_trace(y= ~y_tr_pred_tree,
+            name='Modelo lm',
+            line=list(width=1,color='rgb(22, 96, 167)'))%>%
+  layout(title='Total Accidentes',
+         xaxis=list(title="Fecha"),
+         yaxis=list(title="Accidentes"),
+         legend = list(x = 0.75, y = 0.9))
+```
 
 ## 5. BOSQUE ALEATORIO
 
@@ -816,7 +864,27 @@ plot_ly (data=Test_D_Dataset,
          xaxis=list(title="Fecha"),
          yaxis=list(title="Accidentes"),
          legend = list(x = 0.75, y = 0.9))
+
 ```
+
+
+
+```{r}
+plot_ly (data=Train_D_Dataset,
+         x = ~FECHA,
+         y = ~Total_Accidentes,
+         type = "scatter" ,mode = "lines",
+         name='Real',
+         line=list(width=1,color='rgb(205, 12, 24)'))%>%
+  add_trace(y= ~y_tr_pred_rf,
+            name='Modelo rf',
+            line=list(width=1,color='rgb(22, 96, 167)'))%>%
+  layout(title='Total Accidentes',
+         xaxis=list(title="Fecha"),
+         yaxis=list(title="Accidentes"),
+         legend = list(x = 0.75, y = 0.9))
+```
+
 
 ## 6. XGBOOST
 
