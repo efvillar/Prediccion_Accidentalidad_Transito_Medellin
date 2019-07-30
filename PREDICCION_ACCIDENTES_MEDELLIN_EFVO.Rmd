@@ -434,6 +434,35 @@ aggregate(FREQ~ANO*MES, data=Total_Dataset_Freq,FUN=mean)%>%
          yaxis=list(title="No. Accidentes"))
 ```
 
+
+```{r}
+aggregate(FREQ~CLASE*MES, data=Total_Dataset_Freq,FUN=mean)%>%
+  plot_ly(x = ~MES,
+         y = ~FREQ,
+         type = "scatter" ,mode = "lines",
+         split = ~CLASE,
+         line=list(width=1))%>%
+  layout(title='Promedio diario mensual de ACCIDENTES en Medellin por CLASE',
+         xaxis=list(title="Mes"),
+         yaxis=list(title="No. Accidentes"))
+```
+
+
+
+```{r}
+aggregate(FREQ~CLASE*SEMANA, data=Total_Dataset_Freq,FUN=mean)%>%
+  plot_ly(x = ~SEMANA,
+         y = ~FREQ,
+         type = "scatter" ,mode = "lines",
+         split = ~CLASE,
+         line=list(width=1))%>%
+  layout(title='Promedio diario SEMANAL de ACCIDENTES en Medellin por CLASE',
+         xaxis=list(title="Mes"),
+         yaxis=list(title="No. Accidentes"))
+```
+
+
+
 ```{r}
 aggregate(FREQ~ANO*DIA_NOMBRE, data=Total_Dataset_Freq,FUN=mean)%>%
   plot_ly(x = ~DIA_NOMBRE,
@@ -526,6 +555,14 @@ Se agrega la columna Total_Accidentes
 ```{r}
 Total_Dataset_Freq$Total_Accidentes <- Total_Dataset_Freq$Atropello + Total_Dataset_Freq$Caida_Ocupante + Total_Dataset_Freq$Choque + Total_Dataset_Freq$Otro + Total_Dataset_Freq$Volcamiento
 ```
+
+
+Se agrega la columna Accidentes Graves
+
+```{r}
+Total_Dataset_Freq$Accidentes_Graves <- Total_Dataset_Freq$Atropello + Total_Dataset_Freq$Caida_Ocupante + Total_Dataset_Freq$Volcamiento
+```
+
 
 
 ```{r}
@@ -961,14 +998,6 @@ plot_ly (data=Train_D_Dataset,
 ```
 
 
-## 6. XGBOOST
-
-
-
-## 7. RED NEURONAL
-
-
-## 8. SERIE DE TIEMPO
 
 
 
