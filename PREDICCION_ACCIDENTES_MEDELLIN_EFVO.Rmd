@@ -2,8 +2,13 @@
 title: "PREDICCION ACCIDENTES MEDELLIN"
 author: "Edwin Villarraga"
 date: "16/7/2019"
-output: html_document
+output: 
+  html_document:
+    theme: cosmo
+    toc: yes
 ---
+
+* * *
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -970,3 +975,4 @@ plot_ly (data=Train_D_Dataset,
 
 
 # ELECCION DEL MODELO
+
