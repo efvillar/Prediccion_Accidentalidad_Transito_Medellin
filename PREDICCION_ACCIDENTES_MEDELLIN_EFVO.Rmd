@@ -4,7 +4,7 @@ author: "Edwin Villarraga"
 date: "16/7/2019"
 output:
     html_document:
-      theme: cosmo
+      theme: yeti
     toc: yes
 ---
 
@@ -806,6 +806,7 @@ plot_ly (data=Test_D_Dataset,
          yaxis=list(title="Accidentes"),
          legend = list(x = 0.75, y = 0.9))
 ```
+
 ### Otros
 
 
