@@ -1,0 +1,12 @@
+name: Shiny
+title: Shiny
+username:
+account: jorgemontoya
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1057814
+bundleId: 2275624
+url: https://jorgemontoya.shinyapps.io/Shiny/
+when: 1564451605.05367
+asMultiple: FALSE
+asStatic: FALSE
