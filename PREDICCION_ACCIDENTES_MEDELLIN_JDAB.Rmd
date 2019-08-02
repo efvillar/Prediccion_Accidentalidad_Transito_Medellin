@@ -14,6 +14,8 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(plotly)
 ```
 
 
@@ -1485,95 +1487,9 @@ Tabla_glm
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## 4. ARBOLES DE REGRESION
 
+### Total Accidentes
 ```{r}
 trcntrl = trainControl(method="cv", number=10)
 caret_tree_fit = caret::train(Total_Accidentes~SEMANA+DIA_SEMANA+Semana.Santa+Feriado+Quincena+Viernes_Desp_Qincena+Viernes_Antes_Puente,data=Train_D_Dataset,
@@ -1582,7 +1498,6 @@ caret_tree_fit = caret::train(Total_Accidentes~SEMANA+DIA_SEMANA+Semana.Santa+Fe
                       preProcess=c("center", "scale"),
                       tuneLength = 10)
 ```
-
 
 
 ```{r}
@@ -1637,7 +1552,370 @@ plot_ly (data=Train_D_Dataset,
          legend = list(x = 0.75, y = 0.9))
 ```
 
+
+### Choques 
+
+```{r}
+trcntrl_ch = trainControl(method="cv", number=10)
+caret_tree_fit_ch = caret::train(Choque~SEMANA+DIA_SEMANA+Semana.Santa+Feriado+Quincena+Viernes_Desp_Qincena+Viernes_Antes_Puente,data=Train_D_Dataset,
+                              method = "rpart", trControl = trcntrl,
+                      parms = list(split = "gini"),
+                      preProcess=c("center", "scale"),
+                      tuneLength = 10)
+```
+
+
+
+```{r}
+caret_tree_fit_ch
+```
+
+```{r}
+y_tr_pred_tree_ch<-predict(caret_tree_fit_ch,Train_D_Dataset[,c("SEMANA","DIA_SEMANA","Semana.Santa","Feriado","Quincena","Viernes_Desp_Qincena","Viernes_Antes_Puente")])
+mse_tr_tree_ch<-mean((Train_D_Dataset$Choque-y_tr_pred_tree_ch)^2) # calcula el mse de entrenamiento
+RMSE_tr_tree_ch = sqrt(mse_tr_tree_ch)
+mse_tr_tree_ch
+RMSE_tr_tree_ch
+```
+
+```{r}
+y_test_pred_tree_ch<-predict(caret_tree_fit_ch,Test_D_Dataset[,c("SEMANA","DIA_SEMANA","Semana.Santa","Feriado","Quincena","Viernes_Desp_Qincena","Viernes_Antes_Puente")])
+mse_test_tree_ch<-mean((Test_D_Dataset$Choque-y_test_pred_tree_ch)^2) # calcula el mse de entrenamiento
+RMSE_test_tree_ch = sqrt(mse_test_tree_ch)
+mse_test_tree_ch
+RMSE_test_tree_ch
+```
+
+```{r}
+plot_ly (data=Train_D_Dataset,
+         x = ~FECHA,
+         y = ~Choque,
+         type = "scatter" ,mode = "lines",
+         name='Real',
+         line=list(width=1,color='rgb(205, 12, 24)'))%>%
+  add_trace(y= ~y_tr_pred_tree_ch,
+            name='Modelo lm',
+            line=list(width=1,color='rgb(22, 96, 167)'))%>%
+  layout(title='Total Choques',
+         xaxis=list(title="Fecha"),
+         yaxis=list(title="Accidentes"),
+         legend = list(x = 0.75, y = 0.9))
+```
+
+
+
+
+```{r}
+plot_ly (data=Test_D_Dataset,
+         x = ~FECHA,
+         y = ~Choque,
+         type = "scatter" ,mode = "lines",
+         name='Real',
+         line=list(width=1,color='rgb(205, 12, 24)'))%>%
+  add_trace(y= ~y_test_pred_tree_ch,
+            name='Modelo lm',
+            line=list(width=1,color='rgb(22, 96, 167)'))%>%
+  layout(title='Total Choques',
+         xaxis=list(title="Fecha"),
+         yaxis=list(title="Accidentes"),
+         legend = list(x = 0.75, y = 0.9))
+```
+
+
+
+### Accidentes Graves
+
+```{r}
+trcntrl_gr = trainControl(method="cv", number=10)
+caret_tree_fit_gr = caret::train(Accidentes_Graves~SEMANA+DIA_SEMANA+Semana.Santa+Feriado+Quincena+Viernes_Desp_Qincena+Viernes_Antes_Puente,data=Train_D_Dataset,
+                              method = "rpart", trControl = trcntrl,
+                      parms = list(split = "gini"),
+                      preProcess=c("center", "scale"),
+                      tuneLength = 10)
+```
+
+
+
+```{r}
+caret_tree_fit_gr
+```
+
+```{r}
+y_tr_pred_tree_gr<-predict(caret_tree_fit_gr,Train_D_Dataset[,c("SEMANA","DIA_SEMANA","Semana.Santa","Feriado","Quincena","Viernes_Desp_Qincena","Viernes_Antes_Puente")])
+mse_tr_tree_gr<-mean((Train_D_Dataset$Accidentes_Graves-y_tr_pred_tree_gr)^2) # calcula el mse de entrenamiento
+RMSE_tr_tree_gr = sqrt(mse_tr_tree_gr)
+mse_tr_tree_gr
+RMSE_tr_tree_gr
+```
+
+```{r}
+y_test_pred_tree_gr<-predict(caret_tree_fit_gr,Test_D_Dataset[,c("SEMANA","DIA_SEMANA","Semana.Santa","Feriado","Quincena","Viernes_Desp_Qincena","Viernes_Antes_Puente")])
+mse_test_tree_gr<-mean((Test_D_Dataset$Accidentes_Graves-y_test_pred_tree_gr)^2) # calcula el mse de entrenamiento
+RMSE_test_tree_gr = sqrt(mse_test_tree_gr)
+mse_test_tree_gr
+RMSE_test_tree_gr
+```
+```{r}
+plot_ly (data=Train_D_Dataset,
+         x = ~FECHA,
+         y = ~Accidentes_Graves,
+         type = "scatter" ,mode = "lines",
+         name='Real',
+         line=list(width=1,color='rgb(205, 12, 24)'))%>%
+  add_trace(y= ~y_tr_pred_tree_gr,
+            name='Modelo lm',
+            line=list(width=1,color='rgb(22, 96, 167)'))%>%
+  layout(title='Accidentes graves',
+         xaxis=list(title="Fecha"),
+         yaxis=list(title="Accidentes"),
+         legend = list(x = 0.75, y = 0.9))
+```
+
+
+```{r}
+plot_ly (data=Test_D_Dataset,
+         x = ~FECHA,
+         y = ~Accidentes_Graves,
+         type = "scatter" ,mode = "lines",
+         name='Real',
+         line=list(width=1,color='rgb(205, 12, 24)'))%>%
+  add_trace(y= ~y_test_pred_tree_gr,
+            name='Modelo lm',
+            line=list(width=1,color='rgb(22, 96, 167)'))%>%
+  layout(title='Accidentes graves',
+         xaxis=list(title="Fecha"),
+         yaxis=list(title="Accidentes"),
+         legend = list(x = 0.75, y = 0.9))
+```
+
+### Otros accidentes
+
+```{r}
+trcntrl_ot = trainControl(method="cv", number=10)
+caret_tree_fit_ot = caret::train(Otro~SEMANA+DIA_SEMANA+Semana.Santa+Feriado+Quincena+Viernes_Desp_Qincena+Viernes_Antes_Puente,data=Train_D_Dataset,
+                              method = "rpart", trControl = trcntrl,
+                      parms = list(split = "gini"),
+                      preProcess=c("center", "scale"),
+                      tuneLength = 10)
+```
+
+
+
+```{r}
+caret_tree_fit_ot
+```
+
+```{r}
+y_tr_pred_tree_ot<-predict(caret_tree_fit_ot,Train_D_Dataset[,c("SEMANA","DIA_SEMANA","Semana.Santa","Feriado","Quincena","Viernes_Desp_Qincena","Viernes_Antes_Puente")])
+mse_tr_tree_ot<-mean((Train_D_Dataset$Otro-y_tr_pred_tree_ot)^2) # calcula el mse de entrenamiento
+RMSE_tr_tree_ot = sqrt(mse_tr_tree_ot)
+mse_tr_tree_ot
+RMSE_tr_tree_ot
+```
+
+```{r}
+y_test_pred_tree_ot<-predict(caret_tree_fit_ot,Test_D_Dataset[,c("SEMANA","DIA_SEMANA","Semana.Santa","Feriado","Quincena","Viernes_Desp_Qincena","Viernes_Antes_Puente")])
+mse_test_tree_ot<-mean((Test_D_Dataset$Otro-y_test_pred_tree_ot)^2) # calcula el mse de entrenamiento
+RMSE_test_tree_ot = sqrt(mse_test_tree_ot)
+mse_test_tree_ot
+RMSE_test_tree_ot
+```
+```{r}
+plot_ly (data=Train_D_Dataset,
+         x = ~FECHA,
+         y = ~Otro,
+         type = "scatter" ,mode = "lines",
+         name='Real',
+         line=list(width=1,color='rgb(205, 12, 24)'))%>%
+  add_trace(y= ~y_tr_pred_tree_ot,
+            name='Modelo lm',
+            line=list(width=1,color='rgb(22, 96, 167)'))%>%
+  layout(title='Otros Accidentes',
+         xaxis=list(title="Fecha"),
+         yaxis=list(title="Accidentes"),
+         legend = list(x = 0.75, y = 0.9))
+```
+
+
+```{r}
+plot_ly (data=Test_D_Dataset,
+         x = ~FECHA,
+         y = ~Otro,
+         type = "scatter" ,mode = "lines",
+         name='Real',
+         line=list(width=1,color='rgb(205, 12, 24)'))%>%
+  add_trace(y= ~y_test_pred_tree_ot,
+            name='Modelo lm',
+            line=list(width=1,color='rgb(22, 96, 167)'))%>%
+  layout(title='Otros Accidentes',
+         xaxis=list(title="Fecha"),
+         yaxis=list(title="Accidentes"),
+         legend = list(x = 0.75, y = 0.9))
+```
+
+
+
+
+### REsumen Modelos Regresión lineal para los diferentes tipos de accidente
+
+```{r}
+Tipo_de_accidentes= c("Total accidentes","Choques","Accidentes graves", "Otros")
+RMSE_Train_tree = round(c(RMSE_tr_tree,RMSE_tr_tree_ch,RMSE_tr_tree_gr,RMSE_tr_tree_ot), 3)
+RMSE_Test_tree = round(c(RMSE_test_tree,RMSE_test_tree_ch,RMSE_test_tree_gr,RMSE_test_tree_ot),3)
+
+Tabla_tree = data.frame (cbind(Tipo_de_accidentes,RMSE_Train_tree,RMSE_Test_lm))
+Tabla_tree
+```
+
 ## 5. BOSQUE ALEATORIO
+
+
+### Total accidentes
+```{r}
+trcntrl = trainControl(method="cv", number=10)
+caret_rf_fit = caret::train(Total_Accidentes~SEMANA+DIA_SEMANA+Semana.Santa+Feriado+Quincena+Viernes_Desp_Qincena+Viernes_Antes_Puente, data=Train_D_Dataset,
+                      method = "rf", trControl = trcntrl,
+                      prox=TRUE,allowParallel=TRUE)
+```
+
+
+```{r}
+summary(caret_rf_fit)
+```
+
+```{r}
+caret_rf_fit
+```
+
+```{r}
+plot(caret_rf_fit)
+```
+
+
+```{r}
+y_tr_pred_rf<-predict(caret_rf_fit,Train_D_Dataset[,c("SEMANA","DIA_SEMANA","Semana.Santa","Feriado","Quincena","Viernes_Desp_Qincena","Viernes_Antes_Puente")])
+mse_tr_rf<-mean((Train_D_Dataset$Total_Accidentes-y_tr_pred_rf)^2) # calcula el mse de entrenamiento
+RMSE_tr_rf = sqrt(mse_tr_rf)
+mse_tr_rf
+RMSE_tr_rf
+```
+
+```{r}
+y_test_pred_rf<-predict(caret_rf_fit,Test_D_Dataset[,c("SEMANA","DIA_SEMANA","Semana.Santa","Feriado","Quincena","Viernes_Desp_Qincena","Viernes_Antes_Puente")])
+mse_test_rf<-mean((Test_D_Dataset$Total_Accidentes-y_test_pred_rf)^2) # calcula el mse de entrenamiento
+RMSE_test_rf = sqrt(mse_test_rf)
+mse_test_rf
+RMSE_test_rf
+```
+
+```{r}
+plot_ly (data=Train_D_Dataset,
+         x = ~FECHA,
+         y = ~Total_Accidentes,
+         type = "scatter" ,mode = "lines",
+         name='Real',
+         line=list(width=1,color='rgb(205, 12, 24)'))%>%
+  add_trace(y= ~y_tr_pred_rf,
+            name='Modelo rf',
+            line=list(width=1,color='rgb(22, 96, 167)'))%>%
+  layout(title='Total Accidentes',
+         xaxis=list(title="Fecha"),
+         yaxis=list(title="Accidentes"),
+         legend = list(x = 0.75, y = 0.9))
+```
+
+```{r}
+plot_ly (data=Test_D_Dataset,
+         x = ~FECHA,
+         y = ~Total_Accidentes,
+         type = "scatter" ,mode = "lines",
+         name='Real',
+         line=list(width=1,color='rgb(205, 12, 24)'))%>%
+  add_trace(y= ~y_test_pred_rf,
+            name='Modelo lm',
+            line=list(width=1,color='rgb(22, 96, 167)'))%>%
+  layout(title='Total Accidentes',
+         xaxis=list(title="Fecha"),
+         yaxis=list(title="Accidentes"),
+         legend = list(x = 0.75, y = 0.9))
+
+```
+
+### Choques 
+
+```{r}
+trcntrl_ch = trainControl(method="cv", number=10)
+caret_rf_fit_ch = caret::train(Choque~SEMANA+DIA_SEMANA+Semana.Santa+Feriado+Quincena+Viernes_Desp_Qincena+Viernes_Antes_Puente, data=Train_D_Dataset,
+                      method = "rf", trControl = trcntrl,
+                      prox=TRUE,allowParallel=TRUE)
+```
+
+
+```{r}
+summary(caret_rf_fit_ch)
+```
+
+```{r}
+caret_rf_fit_ch
+```
+
+```{r}
+plot(caret_rf_fit_ch)
+```
+
+
+```{r}
+y_tr_pred_rf_ch<-predict(caret_rf_fit_ch,Train_D_Dataset[,c("SEMANA","DIA_SEMANA","Semana.Santa","Feriado","Quincena","Viernes_Desp_Qincena","Viernes_Antes_Puente")])
+mse_tr_rf_ch<-mean((Train_D_Dataset$Choque-y_tr_pred_rf)^2) # calcula el mse de entrenamiento
+RMSE_tr_rf_ch = sqrt(mse_tr_rf_ch)
+mse_tr_rf_ch
+RMSE_tr_rf_ch
+```
+
+```{r}
+y_test_pred_rf_ch<-predict(caret_rf_fit_ch,Test_D_Dataset[,c("SEMANA","DIA_SEMANA","Semana.Santa","Feriado","Quincena","Viernes_Desp_Qincena","Viernes_Antes_Puente")])
+mse_test_rf_ch<-mean((Test_D_Dataset$Choque-y_test_pred_rf)^2) # calcula el mse de entrenamiento
+RMSE_test_rf_ch = sqrt(mse_test_rf_ch)
+mse_test_rf_ch
+RMSE_test_rf_ch
+```
+
+```{r}
+plot_ly (data=Test_D_Dataset,
+         x = ~FECHA,
+         y = ~Total_Accidentes,
+         type = "scatter" ,mode = "lines",
+         name='Real',
+         line=list(width=1,color='rgb(205, 12, 24)'))%>%
+  add_trace(y= ~y_test_pred_rf,
+            name='Modelo lm',
+            line=list(width=1,color='rgb(22, 96, 167)'))%>%
+  layout(title='Total Accidentes',
+         xaxis=list(title="Fecha"),
+         yaxis=list(title="Accidentes"),
+         legend = list(x = 0.75, y = 0.9))
+
+```
+
+
+
+```{r}
+plot_ly (data=Train_D_Dataset,
+         x = ~FECHA,
+         y = ~Total_Accidentes,
+         type = "scatter" ,mode = "lines",
+         name='Real',
+         line=list(width=1,color='rgb(205, 12, 24)'))%>%
+  add_trace(y= ~y_tr_pred_rf,
+            name='Modelo rf',
+            line=list(width=1,color='rgb(22, 96, 167)'))%>%
+  layout(title='Total Accidentes',
+         xaxis=list(title="Fecha"),
+         yaxis=list(title="Accidentes"),
+         legend = list(x = 0.75, y = 0.9))
+```
+
+### Accidentes graves
 
 ```{r}
 trcntrl = trainControl(method="cv", number=10)
@@ -1710,6 +1988,212 @@ plot_ly (data=Train_D_Dataset,
          yaxis=list(title="Accidentes"),
          legend = list(x = 0.75, y = 0.9))
 ```
+
+
+### Otros accidentes 
+
+```{r}
+trcntrl = trainControl(method="cv", number=10)
+caret_rf_fit = caret::train(Total_Accidentes~SEMANA+DIA_SEMANA+Semana.Santa+Feriado+Quincena+Viernes_Desp_Qincena+Viernes_Antes_Puente, data=Train_D_Dataset,
+                      method = "rf", trControl = trcntrl,
+                      prox=TRUE,allowParallel=TRUE)
+```
+
+
+```{r}
+summary(caret_rf_fit)
+```
+
+```{r}
+caret_rf_fit
+```
+
+```{r}
+plot(caret_rf_fit)
+```
+
+
+
+```{r}
+y_tr_pred_rf<-predict(caret_rf_fit,Train_D_Dataset[,c("SEMANA","DIA_SEMANA","Semana.Santa","Feriado","Quincena","Viernes_Desp_Qincena","Viernes_Antes_Puente")])
+mse_tr_rf<-mean((Train_D_Dataset$Total_Accidentes-y_tr_pred_rf)^2) # calcula el mse de entrenamiento
+RMSE_tr_rf = sqrt(mse_tr_rf)
+mse_tr_rf
+RMSE_tr_rf
+```
+
+```{r}
+y_test_pred_rf<-predict(caret_rf_fit,Test_D_Dataset[,c("SEMANA","DIA_SEMANA","Semana.Santa","Feriado","Quincena","Viernes_Desp_Qincena","Viernes_Antes_Puente")])
+mse_test_rf<-mean((Test_D_Dataset$Total_Accidentes-y_test_pred_rf)^2) # calcula el mse de entrenamiento
+RMSE_test_rf = sqrt(mse_test_rf)
+mse_test_rf
+RMSE_test_rf
+```
+
+```{r}
+plot_ly (data=Test_D_Dataset,
+         x = ~FECHA,
+         y = ~Total_Accidentes,
+         type = "scatter" ,mode = "lines",
+         name='Real',
+         line=list(width=1,color='rgb(205, 12, 24)'))%>%
+  add_trace(y= ~y_test_pred_rf,
+            name='Modelo lm',
+            line=list(width=1,color='rgb(22, 96, 167)'))%>%
+  layout(title='Total Accidentes',
+         xaxis=list(title="Fecha"),
+         yaxis=list(title="Accidentes"),
+         legend = list(x = 0.75, y = 0.9))
+
+```
+
+
+
+```{r}
+plot_ly (data=Train_D_Dataset,
+         x = ~FECHA,
+         y = ~Total_Accidentes,
+         type = "scatter" ,mode = "lines",
+         name='Real',
+         line=list(width=1,color='rgb(205, 12, 24)'))%>%
+  add_trace(y= ~y_tr_pred_rf,
+            name='Modelo rf',
+            line=list(width=1,color='rgb(22, 96, 167)'))%>%
+  layout(title='Total Accidentes',
+         xaxis=list(title="Fecha"),
+         yaxis=list(title="Accidentes"),
+         legend = list(x = 0.75, y = 0.9))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
