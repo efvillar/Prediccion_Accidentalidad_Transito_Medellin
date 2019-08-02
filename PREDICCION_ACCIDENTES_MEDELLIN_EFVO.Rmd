@@ -3,10 +3,8 @@ title: "PREDICCION ACCIDENTES MEDELLIN"
 author: "Edwin Villarraga"
 date: "16/7/2019"
 output:
-  pdf_document:
-    toc: yes
-  html_document:
-    theme: cosmo
+    html_document:
+      theme: yeti
     toc: yes
 ---
 
@@ -808,6 +806,7 @@ plot_ly (data=Test_D_Dataset,
          yaxis=list(title="Accidentes"),
          legend = list(x = 0.75, y = 0.9))
 ```
+
 ### Otros
 
 
@@ -864,7 +863,12 @@ plot_ly (data=Test_D_Dataset,
 
 
 
-### REsumen Modelos KNN para los diferentes tipos de accidente
+### Resumen Modelos KNN para los diferentes tipos de accidente
+
+
++ TOTAL ACCIDENTES:   MSE = `r mse_test_knn` - RMSE = `r mse_test_knn`
+
+
 
 
 
@@ -1167,7 +1171,7 @@ plot_ly (data=Train_D_Dataset,
 
 ## 5. BOSQUE ALEATORIO
 
-```{r}
+```{r Random_Forest_Total_Accidentes}
 trcntrl = trainControl(method="cv", number=10)
 caret_rf_fit = caret::train(Total_Accidentes~SEMANA+DIA_SEMANA+Semana.Santa+Feriado+Quincena+Viernes_Desp_Qincena+Viernes_Antes_Puente, data=Train_D_Dataset,
                       method = "rf", trControl = trcntrl,
