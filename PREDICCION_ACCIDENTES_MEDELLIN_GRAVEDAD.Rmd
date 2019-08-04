@@ -215,11 +215,11 @@ str(Total_Dataset)
 ```
 
 ```{r}
-levels(Total_Dataset$CLASE)
+levels(Total_Dataset$GRAVEDAD)
 ```
 
 ```{r}
-summary(Total_Dataset$CLASE)
+summary(Total_Dataset$GRAVEDAD)
 ```
 
 Para ahorra memoria se eliminan los dataframes por ano
@@ -304,7 +304,7 @@ Ahora se agregan otras variables a que caracterizan fechas especiales.  Se carga
 
 
 ```{r}
-Dias_Especiales <- read.csv(file="./data/Caracterizacion.csv", encoding="UTF-8", header=TRUE, sep=";",stringsAsFactors=FALSE)
+Dias_Especiales <- read.csv(file="./data/Caracterizacion_v2.csv", encoding="UTF-8", header=TRUE, sep=";",stringsAsFactors=FALSE)
 ```
 
 ```{r}
@@ -416,7 +416,7 @@ aggregate(FREQ~ANO*SEMANA, data=Total_Dataset_Freq,FUN=mean)%>%
          type = "scatter" ,mode = "lines",
          split = ~ANO,
          line=list(width=1))%>%
-  layout(title='Promedio diario mensual de ACCIDENTES en Medellin',
+  layout(title='Promedio semanal de ACCIDENTES en Medellin',
          xaxis=list(title="SEMANA"),
          yaxis=list(title="No. Accidentes"))
 ```
@@ -429,7 +429,7 @@ aggregate(FREQ~ANO*MES, data=Total_Dataset_Freq,FUN=mean)%>%
          type = "scatter" ,mode = "lines",
          split = ~ANO,
          line=list(width=1))%>%
-  layout(title='Promedio diario mensual de ACCIDENTES en Medellin',
+  layout(title='Promedio mensual de ACCIDENTES en Medellin',
          xaxis=list(title="Mes"),
          yaxis=list(title="No. Accidentes"))
 ```
@@ -442,7 +442,7 @@ aggregate(FREQ~GRAVEDAD*MES, data=Total_Dataset_Freq,FUN=mean)%>%
          type = "scatter" ,mode = "lines",
          split = ~GRAVEDAD,
          line=list(width=1))%>%
-  layout(title='Promedio diario mensual de ACCIDENTES en Medellin por CLASE',
+  layout(title='Promedio mensual de ACCIDENTES en Medellin por GRAVEDAD',
          xaxis=list(title="Mes"),
          yaxis=list(title="No. Accidentes"))
 ```
@@ -456,7 +456,7 @@ aggregate(FREQ~GRAVEDAD*FECHA, data=Total_Dataset_Freq,FUN=mean)%>%
          type = "scatter" ,mode = "lines",
          split = ~GRAVEDAD,
          line=list(width=1))%>%
-  layout(title='Promedio diario SEMANAL de ACCIDENTES en Medellin por CLASE',
+  layout(title='Promedio diario ACCIDENTES en Medellin por GRAVEDAD',
          xaxis=list(title="Mes"),
          yaxis=list(title="No. Accidentes"))
 ```
@@ -476,8 +476,8 @@ aggregate(FREQ~ANO*DIA_NOMBRE, data=Total_Dataset_Freq,FUN=mean)%>%
 ```
 
 ```{r}
-aggregate(FREQ~ANO*CLASE, data=Total_Dataset_Freq,FUN=mean)%>%
-  plot_ly(x = ~CLASE,
+aggregate(FREQ~ANO*GRAVEDAD, data=Total_Dataset_Freq,FUN=mean)%>%
+  plot_ly(x = ~GRAVEDAD,
          y = ~FREQ,
          type = "scatter" ,mode = "lines",
          split = ~ANO,
@@ -493,6 +493,10 @@ LAs predicciones a realizar seran para cada uno de las 5 clases de accidentes, y
 Se realiza entonces la particion de los datos por frecuencia: M: Mensual, S: Semanal, D: Diario
 
 primero se realiza un reshape del dataframe para consolidar los casos por dia y separarlos factores CLASE en columnas
+
+```{r}
+head(Total_Dataset_Freq)
+```
 
 
 
