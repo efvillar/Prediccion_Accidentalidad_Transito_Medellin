@@ -1,0 +1,50 @@
+---
+title: "Agrupamiento_Semanal_Mensual"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+head(Dias_Especiales)
+```
+
+
+
+
+se agrega la variable ano a la caracterizacion de los días especiales
+
+```{r}
+Dias_Especiales$ANO <- as.factor(format(Dias_Especiales$FECHA,'%Y'))
+```
+
+Se agrega la variable semana a la caracterizacion de los días especiales
+
+```{r}
+Dias_Especiales$SEMANA <-as.factor(format(Dias_Especiales$FECHA,'%V'))
+```
+
+Se agrega la variable semana a la caracterizacion de los días especiales
+
+```{r}
+Dias_Especiales$MES <-as.factor(format(Dias_Especiales$FECHA,'%m'))
+```
+
+
+```{r}
+library(sqldf)
+Dias_Especiales_Mensuales <- sqldf("SELECT ANO, MES, sum(Lunes)-4 AS Freq_lunes, sum(martes)-4 AS Freq_martes, sum(miercoles)-4 AS Freq_miercoles, sum(jueves)-4 AS Freq_jueves, sum(viernes)-4 AS Freq_viernes, sum(sabado)-4 AS Freq_sabado, sum(domingo)-4 AS Freq_domingo, sum(Feriado_Lunes+Feriado_Otro) as Feriados
+       FROM Dias_Especiales
+       GROUP BY ANO,MES")
+```
+
+```{r}
+library(sqldf)
+Dias_Especiales_Semanal <- sqldf("SELECT ANO, SEMANA, Feria_Flores_Semana,Semana_Santa_Semana, sum(Feriado_Lunes) as Feriados_Lunes, sum(Feriado_Otro) as Feriados_Otros
+       FROM Dias_Especiales
+       GROUP BY ANO,SEMANA,Feria_Flores_Semana,Semana_Santa_Semana")
+```
+
+
