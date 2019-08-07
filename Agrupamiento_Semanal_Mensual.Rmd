@@ -14,31 +14,55 @@ head(Dias_Especiales)
 
 
 
-se agrega la variable ano a la caracterizacion de los días especiales
+se agrega la variable ano a la caracterizacion de los dias especiales
 
 ```{r}
-Dias_Especiales$ANO <- as.factor(format(Dias_Especiales$FECHA,'%Y'))
+Dias_Especiales$ANO <- as.factor(format(Dias_Especiales$Fecha,'%Y'))
 ```
 
-Se agrega la variable semana a la caracterizacion de los días especiales
+Se agrega la variable semana a la caracterizacion de los dias especiales
 
 ```{r}
-Dias_Especiales$SEMANA <-as.factor(format(Dias_Especiales$FECHA,'%V'))
+Dias_Especiales$SEMANA <-as.factor(format(Dias_Especiales$Fecha,'%V'))
 ```
 
-Se agrega la variable semana a la caracterizacion de los días especiales
+Se agrega la variable semana a la caracterizacion de los dias especiales
 
 ```{r}
-Dias_Especiales$MES <-as.factor(format(Dias_Especiales$FECHA,'%m'))
+Dias_Especiales$MES <-as.factor(format(Dias_Especiales$Fecha,'%m'))
+```
+
+```{r}
+head(Dias_Especiales)
 ```
 
 
 ```{r}
 library(sqldf)
-Dias_Especiales_Mensuales <- sqldf("SELECT ANO, MES, sum(Lunes)-4 AS Freq_lunes, sum(martes)-4 AS Freq_martes, sum(miercoles)-4 AS Freq_miercoles, sum(jueves)-4 AS Freq_jueves, sum(viernes)-4 AS Freq_viernes, sum(sabado)-4 AS Freq_sabado, sum(domingo)-4 AS Freq_domingo, sum(Feriado_Lunes+Feriado_Otro) as Feriados
+Dias_Especiales_Mensuales <- sqldf("SELECT ANO, MES, sum(Lunes)-4 AS Freq_lunes, sum(martes)-4 AS Freq_martes, sum(miercoles)-4 AS Freq_miercoles, sum(jueves)-4 AS Freq_jueves, sum(viernes)-4 AS Freq_viernes, sum(sabado)-4 AS Freq_sabado, sum(domingo)-4 AS Freq_domingo, sum(Feriado_Lunes+Feriado_Otro) as Feriados, sum(Feriado_Lunes) AS Feriados_Lunes, sum(Feriado_Otro) AS Feriados_Otro
        FROM Dias_Especiales
-       GROUP BY ANO,MES")
+       GROUP BY ANO, MES")
 ```
+
+
+```{r}
+library(sqldf)
+Total_Dataset_Freq_M <- sqldf("
+
+SELECT TDF.ANO, TDF.MES, TDF.GRAVEDAD, TDF.FREQ, Freq_lunes, Freq_martes, Freq_miercoles, Freq_jueves,Freq_viernes, Freq_sabado, Freq_domingo, Feriados, Feriados_Lunes, Feriados_Otro
+FROM
+(
+SELECT  
+ANO, MES, GRAVEDAD, sum(FREQ) as FREQ
+FROM Total_Dataset_Freq
+GROUP BY 1,2,3) TDF
+        LEFT JOIN Dias_Especiales_Mensuales DEM
+        ON (TDF.ANO=DEM.ANO AND TDF.MES=DEM.MES)
+       GROUP BY TDF.ANO, TDF.MES, TDF.GRAVEDAD")
+```
+
+
+
 
 ```{r}
 library(sqldf)
@@ -48,3 +72,19 @@ Dias_Especiales_Semanal <- sqldf("SELECT ANO, SEMANA, Feria_Flores_Semana,Semana
 ```
 
 
+
+```{r}
+library(sqldf)
+Total_Dataset_Freq_M <- sqldf("
+
+SELECT TDF.ANO, TDF.SEMANA, TDF.GRAVEDAD, TDF.FREQ, DES.Feria_Flores_Semana AS Feria_Flores, DES.Semana_Santa_Semana AS Semana_Santa, DES.Feriados_Lunes, DES.Feriados_Otros
+FROM
+(
+SELECT  
+ANO, SEMANA, GRAVEDAD, sum(FREQ) as FREQ
+FROM Total_Dataset_Freq
+GROUP BY 1,2,3) TDF
+        LEFT JOIN Dias_Especiales_Semanal DES
+        ON (TDF.ANO=DES.ANO AND TDF.SEMANA=DES.SEMANA)
+       GROUP BY TDF.ANO, TDF.SEMANA, TDF.GRAVEDAD")
+```
