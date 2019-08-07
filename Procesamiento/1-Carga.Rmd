@@ -251,3 +251,40 @@ GROUP BY 1,2,3) TDF
 ```{r Frecuencia_Mensual}
 save(Total_Dataset_Freq_M,file="../data/Frecuencia_De_Accidentes_Mensual.Rda")
 ```
+
+
+## FRECUENCIA SEMANAL
+
+Agrupamiento de las variables explicativas en la periodicidad Semanal
+
+
+
+```{r}
+library(sqldf)
+Dias_Especiales_Semanal <- sqldf("SELECT ANO, SEMANA, Feria_Flores_Semana,Semana_Santa_Semana, sum(Feriado_Lunes) as Feriados_Lunes, sum(Feriado_Otro) as Feriados_Otros
+       FROM Dias_Especiales
+       GROUP BY ANO,SEMANA,Feria_Flores_Semana,Semana_Santa_Semana")
+```
+
+
+
+```{r}
+library(sqldf)
+Total_Dataset_Freq_M <- sqldf("
+
+SELECT TDF.ANO, TDF.SEMANA, TDF.GRAVEDAD, TDF.FREQ, DES.Feria_Flores_Semana AS Feria_Flores, DES.Semana_Santa_Semana AS Semana_Santa, DES.Feriados_Lunes, DES.Feriados_Otros
+FROM
+(
+SELECT  
+ANO, SEMANA, GRAVEDAD, sum(FREQ) as FREQ
+FROM Total_Dataset_Freq
+GROUP BY 1,2,3) TDF
+        LEFT JOIN Dias_Especiales_Semanal DES
+        ON (TDF.ANO=DES.ANO AND TDF.SEMANA=DES.SEMANA)
+       GROUP BY TDF.ANO, TDF.SEMANA, TDF.GRAVEDAD")
+```
+
+
+```{r Frecuencia_Mensual}
+save(Total_Dataset_Freq_M,file="../data/Frecuencia_De_Accidentes_Semanal.Rda")
+```
