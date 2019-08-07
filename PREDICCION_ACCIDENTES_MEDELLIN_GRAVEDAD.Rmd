@@ -561,7 +561,7 @@ Total_Dataset_Freq[is.na(Total_Dataset_Freq)] <- 0
 Se agrega la columna Total_Accidentes
 
 ```{r}
-Total_Dataset_Freq$Total_Accidentes <- Total_Dataset_Freq$`SOLO DAÃ‘OS` + Total_Dataset_Freq$MUERTO + Total_Dataset_Freq$HERIDO
+Total_Dataset_Freq$Total_Accidentes <- Total_Dataset_Freq$`SOLO DAÃâOS` + Total_Dataset_Freq$MUERTO + Total_Dataset_Freq$HERIDO
 ```
 
 
@@ -573,7 +573,7 @@ Total_Dataset_Freq$Accidentes_Graves <- + Total_Dataset_Freq$MUERTO + Total_Data
 
 
 ```{r}
-Total_Dataset_Freq$Accidentes_Leves <- + Total_Dataset_Freq$`SOLO DAÃ‘OS`
+Total_Dataset_Freq$Accidentes_Leves <- + Total_Dataset_Freq$`SOLO DAÃâOS`
 ```
 
 ```{r}
@@ -643,7 +643,7 @@ summary(Test_D_Dataset$ANO)
 
 ### Total Accidentes
 ```{r}
-set.seed(123) # fija la semilla del generador de números para que sea reproducible
+set.seed(123) # fija la semilla del generador de nÃºmeros para que sea reproducible
 ```
 
 
@@ -1128,7 +1128,7 @@ plot_ly (data=Test_D_Dataset,
          legend = list(x = 0.75, y = 0.9))
 ```
 
-### REsumen Modelos Regresión lineal para los diferentes tipos de accidente
+### REsumen Modelos RegresiÃ³n lineal para los diferentes tipos de accidente
 
 ```{r}
 Tipo_de_accidentes= c("Total Accidentes","Accidentes graves","Accidentes leves")
@@ -1335,7 +1335,7 @@ plot_ly (data=Test_D_Dataset,
          yaxis=list(title="Accidentes leves"),
          legend = list(x = 0.75, y = 0.9))
 ```
-### REsumen Modelos Regresión lineal generalizado para los diferentes tipos de accidente
+### REsumen Modelos RegresiÃ³n lineal generalizado para los diferentes tipos de accidente
 
 ```{r}
 Tipo_de_accidentes= c("Total Accidentes","Accidentes Graves","Accidentes Leves")
@@ -1544,7 +1544,7 @@ plot_ly (data=Test_D_Dataset,
          legend = list(x = 0.75, y = 0.9))
 ```
 
-### REsumen Modelos Regresión lineal generalizado para los diferentes tipos de accidente
+### REsumen Modelos RegresiÃ³n lineal generalizado para los diferentes tipos de accidente
 
 ```{r}
 Tipo_de_accidentes= c("Total Accidentes","Accidentes Graves","Accidentes Leves")
@@ -1782,7 +1782,7 @@ plot_ly (data=Train_D_Dataset,
          legend = list(x = 0.75, y = 0.9))
 ```
 
-### REsumen Modelos Regresión lineal generalizado para los diferentes tipos de accidente
+### REsumen Modelos RegresiÃ³n lineal generalizado para los diferentes tipos de accidente
 
 ```{r}
 Tipo_de_accidentes= c("Total Accidentes","Total Graves","Total Leves")
