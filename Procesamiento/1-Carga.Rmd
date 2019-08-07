@@ -208,6 +208,9 @@ Total_Dataset_Freq <- sqldf("SELECT *
               LEFT JOIN Dias_Especiales DE ON (TDF.FECHA=DE.Fecha)")
 ```
 
+```{r}
+Total_Dataset_Freq$Fecha<- NULL
+```
 
 
 ```{r}
@@ -240,6 +243,12 @@ Dias_Especiales$MES <-as.factor(format(Dias_Especiales$Fecha,'%m'))
 ```
 
 ```{r}
+head(Dias_Especiales)
+```
+
+
+
+```{r}
 library(sqldf)
 Dias_Especiales_Mensuales <- sqldf("SELECT ANO, MES, sum(Lunes)-4 AS Freq_lunes, sum(martes)-4 AS Freq_martes, sum(miercoles)-4 AS Freq_miercoles, sum(jueves)-4 AS Freq_jueves, sum(viernes)-4 AS Freq_viernes, sum(sabado)-4 AS Freq_sabado, sum(domingo)-4 AS Freq_domingo, sum(Feriado_Lunes+Feriado_Otro) as Feriados, sum(Feriado_Lunes) AS Feriados_Lunes, sum(Feriado_Otro) AS Feriados_Otro
        FROM Dias_Especiales
@@ -248,6 +257,10 @@ Dias_Especiales_Mensuales <- sqldf("SELECT ANO, MES, sum(Lunes)-4 AS Freq_lunes,
 
 ```{r Frecuencia_Mensual}
 save(Dias_Especiales_Mensuales,file="../data/Dias_Especiales_Mensuales.Rda")
+```
+
+```{r}
+
 ```
 
 
@@ -294,7 +307,7 @@ save(Dias_Especiales_Semanal,file="../data/Dias_Especiales_Semanal.Rda")
 
 ```{r}
 library(sqldf)
-Total_Dataset_Freq_M <- sqldf("
+Total_Dataset_Freq_S <- sqldf("
 
 SELECT TDF.ANO, TDF.SEMANA, TDF.GRAVEDAD, TDF.FREQ, DES.Feria_Flores_Semana AS Feria_Flores, DES.Semana_Santa_Semana AS Semana_Santa, DES.Feriados_Lunes, DES.Feriados_Otros
 FROM
