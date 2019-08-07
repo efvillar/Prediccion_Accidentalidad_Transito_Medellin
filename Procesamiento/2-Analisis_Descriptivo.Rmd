@@ -19,7 +19,92 @@ library(tidyverse)
 load("../data/Frecuencia_De_Accidentes_Diario.Rda")
 ```
 
+```{r}
+load("../data/Dias_Especiales_Diario.Rda")
+```
+
+```{r}
+library(reshape)
+Total_Dataset_Freq_Dia <- cast(Total_Dataset_Freq[,c(1,2,3)],FECHA~GRAVEDAD)
+```
+
+```{r}
+Total_Dataset_Freq_Dia$TOTAL_ACCIDENTES <- Total_Dataset_Freq_Dia$ACCIDENTES_GRAVES + Total_Dataset_Freq_Dia$ACCIDENTES_LEVES
+```
+
+```{r}
+Total_Dataset_Freq_Dia <- sqldf("SELECT * 
+              FROM Total_Dataset_Freq_Dia
+              LEFT JOIN Dias_Especiales USING(FECHA)")
+```
+
+
+
 ## Para el Total de Accidentes
+
+
+
+```{r}
+library(plotly)
+plot_ly(data=Total_Dataset_Freq_Dia,
+        x = ~FECHA,
+        y = ~TOTAL_ACCIDENTES,
+        type = "scatter", mode = "lines",
+        ##split = ~GRAVEDAD,
+         ine=list(width=1))%>%
+  layout(title='Evolucion de los accidentes diarios en Medellin',
+         xaxis=list(title="Dia"),
+         yaxis=list(title="Numero de Accidentes Diario"))
+```
+
+```{r}
+library(plotly)
+plot_ly(data=Total_Dataset_Freq,
+        x = ~FECHA,
+        y = ~FREQ,
+        type = "scatter", mode = "lines",
+        split = ~GRAVEDAD,
+         ine=list(width=1))%>%
+  layout(title='Evolucion por gravedad del accidente diarios en Medellin',
+         xaxis=list(title="Dia"),
+         yaxis=list(title="No Accidentes"))
+```
+
+El comportartamiento mensual por ano nos permite identificar una caida importante en el numero de acciedentes de transito en el mes de enero. A su vez permite identificar una caida recurrente en los meses de enero, abril, junio y noviembre.
+
+```{r}
+aggregate(FREQ~ANO*MES, data=Total_Dataset_Freq,FUN=sum)%>%
+  plot_ly(x = ~MES,
+         y = ~FREQ,
+         type = "scatter" ,mode = "lines",
+         split = ~ANO,
+         line=list(width=1))%>%
+  layout(title='Promedio semanal de ACCIDENTES en Medellin',
+         xaxis=list(title="MES"),
+         yaxis=list(title="No. Accidentes"))
+```
+
+Realizando una representación semanal de los accidentes de transito, se identifica ciertas semanas con recurrencia en la disminución de la accidentalidad. Siguiendo los hallazgos en la visualización mensual, el grafico semanal nos permite visualizar con más detalle ese patron en ciertas semanas que estan asociadas a los meses identificados anteriormente. Por lo cual, se indaga por la particularidad de esos patrones y se identifica la importancia de la Semana Santa y la existencia de días festivos en cada una de las semanas.
+
+```{r}
+aggregate(FREQ~ANO*SEMANA, data=Total_Dataset_Freq,FUN=sum)%>%
+  plot_ly(x = ~SEMANA,
+         y = ~FREQ,
+         type = "scatter" ,mode = "lines",
+         split = ~ANO,
+         line=list(width=1))%>%
+  layout(title='Promedio semanal de ACCIDENTES en Medellin',
+         xaxis=list(title="SEMANA"),
+         yaxis=list(title="No. Accidentes"))
+```
+
+
+
+
+
+
+
+
 
 ```{r}
 library(plotly)
@@ -89,7 +174,21 @@ attach(Total_Dataset_Freq)
 ```
 
 ```{r}
-aggregate(FREQ~ANO*SEMANA, data=Total_Dataset_Freq,FUN=mean)%>%
+aggregate(FREQ~ANO*MES, data=Total_Dataset_Freq,FUN=sum)%>%
+  plot_ly(x = ~MES,
+         y = ~FREQ,
+         type = "scatter" ,mode = "lines",
+         split = ~ANO,
+         line=list(width=1))%>%
+  layout(title='Promedio semanal de ACCIDENTES en Medellin',
+         xaxis=list(title="SEMANA"),
+         yaxis=list(title="No. Accidentes"))
+```
+
+
+
+```{r}
+aggregate(FREQ~ANO*SEMANA, data=Total_Dataset_Freq,FUN=sum)%>%
   plot_ly(x = ~SEMANA,
          y = ~FREQ,
          type = "scatter" ,mode = "lines",
