@@ -184,7 +184,7 @@ Ahora se agregan otras variables a que caracterizan fechas especiales.  Se carga
 
 
 ```{r}
-Dias_Especiales <- read.csv(file="../data/Caracterizacion.csv", encoding="UTF-8", header=TRUE, sep=";",stringsAsFactors=FALSE)
+Dias_Especiales <- read.csv(file="../data/Caracterizacion_v2.csv", encoding="UTF-8", header=TRUE, sep=";",stringsAsFactors=FALSE)
 ```
 
 ```{r}
@@ -194,7 +194,7 @@ head(Dias_Especiales)
 Se transforma la variable FEcha a formato Fecha pues se cargo como factor y se unifica el nombre a FECHA para que coincida con l clave de la tabla Total_Dataset_Freq
 
 ```{r}
-Dias_Especiales <- Dias_Especiales[1:1826,]
+Dias_Especiales <- Dias_Especiales[1:2922,]
 Dias_Especiales$Fecha <- as.Date(Dias_Especiales$Fecha, format="%d-%m-%Y")
 ```
 
@@ -222,12 +222,34 @@ save(Total_Dataset_Freq,file="../data/Frecuencia_De_Accidentes_Diario.Rda")
 
 Agrupamiento de las variables explicativas en la periodicidad Mensual
 
+
+```{r}
+Dias_Especiales$ANO <- as.factor(format(Dias_Especiales$Fecha,'%Y'))
+```
+
+Se agrega la variable semana a la caracterizacion de los dias especiales
+
+```{r}
+Dias_Especiales$SEMANA <-as.factor(format(Dias_Especiales$Fecha,'%V'))
+```
+
+Se agrega la variable semana a la caracterizacion de los dias especiales
+
+```{r}
+Dias_Especiales$MES <-as.factor(format(Dias_Especiales$Fecha,'%m'))
+```
+
 ```{r}
 library(sqldf)
 Dias_Especiales_Mensuales <- sqldf("SELECT ANO, MES, sum(Lunes)-4 AS Freq_lunes, sum(martes)-4 AS Freq_martes, sum(miercoles)-4 AS Freq_miercoles, sum(jueves)-4 AS Freq_jueves, sum(viernes)-4 AS Freq_viernes, sum(sabado)-4 AS Freq_sabado, sum(domingo)-4 AS Freq_domingo, sum(Feriado_Lunes+Feriado_Otro) as Feriados, sum(Feriado_Lunes) AS Feriados_Lunes, sum(Feriado_Otro) AS Feriados_Otro
        FROM Dias_Especiales
        GROUP BY ANO, MES")
 ```
+
+```{r Frecuencia_Mensual}
+save(Dias_Especiales_Mensuales,file="../data/Dias_Especiales_Mensuales.Rda")
+```
+
 
 Agrupamientos de los accidentes de transitos mensual con cruce de variables descriptoras
 
@@ -266,7 +288,9 @@ Dias_Especiales_Semanal <- sqldf("SELECT ANO, SEMANA, Feria_Flores_Semana,Semana
        GROUP BY ANO,SEMANA,Feria_Flores_Semana,Semana_Santa_Semana")
 ```
 
-
+```{r Frecuencia_Mensual}
+save(Dias_Especiales_Semanal,file="../data/Dias_Especiales_Semanal.Rda")
+```
 
 ```{r}
 library(sqldf)
