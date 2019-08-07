@@ -1,0 +1,238 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+#Ejercicio de Salarios
+
+```{r}
+library(ISLR)
+fix(Hitters )
+names(Hitters)
+```
+
+#Dimensiones de la base de datos
+
+```{r}
+dim(Hitters )
+```
+#identificacion de los datos atipicos
+```{r}
+sum(is.na(Hitters$Salary))
+```
+
+
+#Omitir los NA de la base de datos
+```{r}
+Hitters =na.omit(Hitters)
+dim(Hitters )
+```
+#Validacion de datos NA
+```{r}
+sum(is.na(Hitters))
+```
+
+#Metodos masivos de seleccion de variables
+
+```{r}
+library(leaps)
+regfit.full=regsubsets (Salary∼.,Hitters)
+summary(regfit.full)
+```
+
+```{r}
+regfit.full=regsubsets (Salary∼.,data=Hitters ,nvmax=19)
+reg.summary =summary (regfit.full)
+names(reg.summary)
+```
+
+```{r}
+reg.summary$rsq
+```
+```{r}
+par(mfrow=c(2,2))
+plot(reg.summary$rss ,xlab="Number of Variables ",ylab="RSS",
+type="l")
+plot(reg.summary$adjr2 ,xlab="Number of Variables ",
+ylab="Adjusted RSq",type="l")
+which.max(reg.summary$adjr2)
+points(11,reg.summary$adjr2[11], col="red",cex=2,pch =20)
+
+plot(reg.summary$cp ,xlab="Number of Variables ",ylab="Cp",type="l")
+which.min(reg.summary$cp)
+
+points (10,reg.summary$cp [10], col ="red",cex=2,pch =20)
+which.min(reg.summary$bic )
+plot(reg.summary$bic ,xlab="Number of Variables ",ylab="BIC",
+type="l")
+points (6,reg.summary$bic [6],col="red",cex=2,pch =20)
+```
+
+```{r}
+plot(regfit.full ,scale="r2")
+plot(regfit.full ,scale="adjr2")
+plot(regfit.full ,scale="Cp")
+plot(regfit.full ,scale="bic")
+```
+
+```{r}
+coef(regfit.full ,6)  #Revisando en los parametros significativos
+```
+#Forward and Backward Stepwise Selection
+```{r}
+regfit.fwd=regsubsets (Salary∼.,data=Hitters , nvmax=19,
+method ="forward")
+summary (regfit.fwd)
+regfit.bwd=regsubsets (Salary∼.,data=Hitters , nvmax=19,
+method ="backward")
+summary (regfit.bwd)
+```
+
+```{r}
+coef(regfit.full ,7)
+
+
+```
+
+```{r}
+coef(regfit.fwd ,7)
+```
+
+```{r}
+coef(regfit.bwd ,7)
+```
+
+#Choosing Among Models Using the Validation Set Approach and Cross-Validation
+
+
+#Definicion de la información de entrenamiento
+```{r}
+set.seed(1)
+train=sample(c(TRUE ,FALSE), nrow(Hitters ),rep=TRUE)
+test=(!train)
+```
+
+```{r}
+regfit.best=regsubsets (Salary∼.,data=Hitters[train,],nvmax=19)
+```
+
+```{r}
+test.mat=model.matrix(Salary∼.,data=Hitters [test ,])
+```
+
+```{r}
+val.errors =rep(NA ,19)
+for(i in 1:19){
+   coefi=coef(regfit.best,id=i)
+   pred=test.mat[,names(coefi)]%*%coefi
+   val.errors[i]=mean(( Hitters$Salary[test]-pred)^2)
+}
+```
+
+```{r}
+val.errors
+```
+
+```{r}
+which.min(val.errors)
+```
+
+```{r}
+coef(regfit.best ,10)
+```
+
+
+```{r}
+predict.regsubsets =function (object , newdata ,id ,...){
+ form=as.formula (object$call [[2]])
+ mat=model.matrix(form ,newdata )
+ coefi=coef(object ,id=id)
+ xvars=names(coefi)
+ mat[,xvars]%*%coefi
+ }
+```
+
+```{r}
+regfit.best=regsubsets (Salary∼.,data=Hitters ,nvmax=19)
+coef(regfit.best ,10)
+```
+
+```{r}
+k=10
+set.seed(1)
+folds=sample (1:k,nrow(Hitters),replace=TRUE)
+cv.errors =matrix (NA,k,19, dimnames =list(NULL , paste (1:19) ))
+```
+
+```{r}
+for(j in 1:k){
+ best.fit=regsubsets (Salary∼.,data=Hitters [folds!=j,],
+nvmax=19)
+ for(i in 1:19){
+ pred=predict (best.fit ,Hitters [folds ==j,],id=i)
+ cv.errors[j,i]= mean( ( Hitters$Salary[ folds==j]-pred)^2)
+ }
+ }
+```
+
+```{r}
+mean.cv.errors=apply(cv.errors ,2, mean)
+mean.cv.errors
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+
+
+
+

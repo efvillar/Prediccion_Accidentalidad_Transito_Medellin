@@ -1,0 +1,271 @@
+---
+title: "ANALISIS DESCRIPTIVO"
+author: "Edwin Villarraga-Jorge Montoya-Juan David Arango"
+date: "10/8/2019"
+output:
+    html_document:
+      theme: yeti
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+# ANALISIS DESCRIPTIVO
+
+```{r}
+load("../data/Frecuencia_De_Accidentes_Diario.Rda")
+```
+
+## Para el Total de Accidentes
+
+```{r}
+library(plotly)
+plot_ly(data=Total_Dataset_Freq,
+        x = ~FECHA,
+        y = ~FREQ,
+        type = "scatter", mode = "lines",
+        split = ~GRAVEDAD,
+         ine=list(width=1))%>%
+  layout(title='Accidentes_Medellin',
+         xaxis=list(title="Dia"),
+         yaxis=list(title="Unidades"))
+```
+
+
+
+```{r}
+plot_ly(data=Total_Dataset_Freq,
+        x = ~ANO,
+        y = ~FREQ,
+        type = "box")%>%
+  layout(title='Accidentes_Medellin',
+         xaxis=list(title="ano"),
+         yaxis=list(title="Unidades"))
+```
+
+
+
+```{r}
+plot_ly(data=Total_Dataset_Freq,
+        x = ~MES,
+        y = ~FREQ,
+        type = "box")%>%
+  layout(title='Accidentes_Medellin',
+         xaxis=list(title="Mes"),
+         yaxis=list(title="Unidades"))
+```
+
+
+```{r}
+plot_ly(data=Total_Dataset_Freq,
+        x = ~DIA_NOMBRE,
+        y = ~FREQ,
+        type = "box")%>%
+  layout(title='Accidentes_Medellin',
+         xaxis=list(title="Dia_Nombre"),
+         yaxis=list(title="Unidades"))
+```
+
+Se observa que excepto el domingo que es menor, los demasla accidentalidad promedio es muy similar, pero se diferencia en la cola derecha de la distribucion 
+
+
+```{r}
+plot_ly(data=Total_Dataset_Freq,
+        x = ~SEMANA,
+        y = ~FREQ,
+        type = "box")%>%
+  layout(title='Accidentes_Medellin',
+         xaxis=list(title="SEMANA"),
+         yaxis=list(title="Unidades"))
+```
+
+
+
+```{r}
+attach(Total_Dataset_Freq)
+```
+
+```{r}
+aggregate(FREQ~ANO*SEMANA, data=Total_Dataset_Freq,FUN=mean)%>%
+  plot_ly(x = ~SEMANA,
+         y = ~FREQ,
+         type = "scatter" ,mode = "lines",
+         split = ~ANO,
+         line=list(width=1))%>%
+  layout(title='Promedio semanal de ACCIDENTES en Medellin',
+         xaxis=list(title="SEMANA"),
+         yaxis=list(title="No. Accidentes"))
+```
+
+
+```{r}
+aggregate(FREQ~ANO*MES, data=Total_Dataset_Freq,FUN=mean)%>%
+  plot_ly(x = ~MES,
+         y = ~FREQ,
+         type = "scatter" ,mode = "lines",
+         split = ~ANO,
+         line=list(width=1))%>%
+  layout(title='Promedio mensual de ACCIDENTES en Medellin',
+         xaxis=list(title="Mes"),
+         yaxis=list(title="No. Accidentes"))
+```
+
+
+```{r}
+aggregate(FREQ~GRAVEDAD*MES, data=Total_Dataset_Freq,FUN=mean)%>%
+  plot_ly(x = ~MES,
+         y = ~FREQ,
+         type = "scatter" ,mode = "lines",
+         split = ~GRAVEDAD,
+         line=list(width=1))%>%
+  layout(title='Promedio mensual de ACCIDENTES en Medellin por GRAVEDAD',
+         xaxis=list(title="Mes"),
+         yaxis=list(title="No. Accidentes"))
+```
+```{r}
+library(plotly)
+```
+
+
+
+```{r}
+aggregate(FREQ~GRAVEDAD*FECHA, data=Total_Dataset_Freq,FUN=mean)%>%
+  plot_ly(x = ~FECHA,
+         y = ~FREQ,
+         type = "scatter" ,mode = "lines",
+         split = ~GRAVEDAD,
+         line=list(width=1))%>%
+  layout(title='Promedio diario ACCIDENTES en Medellin por GRAVEDAD',
+         xaxis=list(title="Mes"),
+         yaxis=list(title="No. Accidentes"))
+```
+
+
+
+```{r}
+aggregate(FREQ~ANO*DIA_NOMBRE, data=Total_Dataset_Freq,FUN=mean)%>%
+  plot_ly(x = ~DIA_NOMBRE,
+         y = ~FREQ,
+         type = "scatter" ,mode = "lines",
+         split = ~ANO,
+         line=list(width=1))%>%
+  layout(title='Promedio diario DIA DE LA SEMANA de Accidentes de Transito en Medellin',
+         xaxis=list(title="Dia Semana"),
+         yaxis=list(title="No. Accidentes"))
+```
+
+```{r}
+aggregate(FREQ~ANO*GRAVEDAD, data=Total_Dataset_Freq,FUN=mean)%>%
+  plot_ly(x = ~GRAVEDAD,
+         y = ~FREQ,
+         type = "scatter" ,mode = "lines",
+         split = ~ANO,
+         line=list(width=1))%>%
+  layout(title='Promedio diario CLASE de Accidentes de Transito en Medellin',
+         xaxis=list(title="Clase"),
+         yaxis=list(title="No. Accidentes"))
+```
+
+
+LAs predicciones a realizar seran para cada uno de las 5 clases de accidentes, y para los periodos de tiempo mensual, semanal y diario, por lo que se generaran 15 modelos, 5 clases de accidente por 3 tipos de periodo de prediccion.
+
+Se realiza entonces la particion de los datos por frecuencia: M: Mensual, S: Semanal, D: Diario
+
+primero se realiza un reshape del dataframe para consolidar los casos por dia y separarlos factores CLASE en columnas
+
+```{r}
+head(Total_Dataset_Freq)
+```
+
+
+
+```{r}
+library(reshape)
+Total_Dataset_Freq <- cast(Total_Dataset_Freq[,c(1,2,3)],FECHA~GRAVEDAD)
+```
+
+```{r}
+Total_Dataset_Freq <- sqldf("SELECT * 
+              FROM Total_Dataset_Freq
+              LEFT JOIN Dias_Especiales USING(FECHA)")
+```
+
+
+se agrega la variable ano al datafrate
+
+```{r}
+Total_Dataset_Freq$ANO <- as.factor(format(Total_Dataset_Freq$FECHA,'%Y'))
+```
+
+Se agrega la variable semana al dataframe
+
+```{r}
+Total_Dataset_Freq$SEMANA <-as.factor(format(Total_Dataset_Freq$FECHA,'%V'))
+```
+
+SE agrega la variable dia al dataframe
+
+```{r}
+Total_Dataset_Freq$DIA <-as.factor(format(Total_Dataset_Freq$FECHA,'%d'))
+```
+
+Se agrega el dia de la semana
+
+```{r}
+Total_Dataset_Freq$DIA_SEMANA <-as.factor(weekdays(Total_Dataset_Freq$FECHA))
+```
+
+Se agrega el mes
+```{r}
+Total_Dataset_Freq$MES <-as.factor(format(Total_Dataset_Freq$FECHA,'%m'))
+```
+
+
+```{r}
+head(Total_Dataset_Freq)
+```
+
+Se reemplazan los NA por ceros
+```{r}
+Total_Dataset_Freq[is.na(Total_Dataset_Freq)] <- 0
+```
+
+
+
+
+Se agrega la columna Total_Accidentes
+
+```{r}
+Total_Dataset_Freq$Total_Accidentes <- Total_Dataset_Freq$`SOLO DAÃÂÃ¢ÂÂOS` + Total_Dataset_Freq$MUERTO + Total_Dataset_Freq$HERIDO
+```
+
+
+Se agrega la columna Accidentes Graves
+
+```{r}
+Total_Dataset_Freq$Accidentes_Graves <- + Total_Dataset_Freq$MUERTO + Total_Dataset_Freq$HERIDO
+```
+
+
+```{r}
+Total_Dataset_Freq$Accidentes_Leves <- + Total_Dataset_Freq$`SOLO DAÃÂÃ¢ÂÂOS`
+```
+
+```{r}
+tail(Total_Dataset_Freq)
+```
+```{r}
+names (Total_Dataset_Freq)[4] = "SOLO_DANOS"
+tail(Total_Dataset_Freq)
+```
+
+
+
+
+
+
+
+
