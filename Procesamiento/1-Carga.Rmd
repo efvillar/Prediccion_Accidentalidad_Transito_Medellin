@@ -247,6 +247,11 @@ head(Dias_Especiales)
 ```
 
 
+```{r Frecuencia_Mensual}
+save(Dias_Especiales,file="../data/Dias_Especiales_Diario.Rda")
+```
+
+
 
 ```{r}
 library(sqldf)
@@ -257,10 +262,6 @@ Dias_Especiales_Mensuales <- sqldf("SELECT ANO, MES, sum(Lunes)-4 AS Freq_lunes,
 
 ```{r Frecuencia_Mensual}
 save(Dias_Especiales_Mensuales,file="../data/Dias_Especiales_Mensuales.Rda")
-```
-
-```{r}
-
 ```
 
 
@@ -301,7 +302,7 @@ Dias_Especiales_Semanal <- sqldf("SELECT ANO, SEMANA, Feria_Flores_Semana,Semana
        GROUP BY ANO,SEMANA,Feria_Flores_Semana,Semana_Santa_Semana")
 ```
 
-```{r Frecuencia_Mensual}
+```{r}
 save(Dias_Especiales_Semanal,file="../data/Dias_Especiales_Semanal.Rda")
 ```
 
@@ -322,6 +323,6 @@ GROUP BY 1,2,3) TDF
 ```
 
 
-```{r Frecuencia_Mensual}
+```{r}
 save(Total_Dataset_Freq_M,file="../data/Frecuencia_De_Accidentes_Semanal.Rda")
 ```
