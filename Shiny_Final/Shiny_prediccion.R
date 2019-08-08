@@ -46,7 +46,7 @@ ui <- fluidPage(
 server <- function(input, output) {
     
 
-    #load XY data semanal
+    #load XY data semanal historica
     load(file = "Data_sem1.Rda")
     XY_Sem <- Data_sem1
     
@@ -62,17 +62,21 @@ server <- function(input, output) {
                    yaxis=list(title="[l/s]"))  })
     
     
-    # Model summary semanal
+    # Model summary semanal precalculado
     output$summary_sem <- renderPrint({
         model_sem <- readRDS("model_sem.rds")
         summary(model_sem)
     })
     
     # Data output semanal
-    output$tbl = DT::renderDataTable({
-        DT::datatable(XY_Sem, options = list(lengthChange = TRUE))
-    })
-    
+    #output$tbl = DT::renderDataTable({
+    #    DT::datatable(XY_Sem, options = list(lengthChange = TRUE))
+    #})
+    output$tbl <- DT::renderDataTable({
+        XY_Sem
+    }, options = list(aLengthMenu = c(5,25,50),
+                      iDisplayLength = 5)
+    )
     
     # Scatterplot output
     output$scatterplot <- renderPlot({
