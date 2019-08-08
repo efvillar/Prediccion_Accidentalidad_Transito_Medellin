@@ -26,7 +26,7 @@ ui <- fluidPage(
             
             tabsetPanel(type = "tabs",
                         
-                        #tabPanel("Gráfica Datos Históricos Semanales", plotlyOutput("Serie_semanal"))
+                        tabPanel("Gráfica Datos Históricos Semanales", plotlyOutput("Serie_semanal")),
                         tabPanel("Scatterplot", plotOutput("scatterplot")), # Plot
                         tabPanel("Distribution", # Plots of distributions
                                  fluidRow(
@@ -48,18 +48,19 @@ server <- function(input, output) {
 
     #load XY data semanal historica
     load(file = "Data_sem1.Rda")
-    XY_Sem <- Data_sem1
+    XY_Sem_shiny <- Data_sem1
     
-    #grafica semanal plotly
-    output$Serie_semanal <- renderPlotly({plot_ly (data=XY_Sem,
-                                                       x = ~Fecha,
-                                                       y = ~QmedioDia_L_s,
+    #grafica historica semanal plotly
+    output$Serie_semanal <- renderPlotly({plot_ly (data=XY_Sem_shiny,
+                                                       x = ~SEMANA,
+                                                       y = ~Total_Accidentes,
+                                                       split = ~ANO,
                                                        type = "scatter" ,mode = "lines",
                                                        #line=list(width=1,color='rgb(205, 12, 24)'))%>%
                                                        line=list(width=1,color='rgb(66, 51, 255)'))%>%
-            layout(title='Caudales Medios Día Cadena Salvatorianos',
-                   xaxis=list(title="Año"),
-                   yaxis=list(title="[l/s]"))  })
+            layout(title='Accidentalidad Semanal Historica Medellin',
+                   xaxis=list(title="SEMANA"),
+                   yaxis=list(title="Accidentes"))  })
     
     
     # Model summary semanal precalculado
@@ -73,7 +74,7 @@ server <- function(input, output) {
     #    DT::datatable(XY_Sem, options = list(lengthChange = TRUE))
     #})
     output$tbl <- DT::renderDataTable({
-        XY_Sem
+        XY_Sem_shiny
     }, options = list(aLengthMenu = c(5,25,50),
                       iDisplayLength = 5)
     )
