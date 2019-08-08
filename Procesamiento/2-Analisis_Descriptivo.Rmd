@@ -3,9 +3,9 @@ title: "ANALISIS DESCRIPTIVO"
 author: "Edwin Villarraga-Jorge Montoya-Juan David Arango"
 date: "10/8/2019"
 output:
+  pdf_document: default
   html_document:
     theme: yeti
-  pdf_document: default
   toc: yes
 ---
 
