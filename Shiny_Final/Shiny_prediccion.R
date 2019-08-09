@@ -61,7 +61,7 @@ server <- function(input, output) {
                                                        
             layout(title='Accidentalidad Total Semanal Historica Medellin',
                    xaxis=list(title="SEMANA"),
-                   yaxis=list(title="Accidentes"))  })
+                   yaxis=list(title="Accidentes Totales"))  })
     
     
     
@@ -77,7 +77,7 @@ server <- function(input, output) {
             
             layout(title='Accidentalidad Accidentes Graves Semanal Historica Medellin',
                    xaxis=list(title="SEMANA"),
-                   yaxis=list(title="Accidentes"))  })
+                   yaxis=list(title="Accidentes Graves"))  })
     
     
     #grafica historica semanal Accidentes Leves plotly
@@ -91,7 +91,7 @@ server <- function(input, output) {
             
             layout(title='Accidentalidad Accidentes Leves Semanal Historica Medellin',
                    xaxis=list(title="SEMANA"),
-                   yaxis=list(title="Accidentes"))  }) 
+                   yaxis=list(title="Accidentes Leves"))  }) 
     
     
     
