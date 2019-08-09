@@ -1,42 +1,23 @@
 library(shiny)
 library(plotly)
 ui <- fluidPage(
-    titlePanel("PREDICCIÃN DE ACCIDENTES"),
-    sidebarLayout(
-        sidebarPanel(
-            selectInput("outcome", label = h3("Periodo de PredicciÃ³n"),
-                        choices = list("Fertility" = "Fertility",
-                                       "Agriculture" = "Agriculture",
-                                       "Examination" = "Examination",
-                                       "Education" = "Education",
-                                       "Catholic" = "Catholic",
-                                       "Infant.Mortality" = "Infant.Mortality"), selected = 1),
-            
-            selectInput("indepvar", label = h3("Explanatory variable"),
-                        choices = list("Fertility" = "Fertility",
-                                       "Agriculture" = "Agriculture",
-                                       "Examination" = "Examination",
-                                       "Education" = "Education",
-                                       "Catholic" = "Catholic",
-                                       "Infant.Mortality" = "Infant.Mortality"), selected = 1)
-            
-        ),
+
         
         mainPanel(
             
             tabsetPanel(type = "tabs",
                         
-                        tabPanel("GrÃ¡fica Datos HistÃ³ricos Semanales Totales", 
+                        tabPanel("Gráfica Datos Históricos Semanales Totales", 
                                                                                 plotlyOutput("Serie_semanal_Total"),
                                                                                 plotlyOutput("Serie_semanal_AG"),
                                                                                 plotlyOutput("Serie_semanal_AL")),
    
                         tabPanel("Resumen del Modelo Semanal", verbatimTextOutput("summary_sem")), # Model output
-                        tabPanel("Data semanal histÃ³rica", DT::dataTableOutput('tbl')) # Data as datatable
+                        tabPanel("Data semanal histórica", DT::dataTableOutput('tbl')) # Data as datatable
                         
             )
         )
-    ))
+    )
 
 
 
