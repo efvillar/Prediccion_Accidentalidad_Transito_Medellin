@@ -17,7 +17,7 @@ library(sqldf)
 
 # EVALUACION DE MODELOS
 
-## Importación y estandarización de la información
+## 1. Importación y estandarización de la información
 
 ```{r}
 load("../data/Frecuencia_De_Accidentes_Diario.Rda")
@@ -48,7 +48,7 @@ Total_Dataset_Freq <- sqldf("SELECT *
 
 
 
-## 1. Particion de los datos para entrenamiento y test
+## 2. Particion de los datos para entrenamiento y test
 
 Se ajustarán modelos con la información disponible desde el 01 de enero de 2014 hasta el 31 de diciembre de 2017 y se utilizará el año 2018 para validar el modelo:
 
@@ -94,11 +94,11 @@ Test_D_Dataset$ANO <- factor(Test_D_Dataset$ANO)
 summary(Test_D_Dataset$ANO)
 ```
 
-### Selección de las mejores variables para el modelo 
+## 3. Selección de las mejores variables para el modelo 
 
 Se utilizará el método best subset selection para elegir las mejores variables explicativas del modelo teniendo como criterio aquellas variables que presente R ajustado 
 
-#### TOTAL ACCIDENTES
+#### Selección de variables para Total accidentes
 ```{r}
 library (leaps)
 regfit.full=regsubsets (TOTAL_ACCIDENTES∼Ano_Base+Lunes+martes+miercoles+jueves+viernes+sabado+domingo+Enero+Febrero+Marzo+Abril+Mayo+Junio+Julio+Agosto+Septiembre+Octubre+Noviembre+Diciembre+Feriado+Feriado_v1+Feriado_Lunes+Feriado_Otro+Previo_feriado+Semana_Santa+Semana_Santa_Mes+Semana_Santa_Semana+Prima+Mujer+Padre+Madre+AmoryAmistad+Semana_Santa_v1+Viernes_Antes_Puente+Quincena+Viernes_Desp_Quincena+Viernes_Desp_Quincena_v1+Viernes_Desp_Quincena_v2+Feria_Flores+Feria_Flores_Mes+Feria_Flores_Semana,Train_D_Dataset, nvmax =19)
@@ -143,7 +143,7 @@ coef(regfit.full ,20)
 ```
 
 
-#### ACCIDENTES GRAVES
+#### Selección de variables para accidentes graves
 ```{r}
 library (leaps)
 regfit.full=regsubsets (ACCIDENTES_GRAVES∼Ano_Base+Lunes+martes+miercoles+jueves+viernes+sabado+domingo+Enero+Febrero+Marzo+Abril+Mayo+Junio+Julio+Agosto+Septiembre+Octubre+Noviembre+Diciembre+Feriado+Feriado_v1+Feriado_Lunes+Feriado_Otro+Previo_feriado+Semana_Santa+Semana_Santa_Mes+Semana_Santa_Semana+Prima+Mujer+Padre+Madre+AmoryAmistad+Semana_Santa_v1+Viernes_Antes_Puente+Quincena+Viernes_Desp_Quincena+Viernes_Desp_Quincena_v1+Viernes_Desp_Quincena_v2+Feria_Flores+Feria_Flores_Mes+Feria_Flores_Semana,Train_D_Dataset, nvmax =19)
@@ -194,7 +194,7 @@ coef(regfit.full ,20)
 ```
 
 
-#### ACCIDENTES LEVES
+#### Selección de variables para accidentes leves
 ```{r}
 library (leaps)
 regfit.full=regsubsets (ACCIDENTES_LEVES∼Ano_Base+Lunes+martes+miercoles+jueves+viernes+sabado+domingo+Enero+Febrero+Marzo+Abril+Mayo+Junio+Julio+Agosto+Septiembre+Octubre+Noviembre+Diciembre+Feriado+Feriado_v1+Feriado_Lunes+Feriado_Otro+Previo_feriado+Semana_Santa+Semana_Santa_Mes+Semana_Santa_Semana+Prima+Mujer+Padre+Madre+AmoryAmistad+Semana_Santa_v1+Viernes_Antes_Puente+Quincena+Viernes_Desp_Quincena+Viernes_Desp_Quincena_v1+Viernes_Desp_Quincena_v2+Feria_Flores+Feria_Flores_Mes+Feria_Flores_Semana,Train_D_Dataset, nvmax =19)
@@ -245,11 +245,11 @@ coef(regfit.full ,20)
 ```
 
 
-## 2. Modelamiento
+## 4. Modelamiento
 
-## 1. REGRESION LINEAL
+### 1. REGRESION LINEAL
 
-### Total Accidentes
+#### Total Accidentes
 ```{r}
 head(Train_D_Dataset)
 ```
@@ -336,7 +336,7 @@ plot_ly (data=Test_D_Dataset,
          legend = list(x = 0.75, y = 0.9))
 ```
 
-### Accidentes Graves
+#### Accidentes Graves
 
 ```{r}
 trcntrl = trainControl(method="cv", number=10)
@@ -417,7 +417,7 @@ plot_ly (data=Test_D_Dataset,
 
 
 
-### Accidentes Leves
+#### Accidentes Leves
 
 ```{r}
 trcntrl = trainControl(method="cv", number=10)
@@ -496,7 +496,7 @@ plot_ly (data=Test_D_Dataset,
          legend = list(x = 0.75, y = 0.9))
 ```
 
-### REsumen Modelos Regresión lineal para los diferentes tipos de accidente
+#### Resumen Modelos Regresión lineal para los diferentes tipos de accidente
 
 ```{r}
 Tipo_de_accidentes= c("Total Accidentes","Accidentes graves","Accidentes leves")
@@ -521,7 +521,7 @@ set.seed(123) # fija la semilla del generador de parámetros para que sea reprod
 head(Train_D_Dataset)
 ```
 
-### Total Accidentes
+#### Total Accidentes
 
 ```{r}
 library(caret)
@@ -596,7 +596,7 @@ plot_ly (data=Test_D_Dataset,
          legend = list(x = 0.75, y = 0.9))
 ```
 
-### Accidentes graves
+#### Accidentes graves
 
 ```{r}
 trcntrl = trainControl(method="cv", number=10)
@@ -664,7 +664,7 @@ plot_ly (data=Test_D_Dataset,
 ```
 
 
-### Accidentes Leves
+#### Accidentes Leves
 
 
 ```{r}
@@ -736,7 +736,7 @@ plot_ly (data=Test_D_Dataset,
 ```
 
 
-### REsumen Modelos KNN para los diferentes tipos de accidente
+#### Resumen Modelos KNN para los diferentes tipos de accidente
 
 ```{r}
 Tipo_de_accidentes= c("Total Accidentes","Accidentes graves","Accidentes leves")
@@ -748,10 +748,10 @@ Tabla_knn
 ```
 
 
-## 3. MODELO LINEAL GENERALIZADO
+### 3. MODELO LINEAL GENERALIZADO
 
 
-### Total Accidentes
+#### Total Accidentes
 
 ```{r}
 glm_fit<-glm(TOTAL_ACCIDENTES∼Ano_Base+Lunes+martes+viernes+sabado+Enero+Febrero+ Octubre+Feriado_Otro+Previo_feriado+Semana_Santa+Semana_Santa_Mes+Mujer+Padre+Madre+AmoryAmistad+Semana_Santa_v1+Viernes_Antes_Puente+Feria_Flores_Semana+Feria_Flores_Mes, data=Train_D_Dataset, family = "poisson")
@@ -815,7 +815,7 @@ plot_ly (data=Test_D_Dataset,
 ```
 
 
-### Accidentes Graves
+#### Accidentes Graves
 
 ```{r}
 glm_fit_m<-glm(ACCIDENTES_GRAVES∼Ano_Base+Lunes+martes+viernes+sabado+Enero+Febrero+ Octubre+Feriado_Otro+Previo_feriado+Semana_Santa+Semana_Santa_Mes+Mujer+Padre+Madre+AmoryAmistad+Semana_Santa_v1+Viernes_Antes_Puente+Feria_Flores_Semana+Feria_Flores_Mes, data=Train_D_Dataset, family = "poisson")
@@ -880,7 +880,7 @@ plot_ly (data=Test_D_Dataset,
 
 
 
-### Accidentes Leves
+#### Accidentes Leves
 
 ```{r}
 glm_fit_sd<-glm(ACCIDENTES_LEVES∼Ano_Base+Lunes+martes+viernes+sabado+Enero+Febrero+ Octubre+Feriado_Otro+Previo_feriado+Semana_Santa+Semana_Santa_Mes+Mujer+Padre+Madre+AmoryAmistad+Semana_Santa_v1+Viernes_Antes_Puente+Feria_Flores_Semana+Feria_Flores_Mes, data=Train_D_Dataset, family = "poisson")
@@ -942,7 +942,7 @@ plot_ly (data=Test_D_Dataset,
          yaxis=list(title="Accidentes leves"),
          legend = list(x = 0.75, y = 0.9))
 ```
-### REsumen Modelos Regresión lineal generalizado para los diferentes tipos de accidente
+#### REsumen Modelos Regresión lineal generalizado para los diferentes tipos de accidente
 
 ```{r}
 Tipo_de_accidentes= c("Total Accidentes","Accidentes Graves","Accidentes Leves")
@@ -956,9 +956,9 @@ Tabla_glm
 
 
 
-## 4. ARBOLES DE REGRESION
+### 4. ARBOLES DE REGRESION
 
-### Total Accidentes
+#### Total Accidentes
 
 ```{r}
 trcntrl = trainControl(method="cv", number=10)
@@ -1024,7 +1024,7 @@ plot_ly (data=Test_D_Dataset,
 ```
 
 
-### Accidentes graves
+#### Accidentes graves
 
 ```{r}
 trcntrl = trainControl(method="cv", number=10)
@@ -1089,7 +1089,7 @@ plot_ly (data=Test_D_Dataset,
 
 
 
-### Accidentes leves
+#### Accidentes leves
 
 ```{r}
 trcntrl = trainControl(method="cv", number=10)
@@ -1152,7 +1152,7 @@ plot_ly (data=Test_D_Dataset,
          legend = list(x = 0.75, y = 0.9))
 ```
 
-### REsumen Modelos Regresión lineal generalizado para los diferentes tipos de accidente
+#### Resumen Modelos Árboles de regresión para los diferentes tipos de accidente
 
 ```{r}
 Tipo_de_accidentes= c("Total Accidentes","Accidentes Graves","Accidentes Leves")
@@ -1163,10 +1163,10 @@ Tabla_tree = data.frame (cbind(Tipo_de_accidentes,RMSE_Train_tree,RMSE_Test_tree
 Tabla_tree
 ```
 
-## 5. BOSQUE ALEATORIO
+### 5. BOSQUE ALEATORIO
 
 
-### Total Accidentes
+#### Total Accidentes
 
 ```{r Random_Forest_TOTAL_ACCIDENTES}
 trcntrl = trainControl(method="cv", number=10)
@@ -1245,11 +1245,11 @@ plot_ly (data=Test_D_Dataset,
 ```
 
 
-### Accidentes Graves
+#### Accidentes Graves
 
 ```{r Random_Forest_ACCIDENTES_GRAVES}
 trcntrl = trainControl(method="cv", number=10)
-caret_rf_fit_m = caret::train(ACCIDENTES_GRAVES~Ano_v1+Ano_v1*DIA_SEMANA+SEMANA+DIA_SEMANA+Semana.Santa+Feriado_Lunes+Feriado_Otro+Feria_Flores+Madre, data=Train_D_Dataset,
+caret_rf_fit_m = caret::train(ACCIDENTES_GRAVES∼Ano_Base+Lunes+martes+viernes+sabado+Enero+Febrero+ Octubre+Feriado_Otro+Previo_feriado+Semana_Santa+Semana_Santa_Mes+Mujer+Padre+Madre+AmoryAmistad+Semana_Santa_v1+Viernes_Antes_Puente+Feria_Flores_Semana+Feria_Flores_Mes, data=Train_D_Dataset,
                       method = "rf", trControl = trcntrl,
                       prox=TRUE,allowParallel=TRUE)
 ```
@@ -1320,11 +1320,11 @@ plot_ly (data=Test_D_Dataset,
 
 ```
 
-### Accidentes Leves
+#### Accidentes Leves
 
 ```{r Random_Forest_ACCIDENTES_LEVES}
 trcntrl = trainControl(method="cv", number=10)
-caret_rf_fit_sd = caret::train(ACCIDENTES_LEVES~Ano_v1+Ano_v1*DIA_SEMANA+SEMANA+DIA_SEMANA+Semana.Santa+Feriado_Lunes+Feriado_Otro+Feria_Flores+Madre, data=Train_D_Dataset,
+caret_rf_fit_sd = caret::train(ACCIDENTES_LEVES∼Ano_Base+Lunes+martes+viernes+sabado+Enero+Febrero+ Octubre+Feriado_Otro+Previo_feriado+Semana_Santa+Semana_Santa_Mes+Mujer+Padre+Madre+AmoryAmistad+Semana_Santa_v1+Viernes_Antes_Puente+Feria_Flores_Semana+Feria_Flores_Mes, data=Train_D_Dataset,
                       method = "rf", trControl = trcntrl,
                       prox=TRUE,allowParallel=TRUE)
 ```
@@ -1397,7 +1397,7 @@ plot_ly (data=Test_D_Dataset,
 ```
 
 
-### REsumen Modelos Regresión lineal generalizado para los diferentes tipos de accidente
+#### Resumen Modelos Random Forest para los diferentes tipos de accidente
 
 ```{r}
 Tipo_de_accidentes= c("Total Accidentes","Total Graves","Total Leves")
@@ -1410,10 +1410,10 @@ Tabla_rf
 
 
 
-# ELECCION DEL MODELO
+## ELECCION DEL MODELO
 
 
-## Elección del modelo para el total de accidentes
+### 1. Elección del modelo para el total de accidentes
 
 Comparación en el entrenamiento
 ```{r}
@@ -1498,7 +1498,7 @@ plot_ly (data=comparacion_vl,
 #### Comparación con los RMSE:
 
 ```{r}
-Entrenamiento<-round(c(RMSE_tr_lm,RMSE_tr_knn,RMSE_tr_glm,RMSE_tr_tree,RMSE_tr_rf,)3) 
+Entrenamiento<-round(c(RMSE_tr_lm,RMSE_tr_knn,RMSE_tr_glm,RMSE_tr_tree,RMSE_tr_rf),3) 
 Validacion<-round(c(RMSE_test_lm,RMSE_test_knn,RMSE_test_glm,RMSE_test_tree,RMSE_test_rf),3) 
 nombres<-c("lm","knn","glm","árbol","bosque")
 ResultadosRMSE<-data.frame(Entrenamiento=Entrenamiento,Validacion=Validacion)
@@ -1507,7 +1507,7 @@ ResultadosRMSE
 ```
 
 
-## Elección del modelo para Accidentes graves
+### 2. Elección del modelo para Accidentes graves
 
 Comparación en el entrenamiento
 ```{r}
@@ -1602,7 +1602,7 @@ ResultadosRMSE
 ```
 
 
-## Elección del modelo para Accidentes leves
+### 3. Elección del modelo para Accidentes leves
 
 Comparación en el entrenamiento
 ```{r}
@@ -1628,16 +1628,16 @@ plot_ly (data=comparacion_tr,
   add_trace(y= ~knn,
             name='knn-leves',
             line=list(width=1,color="red"))%>%
-  add_trace(y= ~glm-graves,
+  add_trace(y= ~glm,
             name='Modelo Poisson-leves',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
   add_trace(y= ~arbol,
-            name='Árbo-gravesl',
+            name='Árbo-leves',
             line=list(width=1,color="green"))%>%
     add_trace(y= ~rf,
-            name='Bosque-graves',
+            name='Bosque-leves',
             line=list(width=1,color='rgb(255, 51, 153)'))%>%
-  layout(title='Accidentes graves (Entrenamiento)',
+  layout(title='Accidentes les (Entrenamiento)',
          xaxis=list(title="Fecha"),
          yaxis=list(title="Accidentes"),
          legend = list(x = 1, y = 0.9))
@@ -1683,15 +1683,21 @@ plot_ly (data=comparacion_vl,
          legend = list(x = 1, y = 0.9))
 ```
 
-
+Calculo de la variación del RMSE de validación y entrenamiento
+```{r}
+Porcetaje<-round(C((((RMSE_test_lm_sd-RMSE_tr_lm_sd)/RMSE_tr_lm_sd)*100),(((RMSE_test_lm_sd-RMSE_tr_lm_sd)/RMSE_tr_lm_sd)*100),(((RMSE_test_lm_sd-RMSE_tr_lm_sd)/RMSE_tr_lm_sd)*100),(((RMSE_test_lm_sd-RMSE_tr_lm_sd)/RMSE_tr_lm_sd)*100),(((RMSE_test_lm_sd-RMSE_tr_lm_sd)/RMSE_tr_lm_sd)*100),))
+```
 
 #### Comparación con los RMSE:
 
 ```{r}
 Entrenamiento<-round(c(RMSE_tr_lm_sd,RMSE_tr_knn_sd,RMSE_tr_glm_sd,RMSE_tr_tree_sd,RMSE_tr_rf_sd),3) 
-Validacion<-round(c(RMSE_test_lm_sd,RMSE_test_knn_sd,RMSE_test_glm_sd,RMSE_test_tree_sd,RMSE_test_rf_sd),3) 
+Validacion<-round(c(RMSE_test_lm_sd,RMSE_test_knn_sd,RMSE_test_glm_sd,RMSE_test_tree_sd,RMSE_test_rf_sd),3)
 nombres<-c("lm","knn","glm","árbol","bosque")
-ResultadosRMSE<-data.frame(Entrenamiento=Entrenamiento,Validacion=Validacion)
+ResultadosRMSE<-data.frame(Entrenamiento=Entrenamiento,Validacion=Validacion,Porcetaje=Porcetaje)
 rownames(ResultadosRMSE)<-nombres
 ResultadosRMSE
 ```
+
+
+
