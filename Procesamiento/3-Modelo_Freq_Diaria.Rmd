@@ -395,7 +395,7 @@ plot_ly (data=Train_D_Dataset,
   add_trace(y= ~y_tr_pred_lm_sd,
             name='Modelo lm',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
-  layout(title='Total Accidentes leves',
+  layout(title='Total accidentes leves',
          xaxis=list(title="Fecha"),
          yaxis=list(title="Accidentes leves"),
          legend = list(x = 0.75, y = 0.9))
@@ -563,7 +563,7 @@ plot_ly (data=Train_D_Dataset,
   add_trace(y= ~y_tr_pred_knn_m,
             name='Modelo knn',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
-  layout(title='Total Accidentes graves',
+  layout(title='Total accidentes graves',
          xaxis=list(title="Fecha"),
          yaxis=list(title="Accidentes graves"),
          legend = list(x = 0.75, y = 0.9))
@@ -632,7 +632,7 @@ plot_ly (data=Train_D_Dataset,
   add_trace(y= ~y_tr_pred_knn_sd,
             name='Modelo knn',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
-  layout(title='Total Accidentes leves',
+  layout(title='Total accidentes leves',
          xaxis=list(title="Fecha"),
          yaxis=list(title="Accidentes"),
          legend = list(x = 0.75, y = 0.9))
@@ -651,7 +651,7 @@ plot_ly (data=Test_D_Dataset,
   add_trace(y= ~y_test_pred_knn_sd,
             name='Modelo knn',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
-  layout(title='Accidentes leves',
+  layout(title='Total accidentes leves',
          xaxis=list(title="Fecha"),
          yaxis=list(title="Accidentes"),
          legend = list(x = 0.75, y = 0.9))
@@ -730,7 +730,7 @@ plot_ly (data=Test_D_Dataset,
   add_trace(y= ~y_test_pred_glm,
             name='Modelo glm',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
-  layout(title='Total Accidentes',
+  layout(title='Total accidentes',
          xaxis=list(title="Fecha"),
          yaxis=list(title="Accidentes"),
          legend = list(x = 0.75, y = 0.9))
@@ -842,7 +842,7 @@ plot_ly (data=Train_D_Dataset,
   add_trace(y= ~y_tr_pred_glm_sd,
             name='Modelo glm',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
-  layout(title='Total Accidentes leves',
+  layout(title='Total accidentes leves',
          xaxis=list(title="Fecha"),
          yaxis=list(title="Accidentes leves"),
          legend = list(x = 0.75, y = 0.9))
@@ -859,7 +859,7 @@ plot_ly (data=Test_D_Dataset,
   add_trace(y= ~y_test_pred_glm_sd,
             name='Modelo glm',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
-  layout(title='Total Accidentes leves',
+  layout(title='Total accidentes leves',
          xaxis=list(title="Fecha"),
          yaxis=list(title="Accidentes leves"),
          legend = list(x = 0.75, y = 0.9))
@@ -987,7 +987,7 @@ plot_ly (data=Train_D_Dataset,
   add_trace(y= ~y_tr_pred_tree_m,
             name='Modelo tree',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
-  layout(title='Accidentes graves',
+  layout(title='Total accidentes graves',
          xaxis=list(title="Fecha"),
          yaxis=list(title="Accidentes"),
          legend = list(x = 0.75, y = 0.9))
@@ -1003,7 +1003,7 @@ plot_ly (data=Test_D_Dataset,
   add_trace(y= ~y_test_pred_tree_m,
             name='Modelo tree',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
-  layout(title='Accidentes graves',
+  layout(title='Total accidentes graves',
          xaxis=list(title="Fecha"),
          yaxis=list(title="Accidentes"),
          legend = list(x = 0.75, y = 0.9))
@@ -1370,9 +1370,9 @@ plot_ly (data=comparacion_tr,
     add_trace(y= ~rf,
             name='Bosque',
             line=list(width=1,color='rgb(255, 51, 153)'))%>%
-  layout(title='Registros RUNT (Entrenamiento)',
+  layout(title='Total accidentes (Entrenamiento)',
          xaxis=list(title="Fecha"),
-         yaxis=list(title="Unidades"),
+         yaxis=list(title="Accidentes"),
          legend = list(x = 1, y = 0.9))
 ```
 
@@ -1432,7 +1432,7 @@ rownames(ResultadosRMSE)<-nombres
 Cálculo de la variación
 
 ```{r}
-ResultadosRMSE$Variacion<-((ResultadosRMSE$Validacion-ResultadosRMSE$Entrenamiento)/ResultadosRMSE$Entrenamiento)*100
+ResultadosRMSE$Por_variacion<-((ResultadosRMSE$Validacion-ResultadosRMSE$Entrenamiento)/ResultadosRMSE$Entrenamiento)*100
 ResultadosRMSE
 ```
 
@@ -1458,19 +1458,19 @@ plot_ly (data=comparacion_tr,
          name='Real',
          line=list(width=1,color='rgb(205, 12, 24)'))%>%
   add_trace(y= ~lm,
-            name='lm-graves',
+            name='lm',
             line=list(width=1,color= "blue"))%>%
   add_trace(y= ~knn,
-            name='knn-graves',
+            name='knn',
             line=list(width=1,color="red"))%>%
   add_trace(y= ~glm,
-            name='Modelo Poisson-graves',
+            name='Modelo Poisson',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
   add_trace(y= ~arbol,
-            name='Árbo-gravesl',
+            name='Árbo',
             line=list(width=1,color="green"))%>%
     add_trace(y= ~rf,
-            name='Bosque-graves',
+            name='Bosque',
             line=list(width=1,color='rgb(255, 51, 153)'))%>%
   layout(title='Accidentes graves (Entrenamiento)',
          xaxis=list(title="Fecha"),
@@ -1498,19 +1498,19 @@ plot_ly (data=comparacion_vl,
          name='Real',
          line=list(width=1,color='rgb(205, 12, 24)'))%>%
   add_trace(y= ~lm,
-            name='lm-graves',
+            name='lm',
             line=list(width=1,color= "blue"))%>%
   add_trace(y= ~knn,
-            name='knn-graves',
+            name='knn',
             line=list(width=1,color="red"))%>%
   add_trace(y= ~glm,
-            name='Modelo Poisson-graves',
+            name='Modelo Poisson',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
   add_trace(y= ~arbol,
-            name='Árbol-graves',
+            name='Árbol',
             line=list(width=1,color="green"))%>%
   add_trace(y= ~rf,
-            name='Bosque-graves',
+            name='Bosque',
             line=list(width=1,color='rgb(255, 51, 153)'))%>%
   layout(title='Accidentes graves (Validación)',
          xaxis=list(title="Fecha"),
@@ -1533,7 +1533,7 @@ rownames(ResultadosRMSE)<-nombres
 Cálculo de la variación
 
 ```{r}
-ResultadosRMSE$Variacion<-((ResultadosRMSE$Validacion-ResultadosRMSE$Entrenamiento)/ResultadosRMSE$Entrenamiento)*100
+ResultadosRMSE$Por_variacion<-((ResultadosRMSE$Validacion-ResultadosRMSE$Entrenamiento)/ResultadosRMSE$Entrenamiento)*100
 ResultadosRMSE
 ```
 
@@ -1558,21 +1558,21 @@ plot_ly (data=comparacion_tr,
          name='Real',
          line=list(width=1,color='rgb(205, 12, 24)'))%>%
   add_trace(y= ~lm,
-            name='lm-lesves',
+            name='lm',
             line=list(width=1,color= "blue"))%>%
   add_trace(y= ~knn,
-            name='knn-leves',
+            name='knn',
             line=list(width=1,color="red"))%>%
   add_trace(y= ~glm,
-            name='Modelo Poisson-leves',
+            name='Modelo Poisson',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
   add_trace(y= ~arbol,
-            name='Árbo-leves',
+            name='Árbo',
             line=list(width=1,color="green"))%>%
     add_trace(y= ~rf,
-            name='Bosque-leves',
+            name='Bosque',
             line=list(width=1,color='rgb(255, 51, 153)'))%>%
-  layout(title='Accidentes les (Entrenamiento)',
+  layout(title='Accidentes leves (Entrenamiento)',
          xaxis=list(title="Fecha"),
          yaxis=list(title="Accidentes"),
          legend = list(x = 1, y = 0.9))
@@ -1598,29 +1598,24 @@ plot_ly (data=comparacion_vl,
          name='Real',
          line=list(width=1,color='rgb(205, 12, 24)'))%>%
   add_trace(y= ~lm,
-            name='lm-leves',
+            name='lm',
             line=list(width=1,color= "blue"))%>%
   add_trace(y= ~knn,
             name='knn',
             line=list(width=1,color="red"))%>%
   add_trace(y= ~glm,
-            name='Modelo Poisson-leves',
+            name='Modelo Poisson',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
   add_trace(y= ~arbol,
-            name='Árbol-leves',
+            name='Árbol',
             line=list(width=1,color="green"))%>%
   add_trace(y= ~rf,
-            name='Bosque-leves',
+            name='Bosque',
             line=list(width=1,color='rgb(255, 51, 153)'))%>%
-  layout(title='Accidentes lesves (Validación)',
+  layout(title='Accidentes leves (Validación)',
          xaxis=list(title="Fecha"),
          yaxis=list(title="Accidentes"),
          legend = list(x = 1, y = 0.9))
-```
-
-Calculo de la variación del RMSE de validación y entrenamiento
-```{r}
-#Porcetaje<-round(C((((RMSE_test_lm_sd-RMSE_tr_lm_sd)/RMSE_tr_lm_sd)*100),(((RMSE_test_lm_sd-RMSE_tr_lm_sd)/RMSE_tr_lm_sd)*100),(((RMSE_test_lm_sd-RMSE_tr_lm_sd)/RMSE_tr_lm_sd)*100),(((RMSE_test_lm_sd-RMSE_tr_lm_sd)/RMSE_tr_lm_sd)*100),(((RMSE_test_lm_sd-RMSE_tr_lm_sd)/RMSE_tr_lm_sd)*100),))
 ```
 
 #### Comparación con los RMSE:
@@ -1636,7 +1631,7 @@ rownames(ResultadosRMSE)<-nombres
 Cálculo de la variación
 
 ```{r}
-ResultadosRMSE$Variacion<-((ResultadosRMSE$Validacion-ResultadosRMSE$Entrenamiento)/ResultadosRMSE$Entrenamiento)*100
+ResultadosRMSE$Por_variacion<-((ResultadosRMSE$Validacion-ResultadosRMSE$Entrenamiento)/ResultadosRMSE$Entrenamiento)*100
 ResultadosRMSE
 ```
 
@@ -1729,7 +1724,9 @@ saveRDS(caret_lm_fit_sd_final,"../Modelos/Prediccion_leves_Diario.rds")
 Modelo_leves_diario<-readRDS(file="../Modelos/Prediccion_leves_Diario.rds")
 ```
 
-##### Datos para pronóstico 
+##### Datos para pronóstico
+
+Se oganizan los datos necesarios para el pronóstico de los accidentes en los años 2019, 2020 y 2021
 
 Importación de los datos
 ```{r}
