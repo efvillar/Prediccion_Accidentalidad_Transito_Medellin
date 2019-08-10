@@ -199,12 +199,25 @@ server <- function(input, output) {
         Data_Historica_Diaria
     }, options = list(aLengthMenu = c(5,25,50),
                       iDisplayLength = 5)
-    )    
-    
-    
-    
+    )   
     
 }
+
+
+# PREDICCION
+
+    #MODELOS DIARIOS
+
+        #Total Accidentes
+
+
+        #Accidentes Graves
+
+
+        #Accidentes graves
+
+
+        #Grafica
 
 shinyApp(ui = ui, server = server)
 
