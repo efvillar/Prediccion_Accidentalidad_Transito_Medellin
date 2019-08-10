@@ -255,7 +255,9 @@ save(Dias_Especiales,file="../data/Dias_Especiales_Diario.Rda")
 
 ```{r}
 library(sqldf)
-Dias_Especiales_Mensuales <- sqldf("SELECT ANO, MES, sum(Lunes)-4 AS Freq_lunes, sum(martes)-4 AS Freq_martes, sum(miercoles)-4 AS Freq_miercoles, sum(jueves)-4 AS Freq_jueves, sum(viernes)-4 AS Freq_viernes, sum(sabado)-4 AS Freq_sabado, sum(domingo)-4 AS Freq_domingo, sum(Feriado_Lunes+Feriado_Otro) as Feriados, sum(Feriado_Lunes) AS Feriados_Lunes, sum(Feriado_Otro) AS Feriados_Otro
+Dias_Especiales_Mensuales <- sqldf("SELECT ANO,
+CASE WHEN ANO<2016 THEN 0 ELSE 1
+END Ano_Base, MES, sum(Lunes)-4 AS Freq_lunes, sum(martes)-4 AS Freq_martes, sum(miercoles)-4 AS Freq_miercoles, sum(jueves)-4 AS Freq_jueves, sum(viernes)-4 AS Freq_viernes, sum(sabado)-4 AS Freq_sabado, sum(domingo)-4 AS Freq_domingo, sum(Feriado_Lunes+Feriado_Otro) as Feriados, sum(Feriado_Lunes) AS Feriados_Lunes, sum(Feriado_Otro) AS Feriados_Otro
        FROM Dias_Especiales
        GROUP BY ANO, MES")
 ```
@@ -271,7 +273,8 @@ Agrupamientos de los accidentes de transitos mensual con cruce de variables desc
 library(sqldf)
 Total_Dataset_Freq_M <- sqldf("
 
-SELECT TDF.ANO, TDF.MES, TDF.GRAVEDAD, TDF.FREQ, Freq_lunes, Freq_martes, Freq_miercoles, Freq_jueves,Freq_viernes, Freq_sabado, Freq_domingo, Feriados, Feriados_Lunes, Feriados_Otro
+SELECT TDF.ANO, 
+DEM.Ano_Base, TDF.MES, TDF.GRAVEDAD, TDF.FREQ, Freq_lunes, Freq_martes, Freq_miercoles, Freq_jueves,Freq_viernes, Freq_sabado, Freq_domingo, Feriados, Feriados_Lunes, Feriados_Otro
 FROM
 (
 SELECT  
