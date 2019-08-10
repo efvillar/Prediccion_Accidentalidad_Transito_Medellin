@@ -297,7 +297,10 @@ Agrupamiento de las variables explicativas en la periodicidad Semanal
 
 ```{r}
 library(sqldf)
-Dias_Especiales_Semanal <- sqldf("SELECT ANO, SEMANA, Feria_Flores_Semana,Semana_Santa_Semana, sum(Feriado_Lunes) as Feriados_Lunes, sum(Feriado_Otro) as Feriados_Otros
+Dias_Especiales_Semanal <- sqldf("SELECT ANO, 
+CASE WHEN ANO<2016 THEN 0 ELSE 1
+END Ano_Base,
+SEMANA, Feria_Flores_Semana,Semana_Santa_Semana, sum(Feriado_Lunes) as Feriados_Lunes, sum(Feriado_Otro) as Feriados_Otros
        FROM Dias_Especiales
        GROUP BY ANO,SEMANA,Feria_Flores_Semana,Semana_Santa_Semana")
 ```
