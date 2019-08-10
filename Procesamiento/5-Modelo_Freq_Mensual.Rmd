@@ -164,7 +164,7 @@ Se realiza el modelo de regresión lineal con las variables seleccionadas y se r
 ```{r}
 library(caret)
 trcntrl = trainControl(method="cv", number=10)
-caret_lm_fit_m = caret::train(TOTAL_ACCIDENTES∼Ano_Base+MES+Freq_lunes+Freq_martes+Freq_miercoles+Freq_jueves+Freq_viernes+Freq_sabado+Freq_domingo+Feriados+Feriados_Lunes+Feriados_Otro, data=Train_M_Dataset ,
+caret_lm_fit_m = caret::train(TOTAL_ACCIDENTES∼Ano_Base+MES+Feriados, data=Train_M_Dataset ,
                       method = "lm", trControl = trcntrl,
                       preProcess=c("center", "scale"),
                       tuneLength = 10)
@@ -185,7 +185,7 @@ head(Train_M_Dataset )
 ```{r}
 library(caret)
 trcntrl = trainControl(method="cv", number=10)
-caret_lm_fit_m = caret::train(TOTAL_ACCIDENTES∼Ano_Base+MES+Feriados+Freq_viernes+Feriados_Lunes, data=Train_M_Dataset ,
+caret_lm_fit_m = caret::train(TOTAL_ACCIDENTES∼Ano_Base+MES+Feriados, data=Train_M_Dataset ,
                       method = "lm", trControl = trcntrl,
                       preProcess=c("center", "scale"),
                       tuneLength = 10)
@@ -204,7 +204,7 @@ Calculo MSE y RMSE para los datos de entrenamiento
 
 
 ```{r}
-y_tr_pred_lm_m<-predict(caret_lm_fit_m,Train_M_Dataset [,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes","Freq_viernes","Feriados_Lunes")])
+y_tr_pred_lm_m<-predict(caret_lm_fit_m,Train_M_Dataset [,c("Ano_Base","MES","Feriados")])
 
 ```
 
@@ -218,7 +218,7 @@ RMSE_tr_lm_m
 Calculo MSE y RMSE para los datos de validación
 
 ```{r}
-y_test_pred_lm_m<-predict(caret_lm_fit_m,Test_M_Dataset[,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes","Freq_viernes","Feriados_Lunes")])
+y_test_pred_lm_m<-predict(caret_lm_fit_m,Test_M_Dataset[,c("Ano_Base","MES","Feriados")])
 mse_test_lm_m<-mean((Test_M_Dataset$TOTAL_ACCIDENTES-y_test_pred_lm_m)^2) # calcula el mse de entrenamiento
 RMSE_test_lm_m = sqrt(mse_test_lm_m)
 mse_test_lm_m
@@ -267,7 +267,7 @@ plot_ly (data=Test_M_Dataset,
 
 ```{r}
 trcntrl = trainControl(method="cv", number=10)
-caret_lm_fit_m_m = caret::train(ACCIDENTES_GRAVES∼Ano_Base+MES+Feriados+Freq_viernes+Feriados_Lunes, data=Train_M_Dataset ,
+caret_lm_fit_m_m = caret::train(ACCIDENTES_GRAVES∼MES+Feriados+Freq_domingo, data=Train_M_Dataset ,
                       method = "lm", trControl = trcntrl,
                       preProcess=c("center", "scale"),
                       tuneLength = 10)
@@ -284,7 +284,7 @@ caret_lm_fit_m_m
 
 Calculo MSE y RMSE para los datos de entrenamiento 
 ```{r}
-y_tr_pred_lm_m_m<-predict(caret_lm_fit_m_m,Train_M_Dataset [,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes","Freq_viernes","Feriados_Lunes")])
+y_tr_pred_lm_m_m<-predict(caret_lm_fit_m_m,Train_M_Dataset [,c("Freq_domingo","MES","Feriados")])
 
 ```
 
@@ -298,7 +298,7 @@ RMSE_tr_lm_m_m
 
 Calculo MSE y RMSE para los datos de validación 
 ```{r}
-y_test_pred_lm_m_m<-predict(caret_lm_fit_m_m,Test_M_Dataset[,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes","Freq_viernes","Feriados_Lunes")])
+y_test_pred_lm_m_m<-predict(caret_lm_fit_m_m,Test_M_Dataset[,c("Freq_domingo","MES","Feriados")])
 mse_test_lm_m_m<-mean((Test_M_Dataset$ACCIDENTES_GRAVES-y_test_pred_lm_m_m)^2) # calcula el mse de entrenamiento
 RMSE_test_lm_m_m = sqrt(mse_test_lm_m_m)
 mse_test_lm_m_m
@@ -349,7 +349,7 @@ plot_ly (data=Test_M_Dataset,
 
 ```{r}
 trcntrl = trainControl(method="cv", number=10)
-caret_lm_fit_m_sd = caret::train(ACCIDENTES_LEVES∼Ano_Base+MES+Feriados+Freq_viernes+Feriados_Lunes, data=Train_M_Dataset ,
+caret_lm_fit_m_sd = caret::train(ACCIDENTES_LEVES∼Ano_Base+MES+Feriados, data=Train_M_Dataset ,
                       method = "lm", trControl = trcntrl,
                       preProcess=c("center", "scale"),
                       tuneLength = 10)
@@ -366,7 +366,7 @@ caret_lm_fit_m_sd
 
 Calculo MSE y RMSE para los datos de entrenamiento 
 ```{r}
-y_tr_pred_lm_m_sd<-predict(caret_lm_fit_m_sd,Train_M_Dataset [,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes","Freq_viernes","Feriados_Lunes")])
+y_tr_pred_lm_m_sd<-predict(caret_lm_fit_m_sd,Train_M_Dataset [,c("Ano_Base","MES","Feriados")])
 
 ```
 
@@ -380,7 +380,7 @@ RMSE_tr_lm_m_sd
 
 Calculo MSE y RMSE para los datos de validación 
 ```{r}
-y_test_pred_lm_m_sd<-predict(caret_lm_fit_m_sd,Test_M_Dataset[,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes","Freq_viernes","Feriados_Lunes")])
+y_test_pred_lm_m_sd<-predict(caret_lm_fit_m_sd,Test_M_Dataset[,c("Ano_Base","MES","Feriados")])
 mse_test_lm_m_sd<-mean((Test_M_Dataset$ACCIDENTES_LEVES-y_test_pred_lm_m_sd)^2) # calcula el mse de entrenamiento
 RMSE_test_lm_m_sd = sqrt(mse_test_lm_m_sd)
 mse_test_lm_m_sd
@@ -451,7 +451,7 @@ library(caret)
 
 ```{r}
 trcntrl = trainControl(method="cv", number=10)
-caret_knn_fit_m = caret::train(TOTAL_ACCIDENTES∼Ano_Base+MES+Feriados+Freq_viernes+Feriados_Lunes, data=Train_M_Dataset ,
+caret_knn_fit_m = caret::train(TOTAL_ACCIDENTES∼Ano_Base+MES+Feriados, data=Train_M_Dataset ,
                       method = "knn", trControl = trcntrl,
                       preProcess=c("center", "scale"),
                       tuneLength = 10)
@@ -468,7 +468,7 @@ caret_knn_fit_m
 Calculo MSE y RMSE para los datos de entrenamiento
 
 ```{r}
-y_tr_pred_knn_m<-predict(caret_knn_fit_m,Train_M_Dataset [,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")])
+y_tr_pred_knn_m<-predict(caret_knn_fit_m,Train_M_Dataset [,c("Ano_Base","MES","Feriados")])
 mse_tr_knn_m<-mean((Train_M_Dataset $TOTAL_ACCIDENTES-y_tr_pred_knn_m)^2) # calcula el mse de entrenamiento
 RMSE_tr_knn_m = sqrt(mse_tr_knn_m)
 mse_tr_knn_m
@@ -478,7 +478,7 @@ RMSE_tr_knn_m
 Calculo MSE y RMSE para los datos de validación 
 
 ```{r}
-y_test_pred_knn_m<-predict(caret_knn_fit_m,Test_M_Dataset[,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")])
+y_test_pred_knn_m<-predict(caret_knn_fit_m,Test_M_Dataset[,c("Ano_Base","MES","Feriados")])
 mse_test_knn_m<-mean((Test_M_Dataset$TOTAL_ACCIDENTES-y_test_pred_knn_m)^2) # calcula el mse de entrenamiento
 RMSE_test_knn_m = sqrt(mse_test_knn_m)
 mse_test_knn_m
@@ -522,7 +522,7 @@ plot_ly (data=Test_M_Dataset,
 
 ```{r}
 trcntrl = trainControl(method="cv", number=10)
-caret_knn_fit_m_m = caret::train(ACCIDENTES_GRAVES∼Ano_Base+MES+Feriados+Freq_viernes+Feriados_Lunes, data=Train_M_Dataset ,
+caret_knn_fit_m_m = caret::train(ACCIDENTES_GRAVES∼Ano_Base+MES+Feriados, data=Train_M_Dataset ,
                       method = "knn", trControl = trcntrl,
                       preProcess=c("center", "scale"),
                       tuneLength = 10)
@@ -538,7 +538,7 @@ caret_knn_fit_m_m
 ```
 Calculo MSE y RMSE para los datos de entrenamiento 
 ```{r}
-y_tr_pred_knn_m_m<-predict(caret_knn_fit_m_m,Train_M_Dataset [,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")])
+y_tr_pred_knn_m_m<-predict(caret_knn_fit_m_m,Train_M_Dataset [,c("Ano_Base","MES","Feriados")])
 mse_tr_knn_m_m<-mean((Train_M_Dataset $ACCIDENTES_GRAVES-y_tr_pred_knn_m_m)^2) # calcula el mse de entrenamiento
 RMSE_tr_knn_m_m = sqrt(mse_tr_knn_m_m)
 mse_tr_knn_m_m
@@ -546,7 +546,7 @@ RMSE_tr_knn_m_m
 ```
 Calculo MSE y RMSE para los datos de validación 
 ```{r}
-y_test_pred_knn_m_m<-predict(caret_knn_fit_m_m,Test_M_Dataset[,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")])
+y_test_pred_knn_m_m<-predict(caret_knn_fit_m_m,Test_M_Dataset[,c("Ano_Base","MES","Feriados")])
 mse_test_knn_m_m<-mean((Test_M_Dataset$ACCIDENTES_GRAVES-y_test_pred_knn_m_m)^2) # calcula el mse de entrenamiento
 RMSE_test_knn_m_m = sqrt(mse_test_knn_m_m)
 mse_test_knn_m_m
@@ -591,7 +591,7 @@ plot_ly (data=Test_M_Dataset,
 
 ```{r}
 trcntrl = trainControl(method="cv", number=10)
-caret_knn_fit_m_sd = caret::train(ACCIDENTES_LEVES∼Ano_Base+MES+Feriados+Freq_viernes+Feriados_Lunes, data=Train_M_Dataset ,
+caret_knn_fit_m_sd = caret::train(ACCIDENTES_LEVES∼Ano_Base+MES+Feriados, data=Train_M_Dataset ,
                       method = "knn", trControl = trcntrl,
                       preProcess=c("center", "scale"),
                       tuneLength = 10)
@@ -607,7 +607,7 @@ caret_knn_fit_m_sd
 ```
 Calculo MSE y RMSE para los datos de entrenamiento 
 ```{r}
-y_tr_pred_knn_m_sd<-predict(caret_knn_fit_m_sd,Train_M_Dataset [,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")])
+y_tr_pred_knn_m_sd<-predict(caret_knn_fit_m_sd,Train_M_Dataset [,c("Ano_Base","MES","Feriados")])
 mse_tr_knn_m_sd<-mean((Train_M_Dataset $ACCIDENTES_LEVES-y_tr_pred_knn_m_sd)^2) # calcula el mse de entrenamiento
 RMSE_tr_knn_m_sd = sqrt(mse_tr_knn_m_sd)
 mse_tr_knn_m_sd
@@ -615,7 +615,7 @@ RMSE_tr_knn_m_sd
 ```
 Calculo MSE y RMSE para los datos de validación 
 ```{r}
-y_test_pred_knn_m_sd<-predict(caret_knn_fit_m_sd,Test_M_Dataset[,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")])
+y_test_pred_knn_m_sd<-predict(caret_knn_fit_m_sd,Test_M_Dataset[,c("Ano_Base","MES","Feriados")])
 mse_test_knn_m_sd<-mean((Test_M_Dataset$ACCIDENTES_LEVES-y_test_pred_knn_m_sd)^2) # calcula el mse de entrenamiento
 RMSE_test_knn_m_sd = sqrt(mse_test_knn_m_sd)
 mse_test_knn_m_sd
@@ -676,7 +676,7 @@ Tabla_knn
 #### Total Accidentes
 
 ```{r}
-glm_fit_m<-glm(TOTAL_ACCIDENTES∼Ano_Base+MES+Feriados+Freq_viernes+Feriados_Lunes, data=Train_M_Dataset , family = "poisson")
+glm_fit_m<-glm(TOTAL_ACCIDENTES∼Ano_Base+MES+Feriados, data=Train_M_Dataset , family = "poisson")
 summary(glm_fit_m)
 ```
 
@@ -685,7 +685,7 @@ glm_fit_m
 ```
 Calculo MSE y RMSE para los datos de entrenamiento 
 ```{r}
-y_tr_pred_glm_m<-predict(glm_fit_m,Train_M_Dataset [,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")],type="response")
+y_tr_pred_glm_m<-predict(glm_fit_m,Train_M_Dataset [,c("Ano_Base","MES","Feriados")],type="response")
 mse_tr_glm_m<-mean((Train_M_Dataset $TOTAL_ACCIDENTES-y_tr_pred_glm_m)^2) # calcula el mse de entrenamiento
 RMSE_tr_glm_m = sqrt(mse_tr_glm_m)
 mse_tr_glm_m
@@ -694,7 +694,7 @@ RMSE_tr_glm_m
 
 Calculo MSE y RMSE para los datos de validación 
 ```{r}
-y_test_pred_glm_m<-predict(glm_fit_m,Test_M_Dataset[,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")],type="response")
+y_test_pred_glm_m<-predict(glm_fit_m,Test_M_Dataset[,c("Ano_Base","MES","Feriados")],type="response")
 mse_test_glm_m<-mean((Train_M_Dataset $TOTAL_ACCIDENTES-y_test_pred_glm_m)^2) # calcula el mse de entrenamiento
 ```
 ```{r}
@@ -740,7 +740,7 @@ plot_ly (data=Test_M_Dataset,
 #### Accidentes Graves
 
 ```{r}
-glm_fit_m_m<-glm(ACCIDENTES_GRAVES∼Ano_Base+MES+Feriados+Freq_viernes+Feriados_Lunes, data=Train_M_Dataset , family = "poisson")
+glm_fit_m_m<-glm(ACCIDENTES_GRAVES∼Ano_Base+MES+Feriados, data=Train_M_Dataset , family = "poisson")
 summary(glm_fit_m_m)
 ```
 
@@ -758,7 +758,7 @@ RMSE_tr_glm_m_m
 
 Calculo MSE y RMSE para los datos de validación 
 ```{r}
-y_test_pred_glm_m_m<-predict(glm_fit_m_m,Test_M_Dataset[,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")],type="response")
+y_test_pred_glm_m_m<-predict(glm_fit_m_m,Test_M_Dataset[,c("Ano_Base","MES","Feriados")],type="response")
 mse_test_glm_m_m<-mean((Train_M_Dataset $ACCIDENTES_GRAVES-y_test_pred_glm_m_m)^2) # calcula el mse de entrenamiento
 ```
 ```{r}
@@ -805,7 +805,7 @@ plot_ly (data=Test_M_Dataset,
 #### Accidentes Leves
 
 ```{r}
-glm_fit_m_sd<-glm(ACCIDENTES_LEVES∼Ano_Base+MES+Feriados+Freq_viernes+Feriados_Lunes, data=Train_M_Dataset , family = "poisson")
+glm_fit_m_sd<-glm(ACCIDENTES_LEVES∼Ano_Base+MES+Feriados, data=Train_M_Dataset , family = "poisson")
 summary(glm_fit_m_sd)
 ```
 
@@ -814,7 +814,7 @@ glm_fit_m_sd
 ```
 Calculo MSE y RMSE para los datos de entrenamiento 
 ```{r}
-y_tr_pred_glm_m_sd<-predict(glm_fit_m_sd,Train_M_Dataset [,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")],type="response")
+y_tr_pred_glm_m_sd<-predict(glm_fit_m_sd,Train_M_Dataset [,c("Ano_Base","MES","Feriados")],type="response")
 mse_tr_glm_m_sd<-mean((Train_M_Dataset $ACCIDENTES_LEVES-y_tr_pred_glm_m_sd)^2) # calcula el mse de entrenamiento
 RMSE_tr_glm_m_sd = sqrt(mse_tr_glm_m_sd)
 mse_tr_glm_m_sd
@@ -823,7 +823,7 @@ RMSE_tr_glm_m_sd
 
 Calculo MSE y RMSE para los datos de validación 
 ```{r}
-y_test_pred_glm_m_sd<-predict(glm_fit_m_sd,Test_M_Dataset[,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")],type="response")
+y_test_pred_glm_m_sd<-predict(glm_fit_m_sd,Test_M_Dataset[,c("Ano_Base","MES","Feriados")],type="response")
 mse_test_glm_m_sd<-mean((Train_M_Dataset $ACCIDENTES_LEVES-y_test_pred_glm_m_sd)^2) # calcula el mse de entrenamiento
 ```
 ```{r}
@@ -884,7 +884,7 @@ Tabla_glm
 
 ```{r}
 trcntrl = trainControl(method="cv", number=10)
-caret_tree_fit_m = caret::train(TOTAL_ACCIDENTES∼Ano_Base+MES+Feriados+Freq_viernes+Feriados_Lunes,data=Train_M_Dataset ,
+caret_tree_fit_m = caret::train(TOTAL_ACCIDENTES∼Ano_Base+MES+Feriados,data=Train_M_Dataset ,
                               method = "rpart", trControl = trcntrl,
                       parms = list(split = "gini"),
                       preProcess=c("center", "scale"),
@@ -898,7 +898,7 @@ caret_tree_fit_m
 ```
 Calculo MSE y RMSE para los datos de entrenamiento 
 ```{r}
-y_tr_pred_tree_m<-predict(caret_tree_fit_m,Train_M_Dataset [,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")])
+y_tr_pred_tree_m<-predict(caret_tree_fit_m,Train_M_Dataset [,c("Ano_Base","MES","Feriados")])
 mse_tr_tree_m<-mean((Train_M_Dataset $TOTAL_ACCIDENTES-y_tr_pred_tree_m)^2) # calcula el mse de entrenamiento
 RMSE_tr_tree_m = sqrt(mse_tr_tree_m)
 mse_tr_tree_m
@@ -906,7 +906,7 @@ RMSE_tr_tree_m
 ```
 Calculo MSE y RMSE para los datos de validación 
 ```{r}
-  y_test_pred_tree_m<-predict(caret_tree_fit_m,Test_M_Dataset[,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")])
+  y_test_pred_tree_m<-predict(caret_tree_fit_m,Test_M_Dataset[,c("Ano_Base","MES","Feriados")])
 mse_test_tree_m<-mean((Test_M_Dataset$TOTAL_ACCIDENTES-y_test_pred_tree_m)^2) # calcula el mse de entrenamiento
 RMSE_test_tree_m = sqrt(mse_test_tree_m)
 mse_test_tree_m
@@ -950,7 +950,7 @@ plot_ly (data=Test_M_Dataset,
 
 ```{r}
 trcntrl = trainControl(method="cv", number=10)
-caret_tree_fit_m_m = caret::train(ACCIDENTES_GRAVES∼Ano_Base+MES+Feriados+Freq_viernes+Feriados_Lunes,data=Train_M_Dataset ,
+caret_tree_fit_m_m = caret::train(ACCIDENTES_GRAVES∼Ano_Base+MES+Feriados,data=Train_M_Dataset ,
                               method = "rpart", trControl = trcntrl,
                       parms = list(split = "gini"),
                       preProcess=c("center", "scale"),
@@ -962,7 +962,7 @@ caret_tree_fit_m_m
 ```
 Calculo MSE y RMSE para los datos de entrenamiento 
 ```{r}
-y_tr_pred_tree_m_m<-predict(caret_tree_fit_m_m,Train_M_Dataset [,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")])
+y_tr_pred_tree_m_m<-predict(caret_tree_fit_m_m,Train_M_Dataset [,c("Ano_Base","MES","Feriados")])
 mse_tr_tree_m_m<-mean((Train_M_Dataset $ACCIDENTES_GRAVES-y_tr_pred_tree_m_m)^2) # calcula el mse de entrenamiento
 RMSE_tr_tree_m_m = sqrt(mse_tr_tree_m_m)
 mse_tr_tree_m_m
@@ -970,7 +970,7 @@ RMSE_tr_tree_m_m
 ```
 Calculo MSE y RMSE para los datos de validación 
 ```{r}
-y_test_pred_tree_m_m<-predict(caret_tree_fit_m_m,Test_M_Dataset[,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")])
+y_test_pred_tree_m_m<-predict(caret_tree_fit_m_m,Test_M_Dataset[,c("Ano_Base","MES","Feriados")])
 mse_test_tree_m_m<-mean((Test_M_Dataset$ACCIDENTES_GRAVES-y_test_pred_tree_m_m)^2) # calcula el mse de entrenamiento
 RMSE_test_tree_m_m = sqrt(mse_test_tree_m_m)
 mse_test_tree_m_m
@@ -1015,7 +1015,7 @@ plot_ly (data=Test_M_Dataset,
 
 ```{r}
 trcntrl = trainControl(method="cv", number=10)
-caret_tree_fit_m_sd = caret::train(ACCIDENTES_LEVES∼Ano_Base+MES+Feriados+Freq_viernes+Feriados_Lunes,data=Train_M_Dataset ,
+caret_tree_fit_m_sd = caret::train(ACCIDENTES_LEVES∼Ano_Base+MES+Feriados,data=Train_M_Dataset ,
                               method = "rpart", trControl = trcntrl,
                       parms = list(split = "gini"),
                       preProcess=c("center", "scale"),
@@ -1027,7 +1027,7 @@ caret_tree_fit_m_sd
 ```
 Calculo MSE y RMSE para los datos de entrenamiento 
 ```{r}
-y_tr_pred_tree_m_sd<-predict(caret_tree_fit_m_sd,Train_M_Dataset [,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")])
+y_tr_pred_tree_m_sd<-predict(caret_tree_fit_m_sd,Train_M_Dataset [,c("Ano_Base","MES","Feriados")])
 mse_tr_tree_m_sd<-mean((Train_M_Dataset $ACCIDENTES_LEVES-y_tr_pred_tree_m_sd)^2) # calcula el mse de entrenamiento
 RMSE_tr_tree_m_sd = sqrt(mse_tr_tree_m_sd)
 mse_tr_tree_m_sd
@@ -1035,7 +1035,7 @@ RMSE_tr_tree_m_sd
 ```
 Calculo MSE y RMSE para los datos de validación 
 ```{r}
-  y_test_pred_tree_m_sd<-predict(caret_tree_fit_m_sd,Test_M_Dataset[,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")])
+  y_test_pred_tree_m_sd<-predict(caret_tree_fit_m_sd,Test_M_Dataset[,c("Ano_Base","MES","Feriados")])
 mse_test_tree_m_sd<-mean((Test_M_Dataset$ACCIDENTES_LEVES-y_test_pred_tree_m_sd)^2) # calcula el mse de entrenamiento
 RMSE_test_tree_m_sd = sqrt(mse_test_tree_m_sd)
 mse_test_tree_m_sd
@@ -1092,7 +1092,7 @@ Tabla_tree
 
 ```{r Random_Forest_TOTAL_ACCIDENTES}
 trcntrl = trainControl(method="cv", number=10)
-caret_rf_fit_s = caret::train(TOTAL_ACCIDENTES∼Ano_Base+MES+Feriados+Freq_viernes+Feriados_Lunes, data=Train_M_Dataset ,
+caret_rf_fit_s = caret::train(TOTAL_ACCIDENTES∼Ano_Base+MES+Feriados, data=Train_M_Dataset ,
                       method = "rf", trControl = trcntrl,
                       prox=TRUE,allowParallel=TRUE)
 ```
@@ -1112,7 +1112,7 @@ plot(caret_rf_fit_s)
 
 Calculo MSE y RMSE para los datos de entrenamiento 
 ```{r}
-y_tr_pred_rf_s<-predict(caret_rf_fit_s,Train_M_Dataset [,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")])
+y_tr_pred_rf_s<-predict(caret_rf_fit_s,Train_M_Dataset [,c("Ano_Base","MES","Feriados")])
 mse_tr_rf_s<-mean((Train_M_Dataset $TOTAL_ACCIDENTES-y_tr_pred_rf_s)^2) # calcula el mse de entrenamiento
 RMSE_tr_rf_s = sqrt(mse_tr_rf_s)
 mse_tr_rf_s
@@ -1121,7 +1121,7 @@ RMSE_tr_rf_s
 
 Calculo MSE y RMSE para los datos de validación 
 ```{r}
-y_test_pred_rf_s<-predict(caret_rf_fit_s,Test_M_Dataset[,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")])
+y_test_pred_rf_s<-predict(caret_rf_fit_s,Test_M_Dataset[,c("Ano_Base","MES","Feriados")])
 mse_test_rf_s<-mean((Test_M_Dataset$TOTAL_ACCIDENTES-y_test_pred_rf_s)^2) # calcula el mse de entrenamiento
 RMSE_test_rf_s = sqrt(mse_test_rf_s)
 mse_test_rf_s
@@ -1171,7 +1171,7 @@ plot_ly (data=Test_M_Dataset,
 
 ```{r Random_Forest_ACCIDENTES_GRAVES}
 trcntrl = trainControl(method="cv", number=10)
-caret_rf_fit_s_m = caret::train(ACCIDENTES_GRAVES∼Ano_Base+MES+Feriados+Freq_viernes+Feriados_Lunes, data=Train_M_Dataset ,
+caret_rf_fit_s_m = caret::train(ACCIDENTES_GRAVES∼Ano_Base+MES+Feriados, data=Train_M_Dataset ,
                       method = "rf", trControl = trcntrl,
                       prox=TRUE,allowParallel=TRUE)
 ```
@@ -1191,7 +1191,7 @@ plot(caret_rf_fit_s_m)
 
 Calculo MSE y RMSE para los datos de entrenamiento 
 ```{r}
-y_tr_pred_rf_s_m<-predict(caret_rf_fit_s_m,Train_M_Dataset [,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")])
+y_tr_pred_rf_s_m<-predict(caret_rf_fit_s_m,Train_M_Dataset [,c("Ano_Base","MES","Feriados")])
 mse_tr_rf_s_m<-mean((Train_M_Dataset $ACCIDENTES_GRAVES-y_tr_pred_rf_s_m)^2) # calcula el mse de entrenamiento
 RMSE_tr_rf_s_m = sqrt(mse_tr_rf_s_m)
 mse_tr_rf_s_m
@@ -1200,7 +1200,7 @@ RMSE_tr_rf_s_m
 
 Calculo MSE y RMSE para los datos de validación 
 ```{r}
-y_test_pred_rf_s_m<-predict(caret_rf_fit_s_m,Test_M_Dataset[,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")])
+y_test_pred_rf_s_m<-predict(caret_rf_fit_s_m,Test_M_Dataset[,c("Ano_Base","MES","Feriados")])
 mse_test_rf_s_m<-mean((Test_M_Dataset$ACCIDENTES_GRAVES-y_test_pred_rf_s_m)^2) # calcula el mse de entrenamiento
 RMSE_test_rf_s_m = sqrt(mse_test_rf_s_m)
 mse_test_rf_s_m
@@ -1246,7 +1246,7 @@ plot_ly (data=Test_M_Dataset,
 
 ```{r Random_Forest_ACCIDENTES_LEVES}
 trcntrl = trainControl(method="cv", number=10)
-caret_rf_fit_s_sd = caret::train(ACCIDENTES_LEVES∼Ano_Base+MES+Feriados+Freq_viernes+Feriados_Lunes, data=Train_M_Dataset ,
+caret_rf_fit_s_sd = caret::train(ACCIDENTES_LEVES∼Ano_Base+MES+Feriados, data=Train_M_Dataset ,
                       method = "rf", trControl = trcntrl,
                       prox=TRUE,allowParallel=TRUE)
 ```
@@ -1266,7 +1266,7 @@ plot(caret_rf_fit_s_sd)
 
 Calculo MSE y RMSE para los datos de entrenamiento 
 ```{r}
-y_tr_pred_rf_s_sd<-predict(caret_rf_fit_s_sd,Train_M_Dataset [,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")])
+y_tr_pred_rf_s_sd<-predict(caret_rf_fit_s_sd,Train_M_Dataset [,c("Ano_Base","MES","Feriados")])
 mse_tr_rf_s_sd<-mean((Train_M_Dataset $ACCIDENTES_LEVES-y_tr_pred_rf_s_sd)^2) # calcula el mse de entrenamiento
 RMSE_tr_rf_s_sd = sqrt(mse_tr_rf_s_sd)
 mse_tr_rf_s_sd
@@ -1275,7 +1275,7 @@ RMSE_tr_rf_s_sd
 
 Calculo MSE y RMSE para los datos de validación 
 ```{r}
-y_test_pred_rf_s_sd<-predict(caret_rf_fit_s_sd,Test_M_Dataset[,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")])
+y_test_pred_rf_s_sd<-predict(caret_rf_fit_s_sd,Test_M_Dataset[,c("Ano_Base","MES","Feriados")])
 mse_test_rf_s_sd<-mean((Test_M_Dataset$ACCIDENTES_LEVES-y_test_pred_rf_s_sd)^2) # calcula el mse de entrenamiento
 RMSE_test_rf_s_sd = sqrt(mse_test_rf_s_sd)
 mse_test_rf_s_sd
@@ -1339,8 +1339,8 @@ Tabla_rf
 
 Comparación en el entrenamiento
 ```{r}
-comparacion_tr<-data.frame(Ano_mes=Total_Dataset_Freq_M$Ano_mes[Total_Dataset_Freq_M$Ano_mes<="2017_52"],
-                          ACCIDENTES=Total_Dataset_Freq_M$TOTAL_ACCIDENTES[Total_Dataset_Freq_M$Ano_mes<="2017_52"],
+comparacion_tr<-data.frame(Ano_mes=Total_Dataset_Freq_M$Ano_mes[Total_Dataset_Freq_M$Ano_mes<="2017_12"],
+                          ACCIDENTES=Total_Dataset_Freq_M$TOTAL_ACCIDENTES[Total_Dataset_Freq_M$Ano_mes<="2017_12"],
                            lm= y_tr_pred_lm_m, 
                            knn= y_tr_pred_knn_m, 
                            glm=y_tr_pred_glm_m ,
@@ -1441,8 +1441,8 @@ ResultadosRMSE
 
 Comparación en el entrenamiento
 ```{r}
-comparacion_tr<-data.frame(Ano_mes=Total_Dataset_Freq_M$Ano_mes[Total_Dataset_Freq_M$Ano_mes<="2017_52"],
-                          ACCIDENTESG=Total_Dataset_Freq_M$ACCIDENTES_GRAVES[Total_Dataset_Freq_M$Ano_mes<="2017_52"],
+comparacion_tr<-data.frame(Ano_mes=Total_Dataset_Freq_M$Ano_mes[Total_Dataset_Freq_M$Ano_mes<="2017_12"],
+                          ACCIDENTESG=Total_Dataset_Freq_M$ACCIDENTES_GRAVES[Total_Dataset_Freq_M$Ano_mes<="2017_12"],
                            lm= y_tr_pred_lm_m_m, 
                            knn= y_tr_pred_knn_m_m, 
                            glm=y_tr_pred_glm_m_m,
@@ -1458,19 +1458,19 @@ plot_ly (data=comparacion_tr,
          name='Real',
          line=list(width=1,color='rgb(205, 12, 24)'))%>%
   add_trace(y= ~lm,
-            name='lm-graves',
+            name='lm',
             line=list(width=1,color= "blue"))%>%
   add_trace(y= ~knn,
-            name='knn-graves',
+            name='knn',
             line=list(width=1,color="red"))%>%
   add_trace(y= ~glm,
-            name='Modelo Poisson-graves',
+            name='Modelo Poisson',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
   add_trace(y= ~arbol,
-            name='Árbo-gravesl',
+            name='Árbo',
             line=list(width=1,color="green"))%>%
     add_trace(y= ~rf,
-            name='Bosque-graves',
+            name='Bosque',
             line=list(width=1,color='rgb(255, 51, 153)'))%>%
   layout(title='Accidentes graves (Entrenamiento)',
          xaxis=list(title="Fecha"),
@@ -1498,19 +1498,19 @@ plot_ly (data=comparacion_vl,
          name='Real',
          line=list(width=1,color='rgb(205, 12, 24)'))%>%
   add_trace(y= ~lm,
-            name='lm-graves',
+            name='lm',
             line=list(width=1,color= "blue"))%>%
   add_trace(y= ~knn,
-            name='knn-graves',
+            name='knn',
             line=list(width=1,color="red"))%>%
   add_trace(y= ~glm,
-            name='Modelo Poisson-graves',
+            name='Modelo Poisson',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
   add_trace(y= ~arbol,
-            name='Árbol-graves',
+            name='Árbol',
             line=list(width=1,color="green"))%>%
   add_trace(y= ~rf,
-            name='Bosque-graves',
+            name='Bosque',
             line=list(width=1,color='rgb(255, 51, 153)'))%>%
   layout(title='Accidentes graves (Validación)',
          xaxis=list(title="Fecha"),
@@ -1541,8 +1541,8 @@ ResultadosRMSE
 
 Comparación en el entrenamiento
 ```{r}
-comparacion_tr<-data.frame(Ano_mes=Total_Dataset_Freq_M$Ano_mes[Total_Dataset_Freq_M$Ano_mes<="2017_52"],
-                          ACCIDENTESL=Total_Dataset_Freq_M$ACCIDENTES_LEVES[Total_Dataset_Freq_M$Ano_mes<="2017_52"],
+comparacion_tr<-data.frame(Ano_mes=Total_Dataset_Freq_M$Ano_mes[Total_Dataset_Freq_M$Ano_mes<="2017_12"],
+                          ACCIDENTESL=Total_Dataset_Freq_M$ACCIDENTES_LEVES[Total_Dataset_Freq_M$Ano_mes<="2017_12"],
                            lm= y_tr_pred_lm_m_sd, 
                            knn= y_tr_pred_knn_m_sd, 
                            glm=y_tr_pred_glm_m_sd,
@@ -1558,21 +1558,21 @@ plot_ly (data=comparacion_tr,
          name='Real',
          line=list(width=1,color='rgb(205, 12, 24)'))%>%
   add_trace(y= ~lm,
-            name='lm-lesves',
+            name='lm',
             line=list(width=1,color= "blue"))%>%
   add_trace(y= ~knn,
-            name='knn-leves',
+            name='knn',
             line=list(width=1,color="red"))%>%
   add_trace(y= ~glm,
-            name='Modelo Poisson-leves',
+            name='Modelo Poisson',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
   add_trace(y= ~arbol,
-            name='Árbo-leves',
+            name='Árbo',
             line=list(width=1,color="green"))%>%
     add_trace(y= ~rf,
-            name='Bosque-leves',
+            name='Bosque',
             line=list(width=1,color='rgb(255, 51, 153)'))%>%
-  layout(title='Accidentes les (Entrenamiento)',
+  layout(title='Accidentes leves (Entrenamiento)',
          xaxis=list(title="Fecha"),
          yaxis=list(title="Accidentes"),
          legend = list(x = 1, y = 0.9))
@@ -1598,19 +1598,19 @@ plot_ly (data=comparacion_vl,
          name='Real',
          line=list(width=1,color='rgb(205, 12, 24)'))%>%
   add_trace(y= ~lm,
-            name='lm-leves',
+            name='lm',
             line=list(width=1,color= "blue"))%>%
   add_trace(y= ~knn,
             name='knn',
             line=list(width=1,color="red"))%>%
   add_trace(y= ~glm,
-            name='Modelo Poisson-leves',
+            name='Modelo Poisson',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
   add_trace(y= ~arbol,
-            name='Árbol-leves',
+            name='Árbol',
             line=list(width=1,color="green"))%>%
   add_trace(y= ~rf,
-            name='Bosque-leves',
+            name='Bosque',
             line=list(width=1,color='rgb(255, 51, 153)'))%>%
   layout(title='Accidentes lesves (Validación)',
          xaxis=list(title="Fecha"),
@@ -1638,62 +1638,54 @@ ResultadosRMSE
 
 #### Modelos elegidos
 
-Teniendo como criterio el mínimo RMSE y que la variación entre los datos de entrenamiento y validación no superen el 15 %, se eligieron los siguientes modelos: 
+Teniendo como criterio el mínimo RMSE en la muestra de validación se eligen los siguientes modelos: 
 
-##### Modelo de regresión lineal para predición de Total Accidentes 
+##### Modelo de regresión lineal generalizado para predición de Total Accidentes 
 
 Se ajusta el modelo con todos los datos desde el 01-01-2014 al 31-12-2018
 
 ```{r}
-library(caret)
-trcntrl = trainControl(method="cv", number=10)
-caret_lm_fit_m_final = caret::train(TOTAL_ACCIDENTES∼Ano_Base+MES+Feriados+Freq_viernes+Feriados_Lunes, data=Total_Dataset_Freq_M,
-                      method = "lm", trControl = trcntrl,
-                      preProcess=c("center", "scale"),
-                      tuneLength = 10)
+glm_fit_m_final<-glm(TOTAL_ACCIDENTES∼Ano_Base+MES+Feriados, data=Total_Dataset_Freq_M , family = "poisson")
+
 ```
 
 ```{r}
-summary(caret_lm_fit_m_final)
+summary(glm_fit_m_final)
 ```
 
 
 Se guardan el modelo en un objeto de r
 ```{r}
-saveRDS(caret_lm_fit_m_final,"../Modelos/Prediccion_Total_Diario.rds")
+saveRDS(glm_fit_m_final,"../Modelos/Prediccion_Total_Mensual.rds")
 ```
 
 
 ```{r}
-Modelo_Total_diario<-readRDS(file="../Modelos/Prediccion_Total_Diario.rds")
+Modelo_Total_mensual<-readRDS(file="../Modelos/Prediccion_Total_Mensual.rds")
 ```
 
 
-##### Modelo de árbol de regresión para predición de Accidentes Graves
+##### Modelo de regresión lineal generalizado para predición de Accidentes Graves
 
 Se ajusta el modelo con todos los datos desde el 01-01-2014 al 31-12-2018
 ```{r}
-trcntrl = trainControl(method="cv", number=10)
-caret_tree_fit_m_m_final = caret::train(ACCIDENTES_GRAVES∼Ano_Base+MES+Feriados+Freq_viernes+Feriados_Lunes,data=Total_Dataset_Freq_M,
-                              method = "rpart", trControl = trcntrl,
-                      parms = list(split = "gini"),
-                      preProcess=c("center", "scale"),
-                      tuneLength = 10)
+glm_fit_m_m_final<-glm(ACCIDENTES_GRAVES∼Ano_Base+MES+Feriados, data=Total_Dataset_Freq_M, family = "poisson")
+
 ```
 
 ```{r}
-caret_tree_fit_m_m_final
+summary(glm_fit_m_m_final)
 ```
 
 
 Se guardan el modelo en un objeto de r
 ```{r}
-saveRDS(caret_tree_fit_m_m_final,"../Modelos/Prediccion_Grave_Diario.rds")
+saveRDS(glm_fit_m_m_final,"../Modelos/Prediccion_Grave_Mensual.rds")
 ```
 
 
 ```{r}
-Modelo_Grave_diario<-readRDS(file="../Modelos/Prediccion_Grave_Diario.rds")
+Modelo_Grave_mensual<-readRDS(file="../Modelos/Prediccion_Grave_Mensual.rds")
 ```
 
 
@@ -1702,7 +1694,7 @@ Modelo_Grave_diario<-readRDS(file="../Modelos/Prediccion_Grave_Diario.rds")
 Se ajusta el modelo con todos los datos desde el 01-01-2014 al 31-12-2018
 ```{r}
 trcntrl = trainControl(method="cv", number=10)
-caret_lm_fit_m_sd_final = caret::train(ACCIDENTES_LEVES∼Ano_Base+MES+Feriados+Freq_viernes+Feriados_Lunes, data=Total_Dataset_Freq_M,
+caret_lm_fit_m_sd_final = caret::train(ACCIDENTES_LEVES∼Ano_Base+MES+Feriados, data=Total_Dataset_Freq_M ,
                       method = "lm", trControl = trcntrl,
                       preProcess=c("center", "scale"),
                       tuneLength = 10)
@@ -1717,12 +1709,12 @@ summary(caret_lm_fit_m_sd_final)
 
 Se guardan el modelo en un objeto de r
 ```{r}
-saveRDS(caret_lm_fit_m_sd_final,"../Modelos/Prediccion_leves_Diario.rds")
+saveRDS(caret_lm_fit_m_sd_final,"../Modelos/Prediccion_leves_Mensual.rds")
 ```
 
 
 ```{r}
-Modelo_leves_diario<-readRDS(file="../Modelos/Prediccion_leves_Diario.rds")
+Modelo_leves_mensual<-readRDS(file="../Modelos/Prediccion_leves_Mensual.rds")
 ```
 
 ##### Datos para pronóstico 
@@ -1731,39 +1723,35 @@ Se oganizan los datos necesarios para el pronóstico de los accidentes en los a�
 
 Importación de los datos
 ```{r}
-load("../data/Dias_Especiales_Diario.Rda")
-```
-
-```{r}
-Dias_Especiales$DIA <-as.factor(format(Dias_Especiales$Fecha,'%u'))
-head(Dias_Especiales)
-```
-
-```{r}
-datos_pronostico_diario<-Dias_Especiales[,c("Fecha","Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")]
+load("../data/Dias_Especiales_Mensuales.Rda")
 ```
 
 
-Predicción del Total de accidentes con el modelo de regresión lineal
+```{r}
+datos_pronostico_mensual<-Dias_Especiales_Mensuales[,c("ANO","Ano_Base","MES","Feriados")]
+```
+
+
+Predicción del Total de accidentes con el modelo de regresión lineal generalizado
 
 ```{r}
-datos_pronostico_diario$prediccion_Total<-predict(Modelo_Total_diario,datos_pronostico_diario[,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")])
+datos_pronostico_mensual$prediccion_Total_m<-predict(Modelo_Total_mensual,datos_pronostico_mensual[,c("ANO","Ano_Base","MES","Feriados")])
 ```
 
 Predicción de accidentes graves con el modelo de árbol de regresión
 
 ```{r}
-datos_pronostico_diario$prediccion_Graves<-predict(Modelo_Grave_diario,datos_pronostico_diario[,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")])
+datos_pronostico_mensual$prediccion_Graves_m<-predict(Modelo_Grave_mensual,datos_pronostico_mensual[,c("ANO","Ano_Base","MES","Feriados")])
 ```
 
 
 Predicción de accidentes leves con el modelo de regresión lineal
 
 ```{r}
-datos_pronostico_diario$prediccion_Leves<-predict(Modelo_leves_diario,datos_pronostico_diario[,c("Ano_Base","MES","Feriados","Freq_viernes","Feriados_Lunes")])
+datos_pronostico_mensual$prediccion_Leves_m<-predict(Modelo_leves_mensual,datos_pronostico_mensual[,c("ANO","Ano_Base","MES","Feriados")])
 ```
 
 Se guardan los datos de pronóstico en un objeto de r
 ```{r}
-save(datos_pronostico_diario,file="../Modelos/datos_pronostico_diario.Rda")
+save(datos_pronostico_mensual,file="../Modelos/datos_pronostico_mensual.Rda")
 ```
