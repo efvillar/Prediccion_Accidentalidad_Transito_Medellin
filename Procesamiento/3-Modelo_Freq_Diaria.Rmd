@@ -103,9 +103,7 @@ summary(Test_D_Dataset$ANO)
 
 ## 3. Selección de las mejores variables para el modelo 
 
-Se utilizará el método best subset selection para elegir las mejores variables explicativas del modelo teniendo como criterio aquellas variables que presente R ajustado
-
-Feriado+Feriado_v1+Feriado_Lunes+Feriado_Otro+Previo_feriado+Semana_Santa+Semana_Santa_Mes+Semana_Santa_Semana+Prima+Mujer+Padre+Madre+AmoryAmistad+Semana_Santa_v1+Viernes_Antes_Puente+Quincena+Viernes_Desp_Quincena+Viernes_Desp_Quincena_v1+Viernes_Desp_Quincena_v2+Feria_Flores+Feria_Flores_Mes+Feria_Flores_Semana
+Se utilizará el método forward selection para elegir las mejores variables explicativas del modelo teniendo como criterio aquellas variables que presente mejor R^2 ajustado
 
 #### Selección de variables para Total accidentes
 ```{r}
@@ -124,33 +122,28 @@ names(reg.summary)
 reg.summary$rsq
 ```
 
+Selección de variables con el mejor R^2 ajustado
+```{r}
+max_adjr<-which.max (reg.summary$adjr2)
+max_adjr
+```
+
+
 ```{r}
 par(mfrow =c(2,2))
 plot(reg.summary$rss ,xlab=" Number of Variables ",ylab=" RSS",
 type="l")
 plot(reg.summary$adjr2 ,xlab =" Number of Variables ",
 ylab=" Adjusted RSq",type="l")
-which.max (reg.summary$adjr2)
-points (81, reg.summary$adjr2[81], col ="red",cex =2, pch =20)
+points (max_adjr, reg.summary$adjr2[max_adjr], col ="red",cex =2, pch =20)
 ```
+
 ```{r}
-plot(reg.summary$cp ,xlab =" Number of Variables ",ylab="Cp",
-type='l')
-which.min (reg.summary$cp )
-points (47, reg.summary$cp [47], col ="red",cex =2, pch =20)
-which.min (reg.summary$bic )
-plot(reg.summary$bic ,xlab=" Number of Variables ",ylab=" BIC",
-type='l')
-points (46, reg.summary$bic [46], col =" red",cex =2, pch =20)
-```
-```{r}
-plot(regfit.fwd ,scale ="r2")
 plot(regfit.fwd ,scale ="adjr2")
-plot(regfit.fwd ,scale ="Cp")
-plot(regfit.fwd ,scale ="bic")
 ```
+
 ```{r}
-coef(regfit.fwd ,46)
+coef(regfit.fwd ,max_adjr)
 ```
 
 
@@ -161,15 +154,8 @@ coef(regfit.fwd ,46)
 set.seed(123) # fija la semilla del generador de parámetros para que sea reproducible
 ```
 
-### 1. REGRESION LINEAL
 
-#### Total Accidentes
-```{r}
-head(Train_D_Dataset)
-```
-
-
-
+Se realiza el modelo de regresión lineal con las variables seleccionadas y se revisa el p-valor de cada una para seleccionar las variables definitivas del modelo 
 ```{r}
 library(caret)
 trcntrl = trainControl(method="cv", number=10)
@@ -179,9 +165,16 @@ caret_lm_fit = caret::train(TOTAL_ACCIDENTES∼ANO+MES+DIA+SEMANA+Feriado_Lunes+
                       tuneLength = 10)
 ```
 
-
 ```{r}
 summary(caret_lm_fit)
+```
+
+
+### 1. REGRESION LINEAL
+
+#### Total Accidentes
+```{r}
+head(Train_D_Dataset)
 ```
 
 ```{r}
