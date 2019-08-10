@@ -313,7 +313,7 @@ save(Dias_Especiales_Semanal,file="../data/Dias_Especiales_Semanal.Rda")
 library(sqldf)
 Total_Dataset_Freq_S <- sqldf("
 
-SELECT TDF.ANO, TDF.SEMANA, TDF.GRAVEDAD, TDF.FREQ, DES.Feria_Flores_Semana AS Feria_Flores, DES.Semana_Santa_Semana AS Semana_Santa, DES.Feriados_Lunes, DES.Feriados_Otros
+SELECT TDF.ANO, DES.Ano_Base, TDF.SEMANA, TDF.GRAVEDAD, TDF.FREQ, DES.Feria_Flores_Semana AS Feria_Flores, DES.Semana_Santa_Semana AS Semana_Santa, DES.Feriados_Lunes, DES.Feriados_Otros
 FROM
 (
 SELECT  
