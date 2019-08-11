@@ -1,19 +1,27 @@
 library(shiny)
 library(plotly)
+#library(shinydashboard)
 ui <- fluidPage(
 
+        tags$h1("Predicción de Accidentes de Tránsito en Medellín"),
+        tags$hr(),
+                tags$p(strong("Edwin Villarraga-Jorge Montoya-Juan David Arango")),
+                tags$p(em("Con datos de accidentalidad en Medellín historícos, se realizan predicciones de accidentres para los años 2019, 2020 y 2021.  Los accidntes se clasifican como accidentes totales, accidentes leves y accidentes graves.  Los accidentes leves solo involucran datos materiales y los accidentes graves implican lesiones personales y muertos")),
+        tags$br(),
+        
         
         mainPanel(
             
+           
             tabsetPanel(type = "tabs",
                         
                         tabPanel("Pronósticos Diarios",
                                 
-                        plotlyOutput("plot_pronostico_D_T"),
-                        plotlyOutput("plot_pronostico_D_L"),
-                        plotlyOutput("plot_pronostico_D_G"),
-                        DT::dataTableOutput('Pronosticos_D')),# Data as datatable
-                        
+                                plotlyOutput("plot_pronostico_D_T"),
+                                plotlyOutput("plot_pronostico_D_L"),
+                                plotlyOutput("plot_pronostico_D_G"),
+                                DT::dataTableOutput('Pronosticos_D')),# Data as datatable
+                                
                         tabPanel("Pronósticos Semanales",
                                  
                                  plotlyOutput("plot_pronostico_S_T"),
@@ -21,6 +29,12 @@ ui <- fluidPage(
                                  plotlyOutput("plot_pronostico_S_G"),
                                  DT::dataTableOutput('Pronosticos_S')),# Data as datatable                       
                         
+                        tabPanel("Pronósticos Mensuales",
+                                 
+                                 plotlyOutput("plot_pronostico_M_T"),
+                                 plotlyOutput("plot_pronostico_M_L"),
+                                 plotlyOutput("plot_pronostico_M_G"),
+                                 DT::dataTableOutput('Pronosticos_M')),# Data as datatable                       
                         
                         
                         
@@ -399,7 +413,7 @@ server <- function(input, output) {
         #TABLA PRONOSTICOS DIARIOS
         
         output$Pronosticos_D <- DT::renderDataTable({
-            datos_PD1
+            datos_PD1[,c(1,3,4,14,15,16)]
         }, options = list(aLengthMenu = c(5,25,50),
                           iDisplayLength = 5)
         )
@@ -445,25 +459,25 @@ server <- function(input, output) {
         
         
         
-        #MODELOS SEMANALES
+ #MODELOS SEMANALES
         
         load(file="./data_modelos_semana/datos_pronostico_semanal.Rda")
         datos_PS1 <- subset(datos_pronostico_semanal, ANO=="2019" | ANO=="2020" | ANO=="2021")
         
-        model_D_T <- readRDS("./data_modelos_semana/Prediccion_Total_Semanal.Rds")
-        datos_PS1$prediccion_Total_S<-predict(model_D_T,datos_PS1[,c("Ano_Base","SEMANA","Feria_Flores_Semana","Semana_Santa_Semana","Feriados_Lunes","Feriados_Otros")])
+        model_S_T <- readRDS("./data_modelos_semana/Prediccion_Total_Semanal.Rds")
+        datos_PS1$prediccion_Total_S<-predict(model_S_T,datos_PS1[,c("Ano_Base","SEMANA","Feria_Flores_Semana","Semana_Santa_Semana","Feriados_Lunes","Feriados_Otros")])
         
-        model_D_L <- readRDS("./data_modelos_semana/Prediccion_leves_Semanal.Rds")
-        datos_PS1$prediccion_Leves_S<-predict(model_D_L,datos_PS1[,c("Ano_Base","SEMANA","Feria_Flores_Semana","Semana_Santa_Semana","Feriados_Lunes","Feriados_Otros")])
+        model_S_L <- readRDS("./data_modelos_semana/Prediccion_leves_Semanal.Rds")
+        datos_PS1$prediccion_Leves_S<-predict(model_S_L,datos_PS1[,c("Ano_Base","SEMANA","Feria_Flores_Semana","Semana_Santa_Semana","Feriados_Lunes","Feriados_Otros")])
         
-        model_D_G <- readRDS("./data_modelos_semana/Prediccion_Grave_Semanal.Rds")
-        datos_PS1$prediccion_Graves_S<-predict(model_D_G,datos_PS1[,c("Ano_Base","SEMANA","Feria_Flores_Semana","Semana_Santa_Semana","Feriados_Lunes","Feriados_Otros")])
+        model_S_G <- readRDS("./data_modelos_semana/Prediccion_Grave_Semanal.Rds")
+        datos_PS1$prediccion_Graves_S<-predict(model_S_G,datos_PS1[,c("Ano_Base","SEMANA","Feria_Flores_Semana","Semana_Santa_Semana","Feriados_Lunes","Feriados_Otros")])
         
  
         #TABLA PRONOSTICOS SEMANALES
         
         output$Pronosticos_S <- DT::renderDataTable({
-            datos_PS1
+            datos_PS1[,c(1,3,12,13,14)]
         }, options = list(aLengthMenu = c(5,25,50),
                           iDisplayLength = 5)
         )        
@@ -509,7 +523,70 @@ server <- function(input, output) {
                        xaxis=list(title="SEMANA"),
                        yaxis=list(title="Accidentes Graves"))  })          
         
-             
+  
+ #MODELOS MENSUALES
+        
+        load(file="./data_modelos_mes/datos_pronostico_mensual.Rda")
+        datos_PM1 <- subset(datos_pronostico_mensual, ANO=="2019" | ANO=="2020" | ANO=="2021")
+        
+        model_M_T <- readRDS("./data_modelos_mes/Prediccion_Total_Mensual.Rds")
+        datos_PM1$prediccion_Total_M<-predict(model_M_T,datos_PM1[,c("ANO","Ano_Base","MES","Feriados")],type="response")
+        
+        model_M_L <- readRDS("./data_modelos_mes/Prediccion_leves_Mensual.Rds")
+        datos_PM1$prediccion_Leves_M<-predict(model_M_L,datos_PM1[,c("ANO","Ano_Base","MES","Feriados")])
+        
+        model_M_G <- readRDS("./data_modelos_mes/Prediccion_Grave_Mensual.Rds")
+        datos_PM1$prediccion_Graves_M<-predict(model_M_G,datos_PM1[,c("ANO","Ano_Base","MES","Feriados")],type="response")
+        
+        
+        #TABLA PRONOSTICOS SEMANALES
+        
+        output$Pronosticos_M <- DT::renderDataTable({
+            datos_PM1[,c(1,3,8,9,10)]
+        }, options = list(aLengthMenu = c(5,25,50),
+                          iDisplayLength = 5)
+        )                
+        
+        #Grafica mensual
+        
+        output$plot_pronostico_M_T <- renderPlotly({plot_ly(data=datos_PM1,
+                                                            x = ~MES,
+                                                            y = ~prediccion_Total_M,
+                                                            color = ~ANO,
+                                                            split = ~ANO,
+                                                            type = "scatter" ,mode = "lines",
+                                                            line=list(width=1,color='rgb(90, 20, 120)'))%>%
+                
+                layout(title='Pronostico Accidentes Totales Mensuales 2019 a 2021',
+                       xaxis=list(title="MES"),
+                       yaxis=list(title="Accidentes Totales"))  })    
+        
+        
+        output$plot_pronostico_M_L <- renderPlotly({plot_ly(data=datos_PM1,
+                                                            x = ~MES,
+                                                            y = ~prediccion_Leves_M,
+                                                            color = ~ANO,
+                                                            split = ~ANO,
+                                                            type = "scatter" ,mode = "lines",
+                                                            line=list(width=1,color='rgb(80, 160, 80)'))%>%
+                
+                layout(title='Pronostico Accidentes Leves  MEnsuales 2019 a 2021',
+                       xaxis=list(title="MES"),
+                       yaxis=list(title="Accidentes Leves"))  })          
+        
+        
+        
+        output$plot_pronostico_M_G <- renderPlotly({plot_ly(data=datos_PM1,
+                                                            x = ~MES,
+                                                            y = ~prediccion_Graves_M,
+                                                            color = ~ANO,
+                                                            split = ~ANO,
+                                                            type = "scatter" ,mode = "lines",
+                                                            line=list(width=1,color='rgb(130, 10, 45)'))%>%
+                
+                layout(title='Pronostico Accidentes Graves  Mensuales 2019 a 2021',
+                       xaxis=list(title="MES"),
+                       yaxis=list(title="Accidentes Graves"))  })                   
         
 }
 shinyApp(ui = ui, server = server)
