@@ -3,9 +3,10 @@ title: "MODELO FRECUENCIA SEMANA"
 author: "Edwin Villarraga-Jorge Montoya-Juan David Arango"
 date: "10/8/2019"
 output:
-    html_document:
-      theme: yeti
-    toc: yes
+  html_document:
+    theme: yeti
+  pdf_document: default
+  toc: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -1674,7 +1675,7 @@ Modelo_Total_semanal<-readRDS(file="../Modelos/Prediccion_Total_Semanal.rds")
 
 Se ajusta el modelo de Random Forest con todos los datos desde el 01-01-2014 al 31-12-2018
 
-```{r Random_Forest_ACCIDENTES_GRAVES}
+```{r Random_Forest_ACCIDENTES_GRAVES-1}
 trcntrl = trainControl(method="cv", number=10)
 caret_rf_fit_s_m_final = caret::train(ACCIDENTES_GRAVES∼Ano_Base+SEMANA+Feria_Flores_Semana+Semana_Santa_Semana+Feriados_Lunes+Feriados_Otros, data=Total_Dataset_Freq_S,
                       method = "rf", trControl = trcntrl,
