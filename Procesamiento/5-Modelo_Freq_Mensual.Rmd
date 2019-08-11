@@ -1731,17 +1731,24 @@ load("../data/Dias_Especiales_Mensuales.Rda")
 datos_pronostico_mensual<-Dias_Especiales_Mensuales[,c("ANO","Ano_Base","MES","Feriados")]
 ```
 
+```{r}
+datos_pronostico_mensual$ANO1 <- datos_pronostico_mensual$ANO
+datos_pronostico_mensual$MES1 <- datos_pronostico_mensual$MES
+library(dplyr)
+datos_pronostico_mensual<-unite_(datos_pronostico_mensual, "Ano_Mes", c("ANO1","MES1"))
+```
+
 
 Predicción del Total de accidentes con el modelo de regresión lineal generalizado
 
 ```{r}
-datos_pronostico_mensual$prediccion_Total_m<-predict(Modelo_Total_mensual,datos_pronostico_mensual[,c("ANO","Ano_Base","MES","Feriados")])
+datos_pronostico_mensual$prediccion_Total_m<-predict(Modelo_Total_mensual,datos_pronostico_mensual[,c("ANO","Ano_Base","MES","Feriados")],type="response")
 ```
 
-Predicción de accidentes graves con el modelo de árbol de regresión
+Predicción de accidentes graves con el modelo de regresión lineal generalizado
 
 ```{r}
-datos_pronostico_mensual$prediccion_Graves_m<-predict(Modelo_Grave_mensual,datos_pronostico_mensual[,c("ANO","Ano_Base","MES","Feriados")])
+datos_pronostico_mensual$prediccion_Graves_m<-predict(Modelo_Grave_mensual,datos_pronostico_mensual[,c("ANO","Ano_Base","MES","Feriados")],type="response")
 ```
 
 
@@ -1755,3 +1762,4 @@ Se guardan los datos de pronóstico en un objeto de r
 ```{r}
 save(datos_pronostico_mensual,file="../Modelos/datos_pronostico_mensual.Rda")
 ```
+

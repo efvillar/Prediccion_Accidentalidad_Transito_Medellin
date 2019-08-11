@@ -1459,20 +1459,20 @@ plot_ly (data=comparacion_tr,
          name='Real',
          line=list(width=1,color='rgb(205, 12, 24)'))%>%
   add_trace(y= ~lm,
-            name='lm-graves',
+            name='lm-',
             line=list(width=1,color= "blue"))%>%
   add_trace(y= ~knn,
-            name='knn-graves',
+            name='knn-',
             line=list(width=1,color="red"))%>%
   add_trace(y= ~glm,
-            name='Modelo Poisson-graves',
+            name='Modelo Poisson',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
   add_trace(y= ~arbol,
-            name='Árbo-gravesl',
+            name='Árbol',
             line=list(width=1,color="green"))%>%
     add_trace(y= ~rf,
-            name='Bosque-graves',
-            line=list(width=1,color='rgb(255, 51, 153)'))%>%
+            name='Bosque',
+            line=list(width=1,color='black'))%>%
   layout(title='Accidentes graves (Entrenamiento)',
          xaxis=list(title="Fecha"),
          yaxis=list(title="Accidentes"),
@@ -1499,19 +1499,19 @@ plot_ly (data=comparacion_vl,
          name='Real',
          line=list(width=1,color='rgb(205, 12, 24)'))%>%
   add_trace(y= ~lm,
-            name='lm-graves',
+            name='lm',
             line=list(width=1,color= "blue"))%>%
   add_trace(y= ~knn,
-            name='knn-graves',
+            name='knn',
             line=list(width=1,color="red"))%>%
   add_trace(y= ~glm,
-            name='Modelo Poisson-graves',
+            name='Modelo Poisson',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
   add_trace(y= ~arbol,
-            name='Árbol-graves',
+            name='Árbol',
             line=list(width=1,color="green"))%>%
   add_trace(y= ~rf,
-            name='Bosque-graves',
+            name='Bosque',
             line=list(width=1,color='rgb(255, 51, 153)'))%>%
   layout(title='Accidentes graves (Validación)',
          xaxis=list(title="Fecha"),
@@ -1559,21 +1559,21 @@ plot_ly (data=comparacion_tr,
          name='Real',
          line=list(width=1,color='rgb(205, 12, 24)'))%>%
   add_trace(y= ~lm,
-            name='lm-lesves',
+            name='lm',
             line=list(width=1,color= "blue"))%>%
   add_trace(y= ~knn,
-            name='knn-leves',
+            name='knn',
             line=list(width=1,color="red"))%>%
   add_trace(y= ~glm,
-            name='Modelo Poisson-leves',
+            name='Modelo Poisson',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
   add_trace(y= ~arbol,
-            name='Árbo-leves',
+            name='Árbo',
             line=list(width=1,color="green"))%>%
     add_trace(y= ~rf,
-            name='Bosque-leves',
+            name='Bosque',
             line=list(width=1,color='rgb(255, 51, 153)'))%>%
-  layout(title='Accidentes les (Entrenamiento)',
+  layout(title='Accidentes leves (Entrenamiento)',
          xaxis=list(title="Fecha"),
          yaxis=list(title="Accidentes"),
          legend = list(x = 1, y = 0.9))
@@ -1599,21 +1599,21 @@ plot_ly (data=comparacion_vl,
          name='Real',
          line=list(width=1,color='rgb(205, 12, 24)'))%>%
   add_trace(y= ~lm,
-            name='lm-leves',
+            name='lm',
             line=list(width=1,color= "blue"))%>%
   add_trace(y= ~knn,
             name='knn',
             line=list(width=1,color="red"))%>%
   add_trace(y= ~glm,
-            name='Modelo Poisson-leves',
+            name='Modelo Poisson',
             line=list(width=1,color='rgb(22, 96, 167)'))%>%
   add_trace(y= ~arbol,
-            name='Árbol-leves',
+            name='Árbol',
             line=list(width=1,color="green"))%>%
   add_trace(y= ~rf,
-            name='Bosque-leves',
+            name='Bosque',
             line=list(width=1,color='rgb(255, 51, 153)'))%>%
-  layout(title='Accidentes lesves (Validación)',
+  layout(title='Accidentes leves (Validación)',
          xaxis=list(title="Fecha"),
          yaxis=list(title="Accidentes"),
          legend = list(x = 1, y = 0.9))
@@ -1639,7 +1639,7 @@ ResultadosRMSE
 
 #### Modelos elegidos
 
-Teniendo como criterio el mínimo RMSE y que la variación entre los datos de entrenamiento y validación no superen el 15 %, se eligieron los siguientes modelos: 
+Teniendo como criterio el mínimo RMSE en la muestra de validación se eligen los siguientes modelos:
 
 ##### Modelo de regresión lineal para predición de Total Accidentes 
 
@@ -1648,7 +1648,7 @@ Se ajusta el modelo con todos los datos desde el 01-01-2014 al 31-12-2018
 ```{r}
 library(caret)
 trcntrl = trainControl(method="cv", number=10)
-caret_lm_fit_s_final = caret::train(TOTAL_ACCIDENTES∼Ano_Base+SEMANA+Feria_Flores_Semana+Semana_Santa_Semana+Feriados_Lunes+Feriados_Otros, data=Total_Dataset_Freq_S,
+caret_lm_fit_s_final = caret::train(TOTAL_ACCIDENTES∼Ano_Base+Ano_Base+SEMANA+Feria_Flores_Semana+Semana_Santa_Semana+Feriados_Lunes+Feriados_Otros, data=Total_Dataset_Freq_S,
                       method = "lm", trControl = trcntrl,
                       preProcess=c("center", "scale"),
                       tuneLength = 10)
@@ -1661,40 +1661,40 @@ summary(caret_lm_fit_s_final)
 
 Se guardan el modelo en un objeto de r
 ```{r}
-saveRDS(caret_lm_fit_s_final,"../Modelos/Prediccion_Total_Diario.rds")
+saveRDS(caret_lm_fit_s_final,"../Modelos/Prediccion_Total_Semanal.rds")
 ```
 
 
 ```{r}
-Modelo_Total_diario<-readRDS(file="../Modelos/Prediccion_Total_Diario.rds")
+Modelo_Total_semanal<-readRDS(file="../Modelos/Prediccion_Total_Semanal.rds")
 ```
 
 
-##### Modelo de árbol de regresión para predición de Accidentes Graves
+##### Modelo de Random Forest para predición de Accidentes Graves
 
-Se ajusta el modelo con todos los datos desde el 01-01-2014 al 31-12-2018
-```{r}
+Se ajusta el modelo de Random Forest con todos los datos desde el 01-01-2014 al 31-12-2018
+
+```{r Random_Forest_ACCIDENTES_GRAVES}
 trcntrl = trainControl(method="cv", number=10)
-caret_tree_fit_s_m_final = caret::train(ACCIDENTES_GRAVES∼Ano_Base+SEMANA+Feria_Flores_Semana+Semana_Santa_Semana+Feriados_Lunes+Feriados_Otros,data=Total_Dataset_Freq_S,
-                              method = "rpart", trControl = trcntrl,
-                      parms = list(split = "gini"),
-                      preProcess=c("center", "scale"),
-                      tuneLength = 10)
+caret_rf_fit_s_m_final = caret::train(ACCIDENTES_GRAVES∼Ano_Base+SEMANA+Feria_Flores_Semana+Semana_Santa_Semana+Feriados_Lunes+Feriados_Otros, data=Total_Dataset_Freq_S,
+                      method = "rf", trControl = trcntrl,
+                      prox=TRUE,allowParallel=TRUE)
 ```
 
+
 ```{r}
-caret_tree_fit_s_m_final
+summary(caret_rf_fit_s_m_final)
 ```
 
 
 Se guardan el modelo en un objeto de r
 ```{r}
-saveRDS(caret_tree_fit_s_m_final,"../Modelos/Prediccion_Grave_Diario.rds")
+saveRDS(caret_rf_fit_s_m_final,"../Modelos/Prediccion_Grave_Semanal.rds")
 ```
 
 
 ```{r}
-Modelo_Grave_diario<-readRDS(file="../Modelos/Prediccion_Grave_Diario.rds")
+Modelo_Grave_semanal<-readRDS(file="../Modelos/Prediccion_Grave_Semanal.rds")
 ```
 
 
@@ -1718,12 +1718,12 @@ summary(caret_lm_fit_s_sd_final)
 
 Se guardan el modelo en un objeto de r
 ```{r}
-saveRDS(caret_lm_fit_s_sd_final,"../Modelos/Prediccion_leves_Diario.rds")
+saveRDS(caret_lm_fit_s_sd_final,"../Modelos/Prediccion_leves_Semanal.rds")
 ```
 
 
 ```{r}
-Modelo_leves_diario<-readRDS(file="../Modelos/Prediccion_leves_Diario.rds")
+Modelo_leves_semanal<-readRDS(file="../Modelos/Prediccion_leves_Semanal.rds")
 ```
 
 ##### Datos para pronóstico 
@@ -1732,39 +1732,41 @@ Se oganizan los datos necesarios para el pronóstico de los accidentes en los a�
 
 Importación de los datos
 ```{r}
-load("../data/Dias_Especiales_Diario.Rda")
+load("../data/Dias_Especiales_Semanal.Rda")
+```
+
+
+```{r}
+datos_pronostico_semanal<-Dias_Especiales_Semanal[,c("ANO","Ano_Base","SEMANA","Feria_Flores_Semana","Semana_Santa_Semana","Feriados_Lunes","Feriados_Otros")]
 ```
 
 ```{r}
-Dias_Especiales$DIA <-as.factor(format(Dias_Especiales$Fecha,'%u'))
-head(Dias_Especiales)
+datos_pronostico_semanal$ANO1 <- datos_pronostico_semanal$ANO
+datos_pronostico_semanal$SEMANA1 <- datos_pronostico_semanal$SEMANA
+library(dplyr)
+datos_pronostico_semanal<-unite_(datos_pronostico_semanal, "Ano_Sem", c("ANO1","SEMANA1"))
 ```
-
-```{r}
-datos_pronostico_diario<-Dias_Especiales[,c("Fecha","Ano_Base","SEMANA","Feria_Flores_Semana","Semana_Santa_Semana","Feriados_Lunes","Feriados_Otros")]
-```
-
 
 Predicción del Total de accidentes con el modelo de regresión lineal
 
 ```{r}
-datos_pronostico_diario$prediccion_Total<-predict(Modelo_Total_diario,datos_pronostico_diario[,c("Ano_Base","SEMANA","Feria_Flores_Semana","Semana_Santa_Semana","Feriados_Lunes","Feriados_Otros")])
+datos_pronostico_semanal$prediccion_Total_s<-predict(Modelo_Total_semanal,datos_pronostico_semanal[,c("Ano_Base","SEMANA","Feria_Flores_Semana","Semana_Santa_Semana","Feriados_Lunes","Feriados_Otros")])
 ```
 
 Predicción de accidentes graves con el modelo de árbol de regresión
 
 ```{r}
-datos_pronostico_diario$prediccion_Graves<-predict(Modelo_Grave_diario,datos_pronostico_diario[,c("Ano_Base","SEMANA","Feria_Flores_Semana","Semana_Santa_Semana","Feriados_Lunes","Feriados_Otros")])
+datos_pronostico_semanal$prediccion_Graves_s<-predict(Modelo_Grave_semanal,datos_pronostico_semanal[,c("Ano_Base","SEMANA","Feria_Flores_Semana","Semana_Santa_Semana","Feriados_Lunes","Feriados_Otros")])
 ```
 
 
 Predicción de accidentes leves con el modelo de regresión lineal
 
 ```{r}
-datos_pronostico_diario$prediccion_Leves<-predict(Modelo_leves_diario,datos_pronostico_diario[,c("Ano_Base","SEMANA","Feria_Flores_Semana","Semana_Santa_Semana","Feriados_Lunes","Feriados_Otros")])
+datos_pronostico_semanal$prediccion_Leves_s<-predict(Modelo_leves_semanal,datos_pronostico_semanal[,c("Ano_Base","SEMANA","Feria_Flores_Semana","Semana_Santa_Semana","Feriados_Lunes","Feriados_Otros")])
 ```
 
 Se guardan los datos de pronóstico en un objeto de r
 ```{r}
-save(datos_pronostico_diario,file="../Modelos/datos_pronostico_diario.Rda")
+save(datos_pronostico_semanal,file="../Modelos/datos_pronostico_semanal.Rda")
 ```
