@@ -49,12 +49,9 @@ Total_Dataset_Freq_Dia$DIA <-as.factor(format(Total_Dataset_Freq_Dia$FECHA,'%u')
 levels(Total_Dataset_Freq_Dia$DIA) <- c("LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", "SABADO", "DOMINGO") 
 ```
 
-
-
-
 ## Total de Accidentes
 
-
+En el gráfico se observa el comportamiento del número de accidentes de tránsito en Medellín en el periodo de análisis. En esta primera aproximación, no se logra observar algún patrón importante salvo las caídas en el número de accidentes a inicio de cada año.
 
 ```{r}
 library(plotly)
@@ -64,12 +61,11 @@ plot_ly(data=Total_Dataset_Freq_Dia,
         type = "scatter", mode = "lines",
         ##split = ~GRAVEDAD,
          ine=list(width=1))%>%
-  layout(title='Evolucion de los accidentes diarios en Medellin',
-         xaxis=list(title="Dia"),
-         yaxis=list(title="Numero de Accidentes Diario"))
+  layout(title='Evolución de los accidentes diarios en Medellín',
+         xaxis=list(title="Día"),
+         yaxis=list(title="Número de Accidentes Diario"))
 ```
 
-Realizando una presentación en el gráfico 2 del comportamiento mensual y por año del número de accidentes, este nos permite identificar un patrón de caída recurrentes en el número de accidentes para los meses de enero, abril, junio y noviembre. Siendo más pronunciado para el mes de de enero. Este último, podría estar asociado a la temporada de vacaciones.
 
 ```{r}
 Total_Dataset_Freq$MES_DES <- Total_Dataset_Freq$MES
@@ -77,7 +73,17 @@ Total_Dataset_Freq$MES_DES <- Total_Dataset_Freq$MES
 
 ```{r}
 levels(Total_Dataset_Freq$MES_DES) <- c("Enero", 	"Febrero", 	"Marzo", 	"Abril", 	"Mayo", 	"Junio", 	"Julio", 	"Agosto", 	"Septiembre", 	"Octubre", 	"Noviembre", 	"Diciembre") 
+
 ```
+```{r}
+Total_Dataset_Freq_Dia$MES_DES <- Total_Dataset_Freq_Dia$MES
+```
+
+```{r}
+levels(Total_Dataset_Freq_Dia$MES_DES) <- c("Enero", 	"Febrero", 	"Marzo", 	"Abril", 	"Mayo", 	"Junio", 	"Julio", 	"Agosto", 	"Septiembre", 	"Octubre", 	"Noviembre", 	"Diciembre") 
+```
+
+Realizando una presentación del comportamiento mensual y por año del número de accidentes, este nos permite identificar un patrón de caída recurrentes en el número de accidentes para los meses de enero, abril, junio y noviembre. Siendo más pronunciado para el mes de de enero. Este último, podría estar asociado a la temporada de vacaciones.
 
 
 ```{r}
@@ -87,12 +93,12 @@ aggregate(FREQ~ANO*MES_DES, data=Total_Dataset_Freq,FUN=sum)%>%
          type = "scatter" ,mode = "lines",
          split = ~ANO,
          line=list(width=1))%>%
-  layout(title='Promedio semanal de ACCIDENTES en Medellin',
+  layout(title='Promedio semanal de ACCIDENTES en Medellín',
          xaxis=list(title="MES"),
          yaxis=list(title="No. Accidentes"))
 ```
 
-Realizando una representación semanal de los accidentes de transito, se identifica ciertas semanas con recurrencia en la disminución de la accidentalidad. Siguiendo los hallazgos en la visualización mensual, el grafico semanal nos permite visualizar con más detalle ese patron en ciertas semanas que estan asociadas a los meses identificados anteriormente. Por lo cual, se indaga por la particularidad de esos patrones y se identifica la importancia de la Semana Santa y la existencia de dias festivos en cada una de las semanas.
+Realizando una representación semanal de los accidentes de transito, se identifica ciertas semanas con recurrencia en la disminución de la accidentalidad. Siguiendo los hallazgos en la visualización mensual, el grafico semanal nos permite visualizar con más detalle ese patron en ciertas semanas que estan asociadas a los meses identificados anteriormente. Por lo cual, se indaga por la particularidad de esos patrones y se identifica la importancia de la Semana Santa y la existencia de días festivos en cada una de las semanas.
 
 ```{r}
 aggregate(FREQ~ANO*SEMANA, data=Total_Dataset_Freq,FUN=sum)%>%
@@ -106,7 +112,7 @@ aggregate(FREQ~ANO*SEMANA, data=Total_Dataset_Freq,FUN=sum)%>%
          yaxis=list(title="No. Accidentes"))
 ```
 
-Despues del analisis semanal, se explora por dia de la semana donde se identifica un patron marcado para los domingos con una disminución en la accidentalidad. 
+Despues del analisis semanal, se explora por día de la semana donde se identifica un patron marcado para los domingos con una disminución en la accidentalidad. 
 
 
 ```{r}
@@ -121,7 +127,7 @@ aggregate(FREQ~ANO*DIA_NOMBRE, data=Total_Dataset_Freq,FUN=mean)%>%
          yaxis=list(title="No. Accidentes"))
 ```
 
-Teniendo en cuenta la importancia de los dias festivos en la accidentalidad, se representa por medio de caja de bigotes su distribucion. Para el dia lunes, se identifica un agrupamiento importante por debajo del bigote inferior, dando más fortaleza a la importancia de los dias festivos. Para los dias viernes, se identifica mayor volatilidad y agrupamientos más importanes que en los otros dias. En los demás dias se observan registros por encima y por debajo de los bigotes, con un agrupamiento importante del numero de accidentes sobre la mediana de los registros.
+Teniendo en cuenta la importancia de los días festivos en la accidentalidad, se representa por medio de caja de bigotes su distribución. Para el día lunes, se identifica un agrupamiento importante por debajo del bigote inferior, dando más fortaleza a la importancia de los días festivos. Para los días viernes, se identifica mayor volatilidad y agrupamientos más importanes que en los otros dias. En los demás días se observan registros por encima y por debajo de los bigotes, con un agrupamiento importante en el número de accidentes sobre la mediana de los registros.
 
 
 ```{r}
@@ -129,7 +135,7 @@ plot_ly(data=Total_Dataset_Freq,
         x = ~DIA_NOMBRE,
         y = ~FREQ,
         type = "box")%>%
-  layout(title='Accidentes_Medellin',
+  layout(title='Distribución de los accidentes de tránsito por día de la semana en Medellín',
          xaxis=list(title="Dia de la Semana"),
          yaxis=list(title="No. Acidentes"))
 ```
@@ -148,38 +154,68 @@ aggregate(FREQ~GRAVEDAD*FECHA, data=Total_Dataset_Freq,FUN=mean)%>%
          type = "scatter" ,mode = "lines",
          split = ~GRAVEDAD,
          line=list(width=1))%>%
-  layout(title='Accidentes diarios en Medellin agrpados por GRAVEDAD',
-         xaxis=list(title="dia"),
-         yaxis=list(title="No. Accidentes"))
+  layout(title='Accidentes diarios en Medellin agrupados por GRAVEDAD',
+         xaxis=list(title="Día"),
+         yaxis=list(title="No. Accidentes"),
+         legend = list(x = 0.75, y = 1))
 ```
 
 A la accientalidad mensual agrupada por gravedad, sigue presentando comportamientos recurrentes para los meses de enero, abril, junio y noviembre. Sin embargo, el efecto no es tan marcado respecto a los accidentes totales.
 
 ```{r}
-aggregate(ACCIDENTES_GRAVES~ANO*MES, data=Total_Dataset_Freq_Dia,FUN=sum)%>%
-  plot_ly(x = ~MES,
+(aggregate(ACCIDENTES_GRAVES~ANO*MES_DES, data=Total_Dataset_Freq_Dia,FUN=sum)%>%
+  plot_ly(x = ~MES_DES,
          y = ~ACCIDENTES_GRAVES,
          type = "scatter" ,mode = "lines",
          split = ~ANO,
          line=list(width=1))%>%
-  layout(title='Numero de accidentes graves mensual en Medellin por año.',
+  layout(title='número de accidentes graves mensual en Medellin por año.',
          xaxis=list(title="MES"),
-         yaxis=list(title="No. Accidentes"))
+         yaxis=list(title="No. Accidentes")))
+
 ```
 
 ```{r}
-aggregate(ACCIDENTES_LEVES~ANO*MES, data=Total_Dataset_Freq_Dia,FUN=sum)%>%
-  plot_ly(x = ~MES,
+(aggregate(ACCIDENTES_LEVES~ANO*MES_DES, data=Total_Dataset_Freq_Dia,FUN=sum)%>%
+  plot_ly(x = ~MES_DES,
          y = ~ACCIDENTES_LEVES,
          type = "scatter" ,mode = "lines",
          split = ~ANO,
          line=list(width=1))%>%
-  layout(title='Numero de accidentes leves mensual en Medellin por año.',
+  layout(title='número de accidentes leves mensual en Medellin por año.',
          xaxis=list(title="MES"),
-         yaxis=list(title="No. Accidentes"))
+         yaxis=list(title="No. Accidentes")))
 ```
 
-Realizando una representación semanal de los accidentes de transito por gravedad, se sigue identificado ciertas semanas con recurrencia en la disminución de la accidentalidad. Siguiendo los hallazgos para los datos totales, el grafico semanal nos permite visualizar la particularidad de ciertas semanas las cuales se asocian a semana santa y semanas con dias festivos.
+```{r}
+par(mfrow=c(1,2))
+
+(aggregate(ACCIDENTES_GRAVES~ANO*MES_DES, data=Total_Dataset_Freq_Dia,FUN=sum)%>%
+  plot_ly(x = ~MES_DES,
+         y = ~ACCIDENTES_GRAVES,
+         type = "scatter" ,mode = "lines",
+         split = ~ANO,
+         line=list(width=1))%>%
+  layout(title='Accidentes Graves',
+         xaxis=list(title="MES"),
+         yaxis=list(title="No. Accidentes Leves")))
+(aggregate(ACCIDENTES_LEVES~ANO*MES_DES, data=Total_Dataset_Freq_Dia,FUN=sum)%>%
+  plot_ly(x = ~MES_DES,
+         y = ~ACCIDENTES_LEVES,
+         type = "scatter" ,mode = "lines",
+         split = ~ANO,
+         line=list(width=1))%>%
+  layout(title='Accidentes Leves',
+         xaxis=list(title="MES"),
+         yaxis=list(title="No. Accidentes Graves")))
+
+
+
+```
+
+
+
+Realizando una representación semanal de los accidentes de transito por gravedad, se sigue identificado ciertas semanas con recurrencia en la disminución de la accidentalidad. Siguiendo los hallazgos para los datos totales, el grafico semanal nos permite visualizar la particularidad de ciertas semanas las cuales se asocian a semana santa y semanas con días festivos.
 
 ```{r}
 aggregate(ACCIDENTES_GRAVES~ANO*SEMANA, data=Total_Dataset_Freq_Dia,FUN=sum)%>%
@@ -205,9 +241,34 @@ aggregate(ACCIDENTES_LEVES~ANO*SEMANA, data=Total_Dataset_Freq_Dia,FUN=sum)%>%
          xaxis=list(title="SEMANA"),
          yaxis=list(title="No. Accidentes"))
 ```
+```{r}
+aggregate(ACCIDENTES_GRAVES~ANO*SEMANA, data=Total_Dataset_Freq_Dia,FUN=sum)%>%
+  plot_ly(x = ~SEMANA,
+         y = ~ACCIDENTES_GRAVES,
+         type = "scatter" ,mode = "lines",
+         split = ~ANO,
+         line=list(width=1))%>%
+  layout(title='Accidentes Greves',
+         xaxis=list(title="SEMANA"),
+         yaxis=list(title="No. Accidentes Leves"))
+
+aggregate(ACCIDENTES_LEVES~ANO*SEMANA, data=Total_Dataset_Freq_Dia,FUN=sum)%>%
+  plot_ly(x = ~SEMANA,
+         y = ~ACCIDENTES_LEVES,
+         type = "scatter" ,mode = "lines",
+         split = ~ANO,
+         line=list(width=1))%>%
+  layout(title='Accidentes Leves',
+         xaxis=list(title="SEMANA"),
+         yaxis=list(title="No. Accidentes Graves"))
+
+```
 
 
-Despues del analisis semanal, se explora por dia de la semana donde se identifica el mismo patron marcado para los domingos  con una disminución en la accidentalidad tanto para los accidentes graves como los accidentes leves. 
+
+
+
+Despues del analisis semanal, se explora por día de la semana donde se identifica el mismo patron marcado para los domingos  con una disminución en la accidentalidad tanto para los accidentes graves como los accidentes leves. 
 
 
 ```{r}
@@ -217,7 +278,7 @@ aggregate(ACCIDENTES_GRAVES~ANO*DIA, data=Total_Dataset_Freq_Dia,FUN=mean)%>%
          type = "scatter" ,mode = "lines",
          split = ~ANO,
          line=list(width=1))%>%
-  layout(title='Accidentes graves por dia de la semana en Medellin por Ano',
+  layout(title='Accidentes graves por día de la semana en Medellin por Ano',
          xaxis=list(title="Dia Semana"),
          yaxis=list(title="No. Accidentes"))
 ```
@@ -229,14 +290,12 @@ aggregate(ACCIDENTES_LEVES~ANO*DIA, data=Total_Dataset_Freq_Dia,FUN=mean)%>%
          type = "scatter" ,mode = "lines",
          split = ~ANO,
          line=list(width=1))%>%
-  layout(title='Accidentes leves por dia de la semana en Medellin por Ano',
+  layout(title='Accidentes leves por día de la semana en Medellin por Año',
          xaxis=list(title="Dia Semana"),
          yaxis=list(title="No. Accidentes"))
 ```
 
-
-
-Teniendo en cuenta la importancia de los dias festivos en la accidentalidad, se representa por medio de caja de bigotes su distribucion por dia y por gravedad del accidente. El agrupamiento en la parte inferior de los lunes ya no es tan marcado. Sin embargo, se identifican agrupamientos en la parte inferior de la caja de bigotes de los acciendentes leves.
+Teniendo en cuenta la importancia de los días festivos en la accidentalidad, se representa por medio de caja de bigotes su distribución por día y por gravedad del accidente. El agrupamiento en la parte inferior de los lunes ya no es tan marcado. Sin embargo, se identifican agrupamientos en la parte inferior de la caja de bigotes de los acciendentes leves.
 
 
 ```{r}
@@ -244,7 +303,7 @@ plot_ly(data=Total_Dataset_Freq_Dia,
         x = ~DIA,
         y = ~ACCIDENTES_GRAVES,
         type = "box")%>%
-  layout(title='Distribucion de los Accidentes graves en Medellin por dia',
+  layout(title='Distribución de los Accidentes graves en Medellin por dia',
          xaxis=list(title="Dia de la Semana"),
          yaxis=list(title="No. Acidentes"))
 ```
@@ -254,14 +313,35 @@ plot_ly(data=Total_Dataset_Freq_Dia,
         x = ~DIA,
         y = ~ACCIDENTES_LEVES,
         type = "box")%>%
-  layout(title='Distribucion de los Accidentes leves en Medellin por dia',
+  layout(title='Distribución de los Accidentes leves en Medellin por dia',
          xaxis=list(title="Dia de la Semana"),
          yaxis=list(title="No. Acidentes"))
 ```
 
+```{r}
+plot_ly(data=Total_Dataset_Freq_Dia,
+        x = ~DIA,
+        y = ~ACCIDENTES_GRAVES,
+        type = "box")%>%
+  layout(title='Distribución de los Accidentes graves en Medellin por dia',
+         xaxis=list(title="Día de la Semana"),
+         yaxis=list(title="No. Acidentes Graves"))
+
+plot_ly(data=Total_Dataset_Freq_Dia,
+        x = ~DIA,
+        y = ~ACCIDENTES_LEVES,
+        type = "box")%>%
+  layout(title='Distribución de los Accidentes leves en Medellin por dia',
+         xaxis=list(title="Día de la Semana"),
+         yaxis=list(title="No. Acidentes Leves"))
+
+```
+
+
+
 ## SELECCION DE VARIABLES
 
-Teniendo en cuenta todo el analisis descriptivo de la accidentalidad en Medellin, se construyo un conjunto de variables dicotomicas para evaluar la importancia dias especificos o grupo de dias con particularidades. A coninuación, se presenta una descripción sobre dicas variables que se van a evaluar en la estimacion del mejor modelo y su posible impacto en la estimacion del numero de accidentes:
+Teniendo en cuenta todo el analisis descriptivo de la accidentalidad en Medellin, se construyo un conjunto de variables dicotomicas para evaluar la importancia días especificos o grupo de días con particularidades. A coninuación, se presenta una descripción sobre dicas variables que se van a evaluar en la estimacion del mejor modelo y su posible impacto en la estimacion del número de accidentes:
 
 AÑO: Año de ocurrencia del accidente. Tendencias o cambios de nivel de los accidentes a traves de los años.
 
@@ -269,38 +349,38 @@ MES: Mes de Ocurrencia del accidente. Patrones estacionales por mes.
 
 SEMANA: Semana de ocurrencia del accidente. Patron estacional por semanal.
 
-DIA: Dia de ocurrencia del accidentes. Patron estacional por dia de la semana.
+DIA: Día de ocurrencia del accidentes. Patron estacional por día de la semana.
 
-Feriado: Identificador de dia feriado en el calendario colombiano. Cambios de nivel en dias feriados.
+Feriado: Identificador de día feriado en el calendario colombiano. Cambios de nivel en días feriados.
 
 Feriado_v1: 
 
-Feriado_Lunes: Identificador de dia feriado lunes en el calendario colombiano. Cambios de nivel en dias lunes feriados.
+Feriado_Lunes: Identificador de día feriado lunes en el calendario colombiano. Cambios de nivel en días lunes feriados.
 
-Feriado_Otro: Identificador de dia feriado distinto a lunes en el calendario colombiano. Cambios de nivel en dias distintos a lunes y feriados.
+Feriado_Otro: Identificador de día feriado distinto a lunes en el calendario colombiano. Cambios de nivel en días distintos a lunes y feriados.
 
-Previo_feriado: Identificacion de los tres primeros dias antes de dia lunes feriado. Cambios de nivel en dias previos a lunes feriados.
+Previo_feriado: Identificacion de los tres primeros días antes de día lunes feriado. Cambios de nivel en días previos a lunes feriados.
 
-Viernes_Antes_Puente: Identificacion de dia viernes antes de lunes feriado. Cambios de nivel para viernes previos a lunes feriados.
+Viernes_Antes_Puente: Identificacion de día viernes antes de lunes feriado. Cambios de nivel para viernes previos a lunes feriados.
 
-Semana_Santa: Identificacion de dias de semana santa desde el sabado antes del domingo de ramos hasta el domingo de reurreccion. Cambios de nivel para los dias de semana santa.
+Semana_Santa: Identificacion de días de semana santa desde el sabado antes del domingo de ramos hasta el domingo de reurreccion. Cambios de nivel para los días de semana santa.
 
-Semana_Santa_v1: Identificacion de dias de semana santa desde lunes de semana santa hasta el domingo de reurreccion. Cambios de nivel para los dias de semana santa.
+Semana_Santa_v1: Identificacion de días de semana santa desde lunes de semana santa hasta el domingo de reurreccion. Cambios de nivel para los días de semana santa.
 
-Prima: Dia de pago de la prima. Cambio de nivel el dia del pago de la prima.
+Prima: Día de pago de la prima. Cambio de nivel el día del pago de la prima.
 
-Mujer: Dia de celebracion del dia de la mujer. Cambio de nivel el dia de celebracion.
+Mujer: Día de celebración del día de la mujer. Cambio de nivel el día de celebración.
 
-Padre: Dia de celebracion del padre. Cambio de nivel el dia de celebracion.
+Padre: Día de celebración del padre. Cambio de nivel el día de celebración.
 
-Madre: Dia de celebracion del dia de la madre. Cambio de nivel el dia de celebracion.
+Madre: Día de celebración del día de la madre. Cambio de nivel el día de celebración.
 
-AmoryAmistad: Dia de celebracion del dia de amor y amistad. Cambio de nivel el dia de celebracion.
+AmoryAmistad: día de celebración del día de amor y amistad. Cambio de nivel el día de celebración.
 
-Quincena: Dia de pago de la quincena asociado al 15 o ultimo día del mes. Cambio de nivel el dia de pago.
+Quincena: Día de pago de la quincena asociado al 15 o ultimo día del mes. Cambio de nivel el día de pago.
 
-Viernes_Desp_Quincena: Viernes más proximo a la quincena. Cambio de nivel.
+Viernes_Desp_Quincena: Viernes más próximo a la quincena. Cambio de nivel.
 
-Vienres_Desp_Quincena_v1: Viernes más proximo a la quincena en la misma semana. Cambio de nivel.
+Vienres_Desp_Quincena_v1: Viernes más próximo a la quincena en la misma semana. Cambio de nivel.
 
-Feria_Flores: Dias de celebración de feria de flores. Cambio de nivel durante la celebracion.
+Feria_Flores: días de celebración de feria de flores. Cambio de nivel durante la celebración.
