@@ -69,11 +69,20 @@ plot_ly(data=Total_Dataset_Freq_Dia,
          yaxis=list(title="Numero de Accidentes Diario"))
 ```
 
-El comportartamiento mensual por ano nos permite identificar una caida recurrentes en el numero de acciedentes para los meses de enero, abril, junio y noviembre. Siendo más pronunciado para el mes de de enero, el cual podría estar asociado a la temporada de vacaciones.
+Realizando una presentación en el gráfico 2 del comportamiento mensual y por año del número de accidentes, este nos permite identificar un patrón de caída recurrentes en el número de accidentes para los meses de enero, abril, junio y noviembre. Siendo más pronunciado para el mes de de enero. Este último, podría estar asociado a la temporada de vacaciones.
 
 ```{r}
-aggregate(FREQ~ANO*MES, data=Total_Dataset_Freq,FUN=sum)%>%
-  plot_ly(x = ~MES,
+Total_Dataset_Freq$MES_DES <- Total_Dataset_Freq$MES
+```
+
+```{r}
+levels(Total_Dataset_Freq$MES_DES) <- c("Enero", 	"Febrero", 	"Marzo", 	"Abril", 	"Mayo", 	"Junio", 	"Julio", 	"Agosto", 	"Septiembre", 	"Octubre", 	"Noviembre", 	"Diciembre") 
+```
+
+
+```{r}
+aggregate(FREQ~ANO*MES_DES, data=Total_Dataset_Freq,FUN=sum)%>%
+  plot_ly(x = ~MES_DES,
          y = ~FREQ,
          type = "scatter" ,mode = "lines",
          split = ~ANO,
@@ -92,7 +101,7 @@ aggregate(FREQ~ANO*SEMANA, data=Total_Dataset_Freq,FUN=sum)%>%
          type = "scatter" ,mode = "lines",
          split = ~ANO,
          line=list(width=1))%>%
-  layout(title='Promedio semanal de ACCIDENTES en Medellin',
+  layout(title='Número de ACCIDENTES semanal  en Medellín',
          xaxis=list(title="SEMANA"),
          yaxis=list(title="No. Accidentes"))
 ```
@@ -107,8 +116,8 @@ aggregate(FREQ~ANO*DIA_NOMBRE, data=Total_Dataset_Freq,FUN=mean)%>%
          type = "scatter" ,mode = "lines",
          split = ~ANO,
          line=list(width=1))%>%
-  layout(title='Promedio diario DIA DE LA SEMANA de Accidentes de Transito en Medellin por Ano',
-         xaxis=list(title="Dia Semana"),
+  layout(title='Promedio de accidentes por día de la semanal en Medellín 2014-2018',
+         xaxis=list(title="Día de la Semana"),
          yaxis=list(title="No. Accidentes"))
 ```
 
