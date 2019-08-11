@@ -1,0 +1,12 @@
+name: Prediccion_Accidentes_Transito_Medellin
+title: Prediccion_Accidentes_Transito_Medellin
+username:
+account: edwin-fernando-villarraga-ossa
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1079586
+bundleId: 2308961
+url: https://edwin-fernando-villarraga-ossa.shinyapps.io/Prediccion_Accidentes_Transito_Medellin/
+when: 1565526226.27273
+asMultiple: FALSE
+asStatic: FALSE
