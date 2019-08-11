@@ -14,6 +14,17 @@ ui <- fluidPage(
                         plotlyOutput("plot_pronostico_D_G"),
                         DT::dataTableOutput('Pronosticos_D')),# Data as datatable
                         
+                        tabPanel("Pronósticos Semanales",
+                                 
+                                 plotlyOutput("plot_pronostico_S_T"),
+                                 plotlyOutput("plot_pronostico_S_L"),
+                                 plotlyOutput("plot_pronostico_S_G"),
+                                 DT::dataTableOutput('Pronosticos_S')),# Data as datatable                       
+                        
+                        
+                        
+                        
+                        
                         tabPanel("Gráfica Datos Históricos", 
                                                                                 plotlyOutput("Serie_Diaria_Total"),
                                                                                 plotlyOutput("Serie_Diaria_AG"),
@@ -384,7 +395,6 @@ server <- function(input, output) {
         model_D_G <- readRDS("./data_modelos_diario/Prediccion_Grave_Diario.Rds")
         datos_PD1$prediccion_Graves_D<-predict(model_D_G,datos_PD1[,c("Ano_Base","DIA","SEMANA","Feriado_Lunes","Feriado_Otro","Madre","Semana_Santa","Viernes_Desp_Quincena_v2","Feria_Flores")])
         
-        #Accidentes graves
 
         #TABLA PRONOSTICOS DIARIOS
         
@@ -433,10 +443,73 @@ server <- function(input, output) {
                        xaxis=list(title="FECHA"),
                        yaxis=list(title="Accidentes Graves"))  })           
         
+        
+        
         #MODELOS SEMANALES
         
-
+        load(file="./data_modelos_semana/datos_pronostico_semanal.Rda")
+        datos_PS1 <- subset(datos_pronostico_semanal, ANO=="2019" | ANO=="2020" | ANO=="2021")
         
+        model_D_T <- readRDS("./data_modelos_semana/Prediccion_Total_Semanal.Rds")
+        datos_PS1$prediccion_Total_S<-predict(model_D_T,datos_PS1[,c("Ano_Base","SEMANA","Feria_Flores_Semana","Semana_Santa_Semana","Feriados_Lunes","Feriados_Otros")])
+        
+        model_D_L <- readRDS("./data_modelos_semana/Prediccion_leves_Semanal.Rds")
+        datos_PS1$prediccion_Leves_S<-predict(model_D_L,datos_PS1[,c("Ano_Base","SEMANA","Feria_Flores_Semana","Semana_Santa_Semana","Feriados_Lunes","Feriados_Otros")])
+        
+        model_D_G <- readRDS("./data_modelos_semana/Prediccion_Grave_Semanal.Rds")
+        datos_PS1$prediccion_Graves_S<-predict(model_D_G,datos_PS1[,c("Ano_Base","SEMANA","Feria_Flores_Semana","Semana_Santa_Semana","Feriados_Lunes","Feriados_Otros")])
+        
+ 
+        #TABLA PRONOSTICOS SEMANALES
+        
+        output$Pronosticos_S <- DT::renderDataTable({
+            datos_PS1
+        }, options = list(aLengthMenu = c(5,25,50),
+                          iDisplayLength = 5)
+        )        
+        
+        #Grafica semanal
+        
+        output$plot_pronostico_S_T <- renderPlotly({plot_ly(data=datos_PS1,
+                                                         x = ~SEMANA,
+                                                         y = ~prediccion_Total_s,
+                                                         color = ~ANO,
+                                                         split = ~ANO,
+                                                         type = "scatter" ,mode = "lines",
+                                                         line=list(width=1,color='rgb(90, 20, 120)'))%>%
+                
+                layout(title='Pronostico Accidentes Totales Semanales 2019 a 2021',
+                       xaxis=list(title="SEMANA"),
+                       yaxis=list(title="Accidentes Total"))  })    
+               
+   
+        output$plot_pronostico_S_L <- renderPlotly({plot_ly(data=datos_PS1,
+                                                            x = ~SEMANA,
+                                                            y = ~prediccion_Leves_s,
+                                                            color = ~ANO,
+                                                            split = ~ANO,
+                                                            type = "scatter" ,mode = "lines",
+                                                            line=list(width=1,color='rgb(80, 160, 80)'))%>%
+                
+                layout(title='Pronostico Accidentes Leves  Semanales 2019 a 2021',
+                       xaxis=list(title="SEMANA"),
+                       yaxis=list(title="Accidentes Leves"))  })          
+        
+        
+        
+        output$plot_pronostico_S_G <- renderPlotly({plot_ly(data=datos_PS1,
+                                                            x = ~SEMANA,
+                                                            y = ~prediccion_Graves_s,
+                                                            color = ~ANO,
+                                                            split = ~ANO,
+                                                            type = "scatter" ,mode = "lines",
+                                                            line=list(width=1,color='rgb(130, 10, 45)'))%>%
+                
+                layout(title='Pronostico Accidentes Graves  Semanales 2019 a 2021',
+                       xaxis=list(title="SEMANA"),
+                       yaxis=list(title="Accidentes Graves"))  })          
+        
+             
         
 }
 shinyApp(ui = ui, server = server)
